@@ -1,7 +1,7 @@
-import { keyring } from './keyring';
+/* import { keyring } from './keyring'; */
 
-describe('keyring', () => {
+/* describe('keyring', () => {
 	it('should work', () => {
 		expect(keyring()).toEqual('keyring');
 	});
-});
+}); */
