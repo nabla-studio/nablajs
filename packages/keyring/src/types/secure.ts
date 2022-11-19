@@ -1,3 +1,3 @@
-export type EncryptResponse<T extends object> = T & {
+export type EncryptResponse<T> = T & {
 	cipherText: string;
 };

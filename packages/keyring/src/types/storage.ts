@@ -1,4 +1,4 @@
-export type KeyringStorageMnemonic<T extends object> = T & {
+export type KeyringStorageMnemonic<T> = T & {
 	name: string;
 	/**
 	 * A cipher text mnemonic, must be decrypted to be used

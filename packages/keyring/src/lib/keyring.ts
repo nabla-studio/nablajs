@@ -8,8 +8,10 @@ import { WalletLength, WalletOptions, Wallet, EncryptResponse } from '../types';
  * The structure is divided into two parts, fixed methods that are used for specific operations
  * and a set of abstract methods that define some atomic operations
  * that can be exploited by the previous methods.
+ *
+ * @typeParam T - Encryption algorithm metadata
  */
-export abstract class Keyring {
+export abstract class Keyring<T> {
 	/**
 	 * @public
 	 * the mnemonics currently selected to operate
@@ -33,7 +35,7 @@ export abstract class Keyring {
 	 * @param walletsOptions - An array of `WalletOptions` used for wallets generation
 	 */
 	constructor(
-		public storageKey: string,
+		public storageKey: string = 'keyring',
 		public walletsOptions: WalletOptions[],
 	) {}
 
@@ -147,9 +149,6 @@ export abstract class Keyring {
 
 	// TODO: add unlock method to match passphrase and save it in current session
 
-	// TODO: add generic for class to support encryption algoritm specifics, for example extra data
-	// for AES such as Inizialization Vector
-
 	/**
 	 * @virtual
 	 * Read data from the storage
@@ -181,7 +180,7 @@ export abstract class Keyring {
 	 * @param key - The key with which to encrypt the payload
 	 * @returns Returns a `EncryptResponse`
 	 */
-	protected abstract encrypt<T extends object>(
+	protected abstract encrypt(
 		data: string,
 		key: string,
 	): Promise<EncryptResponse<T>>;
@@ -193,7 +192,7 @@ export abstract class Keyring {
 	 * @param key - The key with which to decrypt the payload
 	 * @returns Returns a the plain text
 	 */
-	protected abstract decrypt<T extends object>(
+	protected abstract decrypt(
 		data: EncryptResponse<T>,
 		key: string,
 	): Promise<string>;
