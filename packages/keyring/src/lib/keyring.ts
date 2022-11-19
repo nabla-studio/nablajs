@@ -142,36 +142,34 @@ export abstract class Keyring<T> {
 	*/
 	// TODO: Add delete mnemonic functionality by index
 	// TODO: Add get all mnemonics array (No decrypt)
-	/*
-		TODO: Refactor read,save and delete methods, they doesn't need an index, because
-		they're related to how we should store mnemonics, it isn't related to an atomic operation
-	*/
 
 	// TODO: add unlock method to match passphrase and save it in current session
 
 	/**
 	 * @virtual
 	 * Read data from the storage
-	 * @param index - The index of the wallet you want to read
-	 * @returns Returns the mnemonic seed phrase
+	 * @param key - The key you want to read from the storage
+	 * @typeParam K - The type of data storage in the storage location
+	 * @returns Returns `Promise<K>` data
 	 */
-	protected abstract read(index: string): Promise<string>;
+	protected abstract read<K>(key: string): Promise<K>;
 
 	/**
 	 * @virtual
-	 * Append and save data inside the storage
-	 * @param data - Data to store in memory
+	 * Write data inside the storage
+	 * @param key - The key where you want to write the data
+	 * @param data - The data you want to save to storage
 	 * @returns Returns a boolean value with the status of the operation
 	 */
-	protected abstract save(data: string): Promise<boolean>;
+	protected abstract write(key: string, data: string): Promise<boolean>;
 
 	/**
 	 * @virtual
 	 * Delete data stored inside the storage
-	 * @param index - The index of the wallet you want to delete
+	 * @param key - The key of the data you want to remove
 	 * @returns Returns a boolean value with the status of the operation
 	 */
-	protected abstract delete(index: string): Promise<boolean>;
+	protected abstract delete(key: string): Promise<boolean>;
 
 	/**
 	 * @virtual
