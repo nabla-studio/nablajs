@@ -129,6 +129,34 @@ export abstract class Keyring<T> {
 		return accounts.flat();
 	}
 
+	/**
+	 * @public
+	 * Get all the addresses available inside each `Wallet`
+	 * @param payload the plain string we want to compare
+	 * @param hashDigest The result of a hash function that we want to compare
+	 * @returns Returns an array of `AccountData`
+	 * @example
+	 * Here's a simple example:
+	 * ```
+	 * const payload = "test";
+	 * const payload2 = "test2";
+	 * const hashDigest = "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff" // hash digest of "test"
+	 *
+	 * // Prints "true":
+	 * console.log(compareHash(payload, hashDigest));
+	 * // Prints "false":
+	 * console.log(compareHash(payload2, hashDigest));
+	 * ```
+	 */
+	public async compareHash(
+		payload: string,
+		hashDigest: string,
+	): Promise<boolean> {
+		const hash = await this.hash(payload);
+
+		return hash === hashDigest;
+	}
+
 	/*
 		The keyring storage area is an array of mnemonics (Maybe an object with other data)
 	*/
@@ -194,4 +222,12 @@ export abstract class Keyring<T> {
 		data: EncryptResponse<T>,
 		key: string,
 	): Promise<string>;
+
+	/**
+	 * @virtual
+	 * Apply a hash function
+	 * @param data - The string to hash
+	 * @returns Returns a string with a hash digest
+	 */
+	protected abstract hash(data: string): Promise<string>;
 }
