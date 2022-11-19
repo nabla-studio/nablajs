@@ -11,4 +11,7 @@
 	"[typescript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
+	"conventionalCommits.scopes": [
+		"keyring"
+	],
 }
