@@ -167,12 +167,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	/*
 		The keyring storage area is an array of mnemonics (Maybe an object with other data)
 	*/
-	// TODO: Add edit mnemonica functionality by index
 	/*
 		TODO: Add get/set mnemonic functionality by index and key
 		we should decrypt and set the new mnemonic
 	*/
-	// TODO: Add delete mnemonic functionality by index
 	// TODO: Add get all mnemonics array (No decrypt)
 
 	// TODO: add unlock method to match passphrase and save it in current session
@@ -217,6 +215,26 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		storageMnemonic.name = name;
 
 		const mnemonics = [...storage.mnemonics, storageMnemonic];
+
+		storage.mnemonics = mnemonics;
+
+		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+	}
+
+	/**
+	 * @public
+	 * Delete a `KeyringStorageMnemonic` inside the `KeyringStorage`
+	 */
+	public async deleteMnemonic(index: number) {
+		this.unlocked();
+
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		this.outOfIndex(index, storage.mnemonics.length);
+
+		const mnemonics = [...storage.mnemonics];
+
+		mnemonics.splice(index, 1);
 
 		storage.mnemonics = mnemonics;
 
