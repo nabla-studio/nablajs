@@ -177,6 +177,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 	// TODO: add unlock method to match passphrase and save it in current session
 
+	/**
+	 * @public
+	 * Save a mnemonic string inside the `KeyringStorage`
+	 */
 	public async saveMnemonic(mnemonic: string, name: string) {
 		this.unlocked();
 
@@ -197,6 +201,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
 	}
 
+	/**
+	 * @public
+	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
+	 */
 	public async editMnemonic(index: number, name: string) {
 		this.unlocked();
 
@@ -215,12 +223,20 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
 	}
 
+	/**
+	 * @public
+	 * Assertion function used to check that the wallet is unlocked
+	 */
 	public unlocked(): asserts this is this & { passphrase: string } {
 		if (!this.passphrase) {
 			throw new Error('The Keyring is locked, you must unlock it');
 		}
 	}
 
+	/**
+	 * @public
+	 * Assertion function used to check if we are out of index
+	 */
 	private outOfIndex(index: number, length: number) {
 		if (index < 0 || index > length - 1) {
 			throw new Error(
