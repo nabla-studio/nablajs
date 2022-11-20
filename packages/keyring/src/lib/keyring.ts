@@ -197,9 +197,37 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
 	}
 
+	public async editMnemonic(index: number, name: string) {
+		this.unlocked();
+
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		this.outOfIndex(index, storage.mnemonics.length);
+
+		const storageMnemonic = Object.assign({}, storage.mnemonics[index]);
+
+		storageMnemonic.name = name;
+
+		const mnemonics = [...storage.mnemonics, storageMnemonic];
+
+		storage.mnemonics = mnemonics;
+
+		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+	}
+
 	public unlocked(): asserts this is this & { passphrase: string } {
 		if (!this.passphrase) {
 			throw new Error('The Keyring is locked, you must unlock it');
+		}
+	}
+
+	private outOfIndex(index: number, length: number) {
+		if (index < 0 || index > length - 1) {
+			throw new Error(
+				`IndexError: the index ${index} is greater then ${
+					length - 1
+				} or less then zero`,
+			);
 		}
 	}
 
