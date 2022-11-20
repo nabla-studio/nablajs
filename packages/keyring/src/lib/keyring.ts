@@ -9,9 +9,10 @@ import { WalletLength, WalletOptions, Wallet, EncryptResponse } from '../types';
  * and a set of abstract methods that define some atomic operations
  * that can be exploited by the previous methods.
  *
- * @typeParam T - Encryption algorithm metadata
+ * @typeParam T - Object, corresponding to information linked to encryption/decryption activities (e.g., the **IV** for an AES method encryption, parameters for the key generation method).
+ * @typeParam K - Object, that contains information about the cipher method (e.g., the **cipherType**, the **keyLength**, the **keyGenerationMethod**, etc.)
  */
-export abstract class Keyring<T> {
+export abstract class Keyring<T = undefined, K = undefined> {
 	/**
 	 * @public
 	 * the mnemonics currently selected to operate
