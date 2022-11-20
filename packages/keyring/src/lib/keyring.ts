@@ -1,6 +1,13 @@
 import { AccountData, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { HdPath } from '@cosmjs/crypto';
-import { WalletLength, WalletOptions, Wallet, EncryptResponse } from '../types';
+import {
+	WalletLength,
+	WalletOptions,
+	Wallet,
+	EncryptResponse,
+	KeyringStorage,
+	KeyringStorageMnemonic,
+} from '../types';
 
 /**
  * Definition of Keyring class structure,
@@ -26,10 +33,9 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public currentWallets: Wallet[] = [];
 
 	/**
-	 * @private
-	 * current wallets associated with current mnemonic
+	 * current passphrase used for mnemonics encryption
 	 */
-	private passphrase?: string;
+	protected passphrase?: string;
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -161,9 +167,6 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	/*
 		The keyring storage area is an array of mnemonics (Maybe an object with other data)
 	*/
-	/*
-		TODO: Add save mnemonic functionality in append mode using key
-	*/
 	// TODO: Add edit mnemonica functionality by index
 	/*
 		TODO: Add get/set mnemonic functionality by index and key
@@ -174,6 +177,38 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 	// TODO: add unlock method to match passphrase and save it in current session
 
+	public async saveMnemonic(mnemonic: string, name: string) {
+		this.unlocked();
+
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		const encryptResult = await this.encrypt(mnemonic, this.passphrase);
+
+		const storageMnemonic: KeyringStorageMnemonic<T> = {
+			name,
+			cipherText: encryptResult.cipherText,
+			cipheredMetadata: encryptResult.cipheredMetadata,
+		};
+
+		const mnemonics = [...storage.mnemonics, storageMnemonic];
+
+		storage.mnemonics = mnemonics;
+
+		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+	}
+
+	public unlocked(): asserts this is this & { passphrase: string } {
+		if (!this.passphrase) {
+			throw new Error('The Keyring is locked, you must unlock it');
+		}
+	}
+
+	/*
+	 *
+	 * DEFINITIONS OF ABSTRACT METHODS
+	 *
+	 */
+
 	/**
 	 * @virtual
 	 * Read data from the storage
@@ -181,7 +216,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @typeParam K - The type of data storage in the storage location
 	 * @returns Returns `Promise<K>` data
 	 */
-	protected abstract read<K>(key: string): Promise<K>;
+	protected abstract read<R extends object>(key: string): Promise<R>;
 
 	/**
 	 * @virtual
@@ -190,7 +225,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @param data - The data you want to save to storage
 	 * @returns Returns a boolean value with the status of the operation
 	 */
-	protected abstract write(key: string, data: string): Promise<boolean>;
+	protected abstract write<R extends object>(
+		key: string,
+		data: R,
+	): Promise<boolean>;
 
 	/**
 	 * @virtual
