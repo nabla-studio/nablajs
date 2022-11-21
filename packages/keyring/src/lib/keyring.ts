@@ -315,7 +315,17 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		TODO: Add get/set mnemonic functionality by index and key
 		we should decrypt and set the new mnemonic
 	*/
-	// TODO: Add get all mnemonics array (No decrypt)
+	// TODO: Add method for update current wallet and current mnemonic (For user case such as switch wallet)
+
+	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T>[]> {
+		assertKeyringUnlocked(this.#passphrase);
+
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		assertIsDefined(storage);
+
+		return storage.mnemonics;
+	}
 
 	public async empty(): Promise<boolean> {
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
