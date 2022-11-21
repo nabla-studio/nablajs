@@ -7,6 +7,10 @@ import {
 	EncryptResponse,
 	KeyringStorage,
 	KeyringStorageMnemonic,
+	assertIsDefined,
+	Nullable,
+	assertKeyringUnlocked,
+	assertOutOfIndex,
 } from '../types';
 
 /**
@@ -44,6 +48,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	constructor(
 		public storageKey: string = 'keyring',
 		public walletsOptions: WalletOptions[],
+		public cipherMetadata?: K,
 	) {}
 
 	/**
@@ -175,14 +180,85 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 	// TODO: add unlock method to match passphrase and save it in current session
 
+	// TODO: add utils to check if the storage is empty
+
+	/**
+	 * @public
+	 * Function to initialize the `KeyringStorage`,
+	 * in order to operate with the keyring it is first necessary to initialize it,
+	 * at least one mnemonic is required
+	 *
+	 * @param passphrase the passphrase to set for the keyring
+	 * @param mnemonic the first mnemonic to save
+	 * @param name an alias for mnemonics
+	 */
+	public async init(passphrase: string, mnemonic: string, name: string) {
+		const passphraseHash = await this.hash(passphrase);
+
+		const encryptResult = await this.encrypt(mnemonic, passphrase);
+
+		const storageMnemonic: KeyringStorageMnemonic<T> = {
+			name,
+			cipherText: encryptResult.cipherText,
+			cipheredMetadata: encryptResult.cipheredMetadata,
+		};
+
+		const storage: KeyringStorage<T, K> = {
+			passphraseHash: passphraseHash,
+			currentMnemonicIndex: 0,
+			mnemonics: [storageMnemonic],
+			cipherMetadata: this.cipherMetadata,
+		};
+
+		await this.write(this.storageKey, storage);
+
+		this.#passphrase = passphrase;
+		this.currentMnemonic = mnemonic;
+
+		await this.wallets();
+	}
+
+	/**
+	 * @public
+	 * Unlock the `Keyring` and set passphareHash
+	 */
+	public async unlock(passphrase: string) {
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		assertIsDefined(storage);
+
+		const compare = await this.compareHash(passphrase, storage.passphraseHash);
+
+		if (!compare) {
+			throw new Error('The passphrase used is incorrect');
+		}
+
+		assertOutOfIndex(storage.currentMnemonicIndex, storage.mnemonics.length);
+
+		const mnemonics = [...storage.mnemonics];
+
+		const chipherMnemonic = mnemonics.at(storage.currentMnemonicIndex);
+
+		assertIsDefined(chipherMnemonic);
+
+		const mnemonic = await this.decrypt(chipherMnemonic, passphrase);
+
+		this.#passphrase = passphrase;
+		this.currentMnemonic = mnemonic;
+
+		await this.wallets();
+	}
+
 	/**
 	 * @public
 	 * Save a mnemonic string inside the `KeyringStorage`
 	 */
 	public async saveMnemonic(mnemonic: string, name: string) {
-		this.unlocked(this.#passphrase);
+		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		assertIsDefined(storage);
 
 		const encryptResult = await this.encrypt(mnemonic, this.#passphrase);
 
@@ -204,11 +280,13 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
 	public async editMnemonic(index: number, name: string) {
-		this.unlocked(this.#passphrase);
+		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
-		this.outOfIndex(index, storage.mnemonics.length);
+		assertIsDefined(storage);
+
+		assertOutOfIndex(index, storage.mnemonics.length);
 
 		const storageMnemonic = Object.assign({}, storage.mnemonics[index]);
 
@@ -226,11 +304,13 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Delete a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
 	public async deleteMnemonic(index: number) {
-		this.unlocked(this.#passphrase);
+		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
-		this.outOfIndex(index, storage.mnemonics.length);
+		assertIsDefined(storage);
+
+		assertOutOfIndex(index, storage.mnemonics.length);
 
 		const mnemonics = [...storage.mnemonics];
 
@@ -242,29 +322,15 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	}
 
 	/**
-	 * @public
-	 * Assertion function used to check that the wallet is unlocked
+	 * DEFINITIONS OF GETTERS
 	 */
-	public unlocked(
-		passphrase?: string,
-	): asserts passphrase is NonNullable<string> {
-		if (!passphrase) {
-			throw new Error('The Keyring is locked, you must unlock it');
-		}
-	}
 
 	/**
 	 * @public
-	 * Assertion function used to check if we are out of index
+	 * Check if the `Keyring` is unlocked
 	 */
-	private outOfIndex(index: number, length: number) {
-		if (index < 0 || index > length - 1) {
-			throw new Error(
-				`IndexError: the index ${index} is greater then ${
-					length - 1
-				} or less then zero`,
-			);
-		}
+	public get unlocked() {
+		return this.#passphrase !== undefined;
 	}
 
 	/*
@@ -280,7 +346,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @typeParam K - The type of data storage in the storage location
 	 * @returns Returns `Promise<K>` data
 	 */
-	protected abstract read<R extends object>(key: string): Promise<R>;
+	protected abstract read<R extends object>(key: string): Promise<Nullable<R>>;
 
 	/**
 	 * @virtual
