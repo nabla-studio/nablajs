@@ -35,7 +35,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	/**
 	 * current passphrase used for mnemonics encryption
 	 */
-	protected passphrase?: string;
+	#passphrase?: string;
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -180,11 +180,11 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Save a mnemonic string inside the `KeyringStorage`
 	 */
 	public async saveMnemonic(mnemonic: string, name: string) {
-		this.unlocked();
+		this.unlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
-		const encryptResult = await this.encrypt(mnemonic, this.passphrase);
+		const encryptResult = await this.encrypt(mnemonic, this.#passphrase);
 
 		const storageMnemonic: KeyringStorageMnemonic<T> = {
 			name,
@@ -204,7 +204,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
 	public async editMnemonic(index: number, name: string) {
-		this.unlocked();
+		this.unlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
@@ -226,7 +226,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Delete a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
 	public async deleteMnemonic(index: number) {
-		this.unlocked();
+		this.unlocked(this.#passphrase);
 
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
@@ -245,8 +245,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @public
 	 * Assertion function used to check that the wallet is unlocked
 	 */
-	public unlocked(): asserts this is this & { passphrase: string } {
-		if (!this.passphrase) {
+	public unlocked(
+		passphrase?: string,
+	): asserts passphrase is NonNullable<string> {
+		if (!passphrase) {
 			throw new Error('The Keyring is locked, you must unlock it');
 		}
 	}
