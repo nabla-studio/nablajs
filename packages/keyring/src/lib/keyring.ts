@@ -169,19 +169,6 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		return hash === hashDigest;
 	}
 
-	/*
-		The keyring storage area is an array of mnemonics (Maybe an object with other data)
-	*/
-	/*
-		TODO: Add get/set mnemonic functionality by index and key
-		we should decrypt and set the new mnemonic
-	*/
-	// TODO: Add get all mnemonics array (No decrypt)
-
-	// TODO: add unlock method to match passphrase and save it in current session
-
-	// TODO: add utils to check if the storage is empty
-
 	/**
 	 * @public
 	 * Function to initialize the `KeyringStorage`,
@@ -319,6 +306,25 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		storage.mnemonics = mnemonics;
 
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+	}
+
+	/*
+		The keyring storage area is an array of mnemonics (Maybe an object with other data)
+	*/
+	/*
+		TODO: Add get/set mnemonic functionality by index and key
+		we should decrypt and set the new mnemonic
+	*/
+	// TODO: Add get all mnemonics array (No decrypt)
+
+	public async empty(): Promise<boolean> {
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		if (!storage) {
+			return false;
+		}
+
+		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
 	}
 
 	/**

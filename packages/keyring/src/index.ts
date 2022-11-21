@@ -1,2 +1,2 @@
-export * from './lib/keyring';
+export * from './lib';
 export * from './types';
