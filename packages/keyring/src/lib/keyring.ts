@@ -308,14 +308,31 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
 	}
 
-	/*
-		The keyring storage area is an array of mnemonics (Maybe an object with other data)
-	*/
-	/*
-		TODO: Add get/set mnemonic functionality by index and key
-		we should decrypt and set the new mnemonic
-	*/
-	// TODO: Add method for update current wallet and current mnemonic (For user case such as switch wallet)
+	public async changeCurrentMnemonic(index: number) {
+		assertKeyringUnlocked(this.#passphrase);
+
+		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+
+		assertIsDefined(storage);
+
+		assertOutOfIndex(index, storage.mnemonics.length);
+
+		const mnemonics = [...storage.mnemonics];
+
+		const chipherMnemonic = mnemonics.at(index);
+
+		assertIsDefined(chipherMnemonic);
+
+		const mnemonic = await this.decrypt(chipherMnemonic, this.#passphrase);
+
+		storage.currentMnemonicIndex = index;
+
+		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+
+		this.currentMnemonic = mnemonic;
+
+		await this.wallets();
+	}
 
 	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T>[]> {
 		assertKeyringUnlocked(this.#passphrase);
