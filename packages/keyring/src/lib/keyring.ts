@@ -308,6 +308,12 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
 	}
 
+	/**
+	 * @public
+	 * Allows you to change the mnemonics currently in use
+	 *
+	 * @param index The index of the mnemonics with which you want to replace the current one
+	 */
 	public async changeCurrentMnemonic(index: number) {
 		assertKeyringUnlocked(this.#passphrase);
 
@@ -334,6 +340,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		await this.wallets();
 	}
 
+	/**
+	 * @public
+	 * Get all the encrypted mnemonics present in the storage
+	 */
 	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T>[]> {
 		assertKeyringUnlocked(this.#passphrase);
 
@@ -344,6 +354,10 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		return storage.mnemonics;
 	}
 
+	/**
+	 * @public
+	 * Check if the storage is empty
+	 */
 	public async empty(): Promise<boolean> {
 		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
 
