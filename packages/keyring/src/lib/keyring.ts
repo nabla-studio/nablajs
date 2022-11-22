@@ -210,7 +210,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Unlock the `Keyring` and set passphareHash
 	 */
 	public async unlock(passphrase: string) {
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -243,7 +243,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async saveMnemonic(mnemonic: string, name: string) {
 		assertKeyringUnlocked(this.#passphrase);
 
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -259,7 +259,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		storage.mnemonics = mnemonics;
 
-		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 	}
 
 	/**
@@ -269,7 +269,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async editMnemonic(index: number, name: string) {
 		assertKeyringUnlocked(this.#passphrase);
 
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -283,7 +283,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		storage.mnemonics = mnemonics;
 
-		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 	}
 
 	/**
@@ -293,7 +293,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async deleteMnemonic(index: number) {
 		assertKeyringUnlocked(this.#passphrase);
 
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -305,7 +305,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		storage.mnemonics = mnemonics;
 
-		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 	}
 
 	/**
@@ -317,7 +317,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async changeCurrentMnemonic(index: number) {
 		assertKeyringUnlocked(this.#passphrase);
 
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -333,7 +333,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		storage.currentMnemonicIndex = index;
 
-		await this.write<KeyringStorage<T, K>>(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 
 		this.currentMnemonic = mnemonic;
 
@@ -347,7 +347,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T>[]> {
 		assertKeyringUnlocked(this.#passphrase);
 
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
@@ -359,7 +359,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * Check if the storage is empty
 	 */
 	public async empty(): Promise<boolean> {
-		const storage = await this.read<KeyringStorage<T, K>>(this.storageKey);
+		const storage = await this.read(this.storageKey);
 
 		if (!storage) {
 			return false;
@@ -393,7 +393,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @typeParam K - The type of data storage in the storage location
 	 * @returns Returns `Promise<K>` data
 	 */
-	protected abstract read<R extends object>(key: string): Promise<Nullable<R>>;
+	protected abstract read(key: string): Promise<Nullable<KeyringStorage<T, K>>>;
 
 	/**
 	 * @virtual
@@ -402,9 +402,9 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @param data - The data you want to save to storage
 	 * @returns Returns a boolean value with the status of the operation
 	 */
-	protected abstract write<R extends object>(
+	protected abstract write(
 		key: string,
-		data: R,
+		data: KeyringStorage<T, K>,
 	): Promise<boolean>;
 
 	/**
