@@ -417,26 +417,26 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 	/**
 	 * @virtual
-	 * Encrypt the `data` payload using the `key` param
+	 * Encrypt the `data` payload using the `passphrase` param
 	 * @param data - The data payload to be encrypted
-	 * @param key - The key with which to encrypt the payload
+	 * @param passphrase - The passphrase with which to encrypt the payload
 	 * @returns Returns a `EncryptResponse`
 	 */
 	protected abstract encrypt(
 		data: string,
-		key: string,
+		passphrase: string,
 	): Promise<EncryptResponse<T>>;
 
 	/**
 	 * @virtual
-	 * Decrypt the `EncryptResponse` payload using the `key` param
+	 * Decrypt the `EncryptResponse` payload using the `passphrase` param
 	 * @param data - The data payload to be decrypted
-	 * @param key - The key with which to decrypt the payload
+	 * @param passphrase - The passphrase with which to decrypt the payload
 	 * @returns Returns a the plain text
 	 */
 	protected abstract decrypt(
 		data: EncryptResponse<T>,
-		key: string,
+		passphrase: string,
 	): Promise<string>;
 
 	/**
