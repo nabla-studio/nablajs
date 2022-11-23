@@ -1,4 +1,4 @@
-/* import { keyring } from './keyring'; */
+import { TestKeyring } from './map-storage';
 
 /* describe('keyring', () => {
 	it('should work', () => {
