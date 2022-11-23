@@ -8,6 +8,7 @@
     "@cosmjs/amino": "^0.29.4",
     "@cosmjs/crypto": "^0.29.4",
     "@cosmjs/proto-signing": "^0.29.4",
+    "js-crypto-utils": "^1.0.4",
     "mobx": "^6.7.0",
     "tslib": "^2.3.0"
   },
