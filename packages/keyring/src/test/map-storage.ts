@@ -55,7 +55,7 @@ export class TestKeyring extends Keyring<AESMetadata> {
 	): Promise<EncryptResponse<AESMetadata>> {
 		const text = Buffer.from(data);
 
-		const key = await this.generateKey(passphrase, this.salt, 5000, 256);
+		const key = await this.generateKey(passphrase, this.salt, 5000, 16);
 		const encryptionResult = await this.encryptData(text, key);
 
 		const cipherText = Buffer.from(encryptionResult.cipher).toString('hex');
