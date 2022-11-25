@@ -279,7 +279,9 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		storageMnemonic.name = name;
 
-		const mnemonics = [...storage.mnemonics, storageMnemonic];
+		const mnemonics = [...storage.mnemonics];
+
+		mnemonics[index] = storageMnemonic;
 
 		storage.mnemonics = mnemonics;
 
