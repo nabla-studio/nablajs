@@ -78,7 +78,7 @@ export class TestKeyring extends Keyring<AESMetadata> {
 			iv: Buffer.from(data.cipheredMetadata?.iv ?? '', 'hex'),
 		};
 
-		const key = await this.generateKey(passphrase, this.salt, 5000, 256);
+		const key = await this.generateKey(passphrase, this.salt, 5000, 16);
 
 		const decryptData = await this.decryptData(encryptData, key);
 
