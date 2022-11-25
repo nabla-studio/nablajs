@@ -238,6 +238,16 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 	/**
 	 * @public
+	 * Lock the `Keyring` and reset the current state
+	 */
+	public lock() {
+		this.#passphrase = undefined;
+		this.currentMnemonic = undefined;
+		this.currentWallets = [];
+	}
+
+	/**
+	 * @public
 	 * Save a mnemonic string inside the `KeyringStorage`
 	 */
 	public async saveMnemonic(mnemonic: string, name: string) {
@@ -306,6 +316,14 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		mnemonics.splice(index, 1);
 
 		storage.mnemonics = mnemonics;
+
+		if (storage.currentMnemonicIndex === index) {
+			storage.currentMnemonicIndex = 0;
+		}
+
+		if (storage.mnemonics.length === 0) {
+			this.lock();
+		}
 
 		await this.write(this.storageKey, storage);
 	}
