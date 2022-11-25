@@ -82,7 +82,7 @@ export class TestKeyring extends Keyring<AESMetadata> {
 
 		const decryptData = await this.decryptData(encryptData, key);
 
-		return Buffer.from(decryptData).toString('hex');
+		return Buffer.from(decryptData).toString('utf8');
 	}
 
 	protected async hash(data: string): Promise<string> {
