@@ -362,7 +362,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		const storage = await this.read(this.storageKey);
 
 		if (!storage) {
-			return false;
+			return true;
 		}
 
 		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
