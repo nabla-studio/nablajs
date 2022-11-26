@@ -45,15 +45,22 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			await expect(testKeyring.changeCurrentMnemonic(0)).rejects.toThrowError();
 		});
 		it('getAllMnemonics should fail because keyring is locked', async () => {
-			await expect(testKeyring.changeCurrentMnemonic(0)).rejects.toThrowError();
+			await expect(testKeyring.getAllMnemonics()).rejects.toThrowError();
 		});
 	});
 	describe('Validate mnemonics I/O Operations', () => {
+		it('Should get empty true', async () => {
+			const empty = await testKeyring.empty();
+
+			expect(empty).toBe(true);
+		});
 		it('Should init the Keyring', async () => {
 			await testKeyring.init(passphrase, mnemonic, mnemonicName);
 		});
 		it('Should get wallets', async () => {
-			await testKeyring.wallets();
+			const wallets = await testKeyring.wallets();
+
+			expect(wallets.length).toBe(2);
 		});
 		it('Should get accounts', async () => {
 			const accounts = await testKeyring.accounts();
@@ -69,6 +76,58 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			);
 
 			expect(cosmosAccount).not.toBeUndefined();
+		});
+		it('Should get empty false', async () => {
+			const empty = await testKeyring.empty();
+
+			expect(empty).toBe(false);
+		});
+		it('Should get mnemonics of length equal to one', async () => {
+			const mnemonics = await testKeyring.getAllMnemonics();
+
+			expect(mnemonics.length).toBe(1);
+		});
+		it('Unlock should succed', async () => {
+			await testKeyring.unlock(passphrase);
+		});
+		it('Should save a new mnemonic and set it as current one', async () => {
+			const newMnemonic = await testKeyring.generateMnemonic(
+				24,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			const [newAccount] = await newMnemonic.getAccounts();
+
+			await testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic');
+			await testKeyring.changeCurrentMnemonic(1);
+
+			const mnemonics = await testKeyring.getAllMnemonics();
+
+			expect(mnemonics.length).toBe(2);
+
+			const accounts = await testKeyring.accounts();
+
+			const bitsongAccount = accounts.find(
+				account => account.address === newAccount.address,
+			);
+
+			expect(bitsongAccount).not.toBeUndefined();
+		});
+		it('Should edit the new mnemonic', async () => {
+			const [mnemonic] = await testKeyring.getAllMnemonics();
+
+			await testKeyring.editMnemonic(0, `${mnemonicName}-edit`);
+
+			const [editMnemonic] = await testKeyring.getAllMnemonics();
+
+			expect(editMnemonic.name).toBe(`${mnemonicName}-edit`);
+			expect(mnemonic.name).not.toBe(editMnemonic.name);
+		});
+		it('Should delete a mnemonic', async () => {
+			await testKeyring.deleteMnemonic(1);
+
+			expect(testKeyring.getAllMnemonics);
 		});
 	});
 });
