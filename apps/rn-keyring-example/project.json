@@ -1,0 +1,76 @@
+{
+	"name": "rn-keyring-example",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/rn-keyring-example/src",
+	"projectType": "application",
+	"targets": {
+		"start": {
+			"executor": "@nrwl/react-native:start",
+			"options": {
+				"port": 8081
+			}
+		},
+		"serve": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "nx start rn-keyring-example"
+			}
+		},
+		"run-ios": {
+			"executor": "@nrwl/react-native:run-ios",
+			"options": {}
+		},
+		"bundle-ios": {
+			"executor": "@nrwl/react-native:bundle",
+			"options": {
+				"entryFile": "src/main.tsx",
+				"platform": "ios",
+				"bundleOutput": "dist/apps/rn-keyring-example/ios/main.jsbundle"
+			}
+		},
+		"run-android": {
+			"executor": "@nrwl/react-native:run-android",
+			"options": {}
+		},
+		"build-android": {
+			"executor": "@nrwl/react-native:build-android",
+			"outputs": [
+				"{projectRoot}/android/app/build/outputs/bundle",
+				"{projectRoot}/android/app/build/outputs/apk"
+			],
+			"options": {}
+		},
+		"bundle-android": {
+			"executor": "@nrwl/react-native:bundle",
+			"options": {
+				"entryFile": "src/main.tsx",
+				"platform": "android",
+				"bundleOutput": "dist/apps/rn-keyring-example/android/main.jsbundle"
+			}
+		},
+		"sync-deps": {
+			"executor": "@nrwl/react-native:sync-deps",
+			"options": {}
+		},
+		"ensure-symlink": {
+			"executor": "@nrwl/react-native:ensure-symlink",
+			"options": {}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["apps/rn-keyring-example/**/*.{ts,tsx,js,jsx}"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "apps/rn-keyring-example/jest.config.ts",
+				"passWithNoTests": true
+			}
+		}
+	},
+	"tags": []
+}

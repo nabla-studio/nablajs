@@ -103,4 +103,4 @@ buck-out/
 # Ruby / CocoaPods
 **/ios/Pods/
 **/vendor/bundle/
-
+apps/rn-keyring-example-e2e/artifacts

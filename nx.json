@@ -33,7 +33,8 @@
 		"sharedGlobals": ["{workspaceRoot}/babel.config.json"]
 	},
 	"workspaceLayout": {
-		"appsDir": "packages",
+		"appsDir": "apps",
 		"libsDir": "packages"
-	}
+	},
+	"defaultProject": "rn-keyring-example"
 }
