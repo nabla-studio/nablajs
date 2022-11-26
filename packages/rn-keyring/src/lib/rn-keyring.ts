@@ -5,6 +5,7 @@ import {
 	Nullable,
 	WalletOptions,
 } from '@nablajs/keyring';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AES from 'react-native-aes-crypto';
 import { AESEcrypted, AESMetadata } from '../types';
 
@@ -17,19 +18,27 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		super(storageKey, walletsOptions);
 	}
 
-	protected read(key: string): Promise<Nullable<KeyringStorage<AESMetadata>>> {
-		throw new Error('Method not implemented.');
+	protected async read(
+		key: string,
+	): Promise<Nullable<KeyringStorage<AESMetadata>>> {
+		const data = await AsyncStorage.getItem(key);
+
+		return data ? JSON.parse(data) : null;
 	}
 
-	protected write(
+	protected async write(
 		key: string,
 		data: KeyringStorage<AESMetadata>,
 	): Promise<boolean> {
-		throw new Error('Method not implemented.');
+		await AsyncStorage.setItem(key, JSON.stringify(data));
+
+		return true;
 	}
 
-	protected delete(key: string): Promise<boolean> {
-		throw new Error('Method not implemented.');
+	protected async delete(key: string): Promise<boolean> {
+		await AsyncStorage.removeItem(key);
+
+		return true;
 	}
 
 	protected async encrypt(

@@ -2,7 +2,10 @@
 	"name": "nablajs",
 	"version": "0.0.0",
 	"license": "MIT",
-	"scripts": {},
+	"scripts": {
+		"build:all": "nx run-many --target=build --projects=keyring,rn-keyring --parallel=2",
+		"test:all": "nx run-many --target=test --projects=keyring,rn-keyring --parallel=2"
+	},
 	"private": true,
 	"dependencies": {
 		"@cosmjs/amino": "^0.29.4",
