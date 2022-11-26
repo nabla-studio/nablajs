@@ -1,0 +1,43 @@
+{
+	"name": "rn-keyring",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "packages/rn-keyring/src",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "@nrwl/web:rollup",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/packages/rn-keyring",
+				"tsConfig": "packages/rn-keyring/tsconfig.lib.json",
+				"project": "packages/rn-keyring/package.json",
+				"entryFile": "packages/rn-keyring/src/index.ts",
+				"external": ["react/jsx-runtime", "react-native"],
+				"rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+				"assets": [
+					{
+						"glob": "packages/rn-keyring/README.md",
+						"input": ".",
+						"output": "."
+					}
+				]
+			}
+		},
+		"lint": {
+			"executor": "@nrwl/linter:eslint",
+			"outputs": ["{options.outputFile}"],
+			"options": {
+				"lintFilePatterns": ["packages/rn-keyring/**/*.{ts,tsx,js,jsx}"]
+			}
+		},
+		"test": {
+			"executor": "@nrwl/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "packages/rn-keyring/jest.config.ts",
+				"passWithNoTests": true
+			}
+		}
+	}
+}
