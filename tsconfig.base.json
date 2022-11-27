@@ -17,8 +17,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@nablajs/keyring": ["packages/keyring/src/index.ts"],
-			"@nablajs/rn-keyring": ["packages/rn-keyring/src/index.ts"]
+			"@nabla-studio/keyring": ["packages/keyring/src/index.ts"],
+			"@nabla-studio/rn-keyring": ["packages/rn-keyring/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

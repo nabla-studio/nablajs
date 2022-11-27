@@ -4,7 +4,7 @@ import {
 	KeyringStorage,
 	Nullable,
 	WalletOptions,
-} from '@nablajs/keyring';
+} from '@nabla-studio/keyring';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AES from 'react-native-aes-crypto';
 import { AESEcrypted, AESMetadata } from '../types';
