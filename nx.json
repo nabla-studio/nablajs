@@ -35,6 +35,5 @@
 	"workspaceLayout": {
 		"appsDir": "apps",
 		"libsDir": "packages"
-	},
-	"defaultProject": "rn-keyring-example"
+	}
 }
