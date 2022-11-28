@@ -182,24 +182,19 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async init(passphrase: string, mnemonic: string, name: string) {
 		const passphraseHash = await this.hash(passphrase);
 
-		const encryptResult = await this.encrypt(mnemonic, passphrase);
-
-		const storageMnemonic: KeyringStorageMnemonic<T> = {
-			name,
-			cipherText: encryptResult.cipherText,
-			cipheredMetadata: encryptResult.cipheredMetadata,
-		};
-
 		const storage: KeyringStorage<T, K> = {
 			passphraseHash: passphraseHash,
 			currentMnemonicIndex: 0,
-			mnemonics: [storageMnemonic],
+			mnemonics: [],
 			cipherMetadata: this.cipherMetadata,
 		};
 
 		await this.write(this.storageKey, storage);
 
 		this.#passphrase = passphrase;
+
+		await this.saveMnemonic(mnemonic, name);
+
 		this.currentMnemonic = mnemonic;
 
 		await this.wallets();
