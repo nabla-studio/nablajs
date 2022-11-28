@@ -12,6 +12,10 @@ import { AESEcrypted, AESMetadata } from '../types';
 export class RNKeyring extends Keyring<AESMetadata> {
 	constructor(
 		public salt: string,
+		public pbkdf2cost: number,
+		public pbkdf2length: number,
+		public randomKeyLength: number,
+		public algorithm: AES.Algorithms,
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
 	) {
@@ -45,7 +49,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		data: string,
 		passphrase: string,
 	): Promise<EncryptResponse<AESMetadata>> {
-		const key = await this.generateKey(passphrase, this.salt, 5000, 16);
+		const key = await this.generateKey(passphrase);
 		const encryptionResult = await this.encryptData(data, key);
 
 		return {
@@ -60,7 +64,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		data: EncryptResponse<AESMetadata>,
 		passphrase: string,
 	): Promise<string> {
-		const key = await this.generateKey(passphrase, this.salt, 5000, 16);
+		const key = await this.generateKey(passphrase);
 
 		const encryptData: AESEcrypted = {
 			cipherText: data.cipherText,
@@ -78,21 +82,21 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		return hashResult;
 	}
 
-	private async generateKey(
-		password: string,
-		salt: string,
-		cost: number,
-		length: number,
-	) {
-		const key = await AES.pbkdf2(password, salt, cost, length);
+	private async generateKey(password: string) {
+		const key = await AES.pbkdf2(
+			password,
+			this.salt,
+			this.pbkdf2cost,
+			this.pbkdf2length,
+		);
 
 		return key;
 	}
 
 	private async encryptData(text: string, key: string) {
-		const iv = await AES.randomKey(16);
+		const iv = await AES.randomKey(this.randomKeyLength);
 
-		const cipher = await AES.encrypt(text, key, iv, 'aes-256-cbc');
+		const cipher = await AES.encrypt(text, key, iv, this.algorithm);
 
 		return {
 			cipher,
@@ -105,7 +109,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 			encryptedData.cipherText,
 			key,
 			encryptedData.iv,
-			'aes-256-cbc',
+			this.algorithm,
 		);
 
 		return decrypt;
