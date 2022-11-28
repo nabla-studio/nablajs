@@ -11,13 +11,13 @@ import { AESEcrypted, AESMetadata } from '../types';
 
 export class RNKeyring extends Keyring<AESMetadata> {
 	constructor(
-		public salt: string,
-		public pbkdf2cost: number,
-		public pbkdf2length: number,
-		public randomKeyLength: number,
-		public algorithm: AES.Algorithms,
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
+		public salt: string,
+		public pbkdf2cost: number = 5000,
+		public pbkdf2length: number = 256,
+		public randomKeyLength: number = 16,
+		public algorithm: AES.Algorithms = 'aes-256-cbc',
 	) {
 		super(storageKey, walletsOptions);
 	}
