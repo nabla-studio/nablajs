@@ -25,18 +25,19 @@ import {
  */
 export abstract class Keyring<T = undefined, K = undefined> {
 	/**
-	 * @public
+	 * @private
 	 * the mnemonics currently selected to operate
 	 */
-	public currentMnemonic?: string;
+	#currentMnemonic?: string;
 
 	/**
-	 * @public
+	 * @private
 	 * current wallets associated with current mnemonic
 	 */
-	public currentWallets: Wallet[] = [];
+	#currentWallets: Wallet[] = [];
 
 	/**
+	 * @private
 	 * current passphrase used for mnemonics encryption
 	 */
 	#passphrase?: string;
@@ -103,7 +104,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 */
 	public async wallets(): Promise<Wallet[]> {
 		let wallets: Wallet[] = [];
-		const currentMnemonic = this.currentMnemonic;
+		const currentMnemonic = this.#currentMnemonic;
 
 		if (currentMnemonic) {
 			const walletsPromises = this.walletsOptions.map(option =>
@@ -117,7 +118,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 			wallets = await Promise.all(walletsPromises);
 		}
 
-		this.currentWallets = wallets;
+		this.#currentWallets = wallets;
 
 		return wallets;
 	}
@@ -128,11 +129,11 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @returns Returns an array of `AccountData`
 	 */
 	public async accounts(): Promise<AccountData[]> {
-		if (!this.currentMnemonic && this.currentWallets.length === 0) {
+		if (!this.#currentMnemonic && this.#currentWallets.length === 0) {
 			await this.wallets();
 		}
 
-		const accountsPromises = this.currentWallets.map(({ wallet }) =>
+		const accountsPromises = this.#currentWallets.map(({ wallet }) =>
 			wallet.getAccounts(),
 		);
 
@@ -195,7 +196,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		await this.saveMnemonic(mnemonic, name);
 
-		this.currentMnemonic = mnemonic;
+		this.#currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -226,7 +227,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		const mnemonic = await this.decrypt(chipherMnemonic, passphrase);
 
 		this.#passphrase = passphrase;
-		this.currentMnemonic = mnemonic;
+		this.#currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -237,8 +238,8 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 */
 	public lock() {
 		this.#passphrase = undefined;
-		this.currentMnemonic = undefined;
-		this.currentWallets = [];
+		this.#currentMnemonic = undefined;
+		this.#currentWallets = [];
 	}
 
 	/**
@@ -350,7 +351,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		await this.write(this.storageKey, storage);
 
-		this.currentMnemonic = mnemonic;
+		this.#currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -393,6 +394,22 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 */
 	public get unlocked() {
 		return this.#passphrase !== undefined;
+	}
+
+	/**
+	 * @public
+	 * the mnemonics currently selected to operate
+	 */
+	public get currentMnemonic() {
+		return this.#currentMnemonic;
+	}
+
+	/**
+	 * @public
+	 * current wallets associated with current mnemonic
+	 */
+	public get currentWallets() {
+		return this.#currentWallets;
 	}
 
 	/*
