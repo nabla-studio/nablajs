@@ -17,6 +17,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
+			"@nabla-studio/bip85": ["packages/bip85/src/index.ts"],
 			"@nabla-studio/keyring": ["packages/keyring/src/index.ts"],
 			"@nabla-studio/rn-keyring": ["packages/rn-keyring/src/index.ts"]
 		}
