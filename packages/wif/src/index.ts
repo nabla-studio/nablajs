@@ -1,1 +1,1 @@
-export * from './lib/wif';
+export * from './lib';
