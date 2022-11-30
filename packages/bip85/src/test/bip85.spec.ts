@@ -1,15 +1,12 @@
 import { Slip10, Slip10Curve, stringToPath } from '@cosmjs/crypto';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { base58, hex } from '@scure/base';
-import { encode } from '@nabla-studio/wif';
 import { BIP85 } from '../lib/bip85';
 
 // Test vectors taken from: https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki#applications
 // Mnemonic: puppy ocean match cereal symbol another shed magic wrap hammer bulb intact gadget divorce twin tonight reason outdoor destroy simple truth cigar social volcano
 const rootKey =
-	'9s21ZrQH143K2LBWUUQRFXhucrQqBpKdRRxNVq2zBqsx8HVqFk2uYo8kmbaLLHRdqtQpUm98uKfu3vca1LqdGhUtyoFnCNkfmXRyPXLjbKb';
-
-const hexRootKey = encode(128, Buffer.from(rootKey));
+	'xprv9s21ZrQH143K2LBWUUQRFXhucrQqBpKdRRxNVq2zBqsx8HVqFk2uYo8kmbaLLHRdqtQpUm98uKfu3vca1LqdGhUtyoFnCNkfmXRyPXLjbKb';
 
 const testCase1 = {
 	derivedKey: 'cca20ccb0e9a90feb0912870c3323b24874b0ca3d8018c4b96d0b97c0e82ded0',
@@ -17,25 +14,28 @@ const testCase1 = {
 		'efecfbccffea313214232d29e71563d941229afb4338c21f9517c41aaa0d16f00b83d2a09ef747e7a64e8e2bd5a14869e693da66ce94ac2da570ab7ee48618f7',
 };
 
+const testCase2 = {
+	derivedKey: '503776919131758bb7de7beb6c0ae24894f4ec042c26032890c29359216e21ba',
+	derivedEntropy:
+		'70c6e3e8ebee8dc4c0dbba66076819bb8c09672527c4277ca8729532ad711872218f826919f6b67218adde99018a6df9095ab2b58d803b5b93ec9802085a690e',
+};
+
 describe('BIP85: Child Entropy', () => {
 	it('works for test case 1', async () => {
-		console.log(hexRootKey);
-		const master = BIP85.fromBase58(hexRootKey);
+		const master = BIP85.fromBase58(rootKey);
 		const child = master.derive(`m/83696968'/0'/0'`);
 
 		expect(child).toEqual(testCase1.derivedEntropy);
 	});
 
-	/* it('works for test case 2', () => {
+	it('works for test case 2', () => {
 		const master = BIP85.fromBase58(rootKey);
 		const child = master.derive(`m/83696968'/0'/1'`);
 
-		expect(child).toEqual(
-			'70c6e3e8ebee8dc4c0dbba66076819bb8c09672527c4277ca8729532ad711872218f826919f6b67218adde99018a6df9095ab2b58d803b5b93ec9802085a690e',
-		);
+		expect(child).toEqual(testCase2.derivedEntropy);
 	});
 
-	it('works for BIP39, 12 words', () => {
+	/*it('works for BIP39, 12 words', () => {
 		const master = BIP85.fromBase58(rootKey);
 		const child = master.deriveBIP39(0, 12, 0);
 

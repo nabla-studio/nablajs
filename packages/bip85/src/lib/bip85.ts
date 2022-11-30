@@ -5,7 +5,7 @@ import {
 	validateMnemonic,
 } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
-import { sha256 } from '@noble/hashes/sha256';
+import { sha512 } from '@noble/hashes/sha512';
 import { hmac } from '@noble/hashes/hmac';
 import { BIP85Child } from './bip85-child';
 import {
@@ -22,8 +22,6 @@ import {
 	BIP85_KEY,
 	BIP85_ENTROPY_LENGTHS,
 } from './types';
-import { base58 } from '@scure/base';
-import { hexToBytes } from '@noble/hashes/utils';
 
 export class BIP85 {
 	private node: HDKey;
@@ -106,12 +104,12 @@ export class BIP85 {
 
 	derive(path: string, bytesLength = 64): string {
 		const childNode = this.node.derive(path);
+
 		// Child derived from root key always has private key
-		const childPrivateKey = childNode.privateKey;
+		assertIsDefined(childNode.privateKey);
 
-		assertIsDefined(childPrivateKey);
+		const hash = hmac(sha512, Buffer.from(BIP85_KEY), childNode.privateKey);
 
-		const hash = hmac(sha256, Buffer.from(BIP85_KEY), childPrivateKey);
 		const truncatedHash = hash.slice(0, bytesLength);
 
 		const childEntropy: string = Buffer.from(truncatedHash).toString('hex');
@@ -120,7 +118,7 @@ export class BIP85 {
 	}
 
 	static fromBase58(bip32seed: string): BIP85 {
-		const node = HDKey.fromMasterSeed(hexToBytes(bip32seed));
+		const node = HDKey.fromExtendedKey(bip32seed);
 
 		if (node.depth !== 0) {
 			throw new Error('Expected master, got child');
