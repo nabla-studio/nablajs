@@ -1,1 +1,1 @@
-export * from './lib/bip85';
+export * from './lib';
