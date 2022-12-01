@@ -43,17 +43,18 @@ export const decode = (data: string, version: number) => {
 
 export const encodeRaw = (
 	version: number,
-	privateKey: Buffer,
+	privateKey: Uint8Array,
 	compressed: boolean,
 ) => {
 	if (privateKey.length !== 32) {
 		throw new TypeError('Invalid privateKey length');
 	}
 
-	const result = Buffer.alloc(compressed ? 34 : 33);
-	result.writeUInt8(version, 0);
+	const result = new Uint8Array(compressed ? 34 : 33);
 
-	privateKey.copy(result, 1);
+	result[0] = version;
+
+	result.set(new Uint8Array(privateKey), 1);
 
 	if (compressed) {
 		result[33] = 0x01;
@@ -64,7 +65,7 @@ export const encodeRaw = (
 
 export const encode = (
 	version: number,
-	privateKey: Buffer,
+	privateKey: Uint8Array,
 	compressed = false,
 ) => {
 	return base58check.encode(encodeRaw(version, privateKey, compressed));
