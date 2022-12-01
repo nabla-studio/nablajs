@@ -22,6 +22,8 @@ import {
 	BIP85_KEY,
 	BIP85_ENTROPY_LENGTHS,
 } from './types';
+import { bytesToHex } from '@noble/hashes/utils';
+import { bytesToString, stringToBytes } from '@scure/base';
 
 export class BIP85 {
 	private node: HDKey;
@@ -108,11 +110,15 @@ export class BIP85 {
 		// Child derived from root key always has private key
 		assertIsDefined(childNode.privateKey);
 
-		const hash = hmac(sha512, Buffer.from(BIP85_KEY), childNode.privateKey);
+		const hash = hmac(
+			sha512,
+			stringToBytes('utf8', BIP85_KEY),
+			childNode.privateKey,
+		);
 
 		const truncatedHash = hash.slice(0, bytesLength);
 
-		const childEntropy: string = Buffer.from(truncatedHash).toString('hex');
+		const childEntropy: string = bytesToHex(truncatedHash);
 
 		return childEntropy;
 	}
@@ -127,8 +133,8 @@ export class BIP85 {
 		return new BIP85(node);
 	}
 
-	static fromSeed(bip32seed: Buffer): BIP85 {
-		const node = HDKey.fromMasterSeed(Buffer.from(bip32seed));
+	static fromSeed(bip32seed: string): BIP85 {
+		const node = HDKey.fromMasterSeed(stringToBytes('utf8', bip32seed));
 
 		if (node.depth !== 0) {
 			throw new Error('Expected master, got child');
@@ -138,7 +144,7 @@ export class BIP85 {
 	}
 
 	static fromEntropy(entropy: string, password = '') {
-		const mnemonic = entropyToMnemonic(Buffer.from(entropy), wordlist);
+		const mnemonic = entropyToMnemonic(stringToBytes('utf8', entropy), wordlist);
 
 		return BIP85.fromMnemonic(mnemonic, password);
 	}
@@ -150,6 +156,6 @@ export class BIP85 {
 
 		const seed = await mnemonicToSeed(mnemonic, password);
 
-		return BIP85.fromSeed(Buffer.from(seed));
+		return BIP85.fromSeed(bytesToString('utf8', seed));
 	}
 }

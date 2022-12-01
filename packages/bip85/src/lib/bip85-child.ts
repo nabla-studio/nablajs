@@ -32,7 +32,7 @@ export class BIP85Child {
 			throw new Error('BIP85Child type is not WIF');
 		}
 
-		const buf = Buffer.from(this.entropy, 'hex');
+		const buf = hexToBytes(this.entropy);
 
 		return encode(128, buf, true);
 	}
