@@ -1,4 +1,5 @@
 import { encode } from '@nabla-studio/wif';
+import { hexToBytes } from '@noble/hashes/utils';
 import { HDKey } from '@scure/bip32';
 import { entropyToMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
@@ -23,7 +24,7 @@ export class BIP85Child {
 			throw new Error('BIP85Child type is not BIP39');
 		}
 
-		return entropyToMnemonic(Buffer.from(this.entropy), wordlist);
+		return entropyToMnemonic(hexToBytes(this.entropy), wordlist);
 	}
 
 	toWIF(): string {
@@ -41,17 +42,7 @@ export class BIP85Child {
 			throw new Error('BIP85Child type is not XPRV');
 		}
 
-		const chainCode = Buffer.from(this.entropy.slice(0, 64), 'hex');
-		const privateKey = Buffer.from(this.entropy.slice(64, 128), 'hex');
-
-		const hdkey = new HDKey({
-			privateKey,
-			chainCode,
-			versions: {
-				public: 0,
-				private: 0,
-			},
-		});
+		const hdkey = HDKey.fromMasterSeed(hexToBytes(this.entropy));
 
 		return hdkey.privateExtendedKey;
 	}
