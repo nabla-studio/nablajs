@@ -1,6 +1,3 @@
-import { Slip10, Slip10Curve, stringToPath } from '@cosmjs/crypto';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { base58, hex } from '@scure/base';
 import { BIP85 } from '../lib/bip85';
 
 // Test vectors taken from: https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki#applications
