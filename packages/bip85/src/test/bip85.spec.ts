@@ -2,6 +2,8 @@ import { BIP85 } from '../lib/bip85';
 
 // Test vectors taken from: https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki#applications
 // Mnemonic: puppy ocean match cereal symbol another shed magic wrap hammer bulb intact gadget divorce twin tonight reason outdoor destroy simple truth cigar social volcano
+const mnemonic =
+	'puppy ocean match cereal symbol another shed magic wrap hammer bulb intact gadget divorce twin tonight reason outdoor destroy simple truth cigar social volcano';
 const rootKey =
 	'xprv9s21ZrQH143K2LBWUUQRFXhucrQqBpKdRRxNVq2zBqsx8HVqFk2uYo8kmbaLLHRdqtQpUm98uKfu3vca1LqdGhUtyoFnCNkfmXRyPXLjbKb';
 
@@ -54,7 +56,7 @@ const testHEX = {
 };
 
 describe('BIP85: Child Entropy', () => {
-	it('works for test case 1', async () => {
+	it('works for test case 1', () => {
 		const master = BIP85.fromBase58(rootKey);
 		const child = master.derive(`m/83696968'/0'/0'`);
 
