@@ -4,6 +4,10 @@ import { BIP85 } from '../lib/bip85';
 // Mnemonic: puppy ocean match cereal symbol another shed magic wrap hammer bulb intact gadget divorce twin tonight reason outdoor destroy simple truth cigar social volcano
 const mnemonic =
 	'puppy ocean match cereal symbol another shed magic wrap hammer bulb intact gadget divorce twin tonight reason outdoor destroy simple truth cigar social volcano';
+
+const mnemonicChild =
+	'utility ball bomb loyal discover scrap cup piano romance demand lonely canvas';
+
 const rootKey =
 	'xprv9s21ZrQH143K2LBWUUQRFXhucrQqBpKdRRxNVq2zBqsx8HVqFk2uYo8kmbaLLHRdqtQpUm98uKfu3vca1LqdGhUtyoFnCNkfmXRyPXLjbKb';
 
@@ -115,5 +119,12 @@ describe('BIP85: Child Entropy', () => {
 		const child = master.deriveHex(64, 0);
 
 		expect(child.toEntropy()).toEqual(testHEX.derivedEntropy);
+	});
+
+	it('works for fromMnemonic and deriveBIP39', () => {
+		const master = BIP85.fromMnemonic(mnemonic);
+		const child = master.deriveBIP39(0, 12, 0);
+
+		expect(child.toMnemonic()).toEqual(mnemonicChild);
 	});
 });
