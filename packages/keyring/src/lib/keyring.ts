@@ -11,7 +11,7 @@ import {
 	Nullable,
 	assertKeyringUnlocked,
 	assertOutOfIndex,
-} from '../types';
+} from './types';
 
 /**
  * Definition of Keyring class structure,

@@ -1,5 +1,5 @@
 import { Keyring } from '../lib';
-import { EncryptResponse, KeyringStorage, Nullable } from '../types';
+import { EncryptResponse, KeyringStorage, Nullable } from '../lib/types';
 import { aes, random, pbkdf, hash } from 'js-crypto-utils';
 
 /**
