@@ -7,7 +7,7 @@ import {
 } from '@nabla-studio/keyring';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AES from 'react-native-aes-crypto';
-import { AESEcrypted, AESMetadata } from '../types';
+import { AESEcrypted, AESMetadata } from './types';
 
 export class RNKeyring extends Keyring<AESMetadata> {
 	constructor(
