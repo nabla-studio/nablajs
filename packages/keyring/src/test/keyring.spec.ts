@@ -1,5 +1,5 @@
 import { stringToPath } from '@cosmjs/crypto';
-import { TestKeyring } from './map-storage';
+import { TestKeyring } from './map-storage.testdata';
 
 const passphrase = 'test';
 
