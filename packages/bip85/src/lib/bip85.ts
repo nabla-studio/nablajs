@@ -1,8 +1,8 @@
 import { HDKey } from '@scure/bip32';
 import {
-	mnemonicToSeed,
 	entropyToMnemonic,
 	validateMnemonic,
+	mnemonicToSeedSync,
 } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import { sha512 } from '@noble/hashes/sha512';
@@ -133,8 +133,8 @@ export class BIP85 {
 		return new BIP85(node);
 	}
 
-	static fromSeed(bip32seed: string): BIP85 {
-		const node = HDKey.fromMasterSeed(stringToBytes('utf8', bip32seed));
+	static fromSeed(bip32seed: Uint8Array): BIP85 {
+		const node = HDKey.fromMasterSeed(bip32seed);
 
 		if (node.depth !== 0) {
 			throw new Error('Expected master, got child');
@@ -149,13 +149,13 @@ export class BIP85 {
 		return BIP85.fromMnemonic(mnemonic, password);
 	}
 
-	static async fromMnemonic(mnemonic: string, password = '') {
+	static fromMnemonic(mnemonic: string, password = '') {
 		if (!validateMnemonic(mnemonic, wordlist)) {
 			throw new Error('Invalid mnemonic');
 		}
 
-		const seed = await mnemonicToSeed(mnemonic, password);
+		const seed = mnemonicToSeedSync(mnemonic, password);
 
-		return BIP85.fromSeed(bytesToString('utf8', seed));
+		return BIP85.fromSeed(seed);
 	}
 }

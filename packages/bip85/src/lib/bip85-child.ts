@@ -1,6 +1,5 @@
 import { encode } from '@nabla-studio/wif';
 import { hexToBytes } from '@noble/hashes/utils';
-import { stringToBytes } from '@scure/base';
 import { HDKey } from '@scure/bip32';
 import { entropyToMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
