@@ -1,5 +1,5 @@
 import { encode, decode } from '../lib/wif';
-import { valid, invalid } from './data';
+import { valid, invalid } from './data.testdata';
 
 describe('WIF Testing', () => {
 	for (const f of valid) {
