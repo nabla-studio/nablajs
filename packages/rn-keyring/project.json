@@ -43,7 +43,7 @@
 			"executor": "nx:run-commands",
 			"outputs": [],
 			"options": {
-				"command": "npx semantic-release-plus --extends ./packages/rn-keyring/release.config.js",
+				"command": "npx semantic-release-plus --extends ./packages/rn-keyring/.releaserc.json",
 				"parallel": false
 			}
 		}
