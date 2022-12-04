@@ -1,5 +1,17 @@
 {
 	"name": "@nabla-studio/bip85",
-	"version": "0.0.1",
-	"type": "module"
+	"version": "0.0.0-semantic-release",
+	"author": "nabla <tech@nabla.studio>",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nabla-studio/nablajs.git",
+		"directory": "packages/bip85"
+	},
+	"bugs": {
+		"url": "https://github.com/nabla-studio/nablajs/issues"
+	},
+	"publishConfig": {
+		"registry": "https://www.npm.pkg.github.com"
+	}
 }
