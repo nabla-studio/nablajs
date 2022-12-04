@@ -1,8 +1,9 @@
-name: "Build and Deploy Next"
+name: "Build and Deploy"
 
 on:
   push:
     branches:
+      - main
       - next
   pull_request:
 
@@ -124,11 +125,12 @@ jobs:
           npx nx affected --target test --parallel 4 --ci --code-coverage
           npx nx affected --target build --parallel 4
           
-      - name: Prerelease 
+      - name: Release
         if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          npx nx affected --target prerelease --all
+          npx nx affected --target release --all
+          npx semantic-release-plus
  
