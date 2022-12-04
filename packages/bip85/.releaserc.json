@@ -1,0 +1,39 @@
+{
+	"extends": ".releaserc.base.json",
+	"pkgRoot": "dist/packages/bip85",
+	"tagFormat": "bip85-v${version}",
+	"commitPaths": ["packages/bip85/*"],
+	"branches": [
+		"main",
+		{
+			"name": "next",
+			"prerelease": true
+		},
+		{
+			"name": "beta",
+			"prerelease": true
+		},
+		{
+			"name": "alpha",
+			"prerelease": true
+		}
+	],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		[
+			"@semantic-release/changelog",
+			{
+				"changelogFile": "packages/bip85/CHANGELOG.md"
+			}
+		],
+		"@semantic-release/npm",
+		[
+			"@semantic-release/git",
+			{
+				"assets": ["packages/bip85/package.json", "packages/bip85/CHANGELOG.md"],
+				"message": "release(version): Release bip85 ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+			}
+		]
+	]
+}
