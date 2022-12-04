@@ -7,4 +7,5 @@ module.exports = {
 	moduleNameMapper: {
 		'.svg': '@nrwl/react-native/plugins/jest/svg-mock',
 	},
+	coverageDirectory: '../../coverage/packages/rn-keyring',
 };
