@@ -25,6 +25,10 @@
 	},
 	"devDependencies": {
 		"@babel/runtime": "7.19.0",
+		"@commitlint/cli": "^17.3.0",
+		"@commitlint/config-conventional": "^17.3.0",
+		"@commitlint/config-nx-scopes": "^17.2.0",
+		"@commitlint/cz-commitlint": "^17.3.0",
 		"@nrwl/cli": "15.2.0",
 		"@nrwl/detox": "15.2.1",
 		"@nrwl/eslint-plugin-nx": "15.2.0",
@@ -50,6 +54,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.36.1",
 		"@typescript-eslint/parser": "^5.36.1",
 		"babel-jest": "28.1.1",
+		"commitizen": "^4.2.5",
 		"detox": "19.12.5",
 		"eslint": "~8.15.0",
 		"eslint-config-prettier": "8.1.0",
