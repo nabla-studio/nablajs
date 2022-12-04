@@ -6,6 +6,21 @@ module.exports = {
 	pkgRoot: `dist/${srcRoot}`,
 	tagFormat: name + '-v${version}',
 	commitPaths: [`${srcRoot}/*`],
+	branches: [
+		'main',
+		{
+			name: 'next',
+			prerelease: true,
+		},
+		{
+			name: 'beta',
+			prerelease: true,
+		},
+		{
+			name: 'alpha',
+			prerelease: true,
+		},
+	],
 	plugins: [
 		'@semantic-release/commit-analyzer',
 		'@semantic-release/release-notes-generator',
