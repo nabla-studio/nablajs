@@ -1,0 +1,39 @@
+{
+	"extends": ".releaserc.base.json",
+	"pkgRoot": "dist/packages/wif",
+	"tagFormat": "wif-v${version}",
+	"commitPaths": ["packages/wif/*"],
+	"branches": [
+		"main",
+		{
+			"name": "next",
+			"prerelease": true
+		},
+		{
+			"name": "beta",
+			"prerelease": true
+		},
+		{
+			"name": "alpha",
+			"prerelease": true
+		}
+	],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		[
+			"@semantic-release/changelog",
+			{
+				"changelogFile": "packages/wif/CHANGELOG.md"
+			}
+		],
+		"@semantic-release/npm",
+		[
+			"@semantic-release/git",
+			{
+				"assets": ["packages/wif/package.json", "packages/wif/CHANGELOG.md"],
+				"message": "release(version): Release wif ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+			}
+		]
+	]
+}
