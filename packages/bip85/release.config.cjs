@@ -1,11 +1,11 @@
-const name = 'bip85';
-const srcRoot = `packages/${name}`;
+var name = 'bip85';
+var srcRoot = 'packages/' + name;
 
 module.exports = {
 	extends: 'release.config.base.js',
-	pkgRoot: `dist/${srcRoot}`,
+	pkgRoot: 'dist/' + srcRoot,
 	tagFormat: name + '-v${version}',
-	commitPaths: [`${srcRoot}/*`],
+	commitPaths: [srcRoot + '/*'],
 	branches: [
 		'main',
 		{
@@ -27,16 +27,18 @@ module.exports = {
 		[
 			'@semantic-release/changelog',
 			{
-				changelogFile: `${srcRoot}/CHANGELOG.md`,
+				changelogFile: srcRoot + '/CHANGELOG.md',
 			},
 		],
 		'@semantic-release/npm',
 		[
 			'@semantic-release/git',
 			{
-				assets: [`${srcRoot}/package.json`, `${srcRoot}/CHANGELOG.md`],
+				assets: [srcRoot + '/package.json', srcRoot + '/CHANGELOG.md'],
 				message:
-					`release(version): Release ${name} ` +
+					'release(version): Release ' +
+					name +
+					' ' +
 					'${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
 			},
 		],
