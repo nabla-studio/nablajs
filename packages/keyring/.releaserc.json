@@ -1,0 +1,42 @@
+{
+	"extends": ".releaserc.base.json",
+	"pkgRoot": "dist/packages/keyring",
+	"tagFormat": "keyring-v${version}",
+	"commitPaths": ["packages/keyring/*"],
+	"branches": [
+		"main",
+		{
+			"name": "next",
+			"prerelease": true
+		},
+		{
+			"name": "beta",
+			"prerelease": true
+		},
+		{
+			"name": "alpha",
+			"prerelease": true
+		}
+	],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		[
+			"@semantic-release/changelog",
+			{
+				"changelogFile": "packages/keyring/CHANGELOG.md"
+			}
+		],
+		"@semantic-release/npm",
+		[
+			"@semantic-release/git",
+			{
+				"assets": [
+					"packages/keyring/package.json",
+					"packages/keyring/CHANGELOG.md"
+				],
+				"message": "release(version): Release keyring ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+			}
+		]
+	]
+}
