@@ -1,5 +1,11 @@
 name: "Build and Deploy"
 
+permissions:
+  actions: write
+  deployments: write
+  packages: write
+  pull-requests: write
+
 on:
   push:
     branches:
@@ -104,7 +110,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ steps.versions.outputs.node_version }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ steps.versions.outputs.node_version }}-
-            
+
       - name: Install dependencies
         run: |
           if [ "${{ steps.package_manager.outputs.name == 'yarn' }}" == "true" ]; then
@@ -117,14 +123,14 @@ jobs:
             echo "Running npm ci"
             npm ci
           fi
-          
+
       - run: |
           npx nx workspace-lint
           npx nx format:check
           npx nx affected --target lint --parallel 4
           npx nx affected --target test --parallel 4 --ci --code-coverage
           npx nx affected --target build --parallel 4
-          
+
       - name: Release
         if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
         env:
