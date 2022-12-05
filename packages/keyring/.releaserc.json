@@ -30,7 +30,12 @@
 				"changelogFile": "packages/keyring/CHANGELOG.md"
 			}
 		],
-		"@semantic-release/npm",
+		[
+			"@semantic-release/npm",
+			{
+				"pkgRoot": "dist/packages/bip85"
+			}
+		],
 		[
 			"@semantic-release/git",
 			{
