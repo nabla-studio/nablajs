@@ -33,7 +33,7 @@
 		[
 			"@semantic-release/npm",
 			{
-				"pkgRoot": "dist/packages/bip85"
+				"pkgRoot": "dist/packages/rn-keyring"
 			}
 		],
 		[
