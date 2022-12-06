@@ -7,6 +7,26 @@
 		"test:all": "nx run-many --target=test --projects=keyring,rn-keyring,bip85,wif --parallel=4",
 		"prepare": "husky install"
 	},
+	"release": {
+		"branches": [
+			"main",
+			{
+				"name": "next",
+				"channel": "next",
+				"prerelease": true
+			},
+			{
+				"name": "beta",
+				"channel": "beta",
+				"prerelease": true
+			},
+			{
+				"name": "alpha",
+				"channel": "alpha",
+				"prerelease": true
+			}
+		]
+	},
 	"private": true,
 	"dependencies": {
 		"@cosmjs/amino": "^0.29.4",

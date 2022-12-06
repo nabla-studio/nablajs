@@ -3,24 +3,6 @@
 	"pkgRoot": "dist/packages/keyring",
 	"tagFormat": "keyring-v${version}",
 	"commitPaths": ["packages/keyring/*"],
-	"branches": [
-		"main",
-		{
-			"name": "next",
-			"channel": "next",
-			"prerelease": true
-		},
-		{
-			"name": "beta",
-			"channel": "beta",
-			"prerelease": true
-		},
-		{
-			"name": "alpha",
-			"channel": "alpha",
-			"prerelease": true
-		}
-	],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",

@@ -3,24 +3,6 @@
 	"pkgRoot": "dist/packages/bip85",
 	"tagFormat": "bip85-v${version}",
 	"commitPaths": ["packages/bip85/*"],
-	"branches": [
-		"main",
-		{
-			"name": "next",
-			"channel": "next",
-			"prerelease": true
-		},
-		{
-			"name": "beta",
-			"channel": "beta",
-			"prerelease": true
-		},
-		{
-			"name": "alpha",
-			"channel": "alpha",
-			"prerelease": true
-		}
-	],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",

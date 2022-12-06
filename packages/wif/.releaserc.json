@@ -3,24 +3,6 @@
 	"pkgRoot": "dist/packages/wif",
 	"tagFormat": "wif-v${version}",
 	"commitPaths": ["packages/wif/*"],
-	"branches": [
-		"main",
-		{
-			"name": "next",
-			"channel": "next",
-			"prerelease": true
-		},
-		{
-			"name": "beta",
-			"channel": "beta",
-			"prerelease": true
-		},
-		{
-			"name": "alpha",
-			"channel": "alpha",
-			"prerelease": true
-		}
-	],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
