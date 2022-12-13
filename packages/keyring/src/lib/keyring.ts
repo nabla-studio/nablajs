@@ -283,6 +283,8 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @public
 	 * Save a mnemonic string inside the `KeyringStorage`
+	 *
+	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
 	public async saveMnemonic(
 		mnemonic: string,
@@ -318,6 +320,8 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @public
 	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
+	 *
+	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
 	public async editMnemonic(
 		index: number,
@@ -353,6 +357,8 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @public
 	 * Delete a `KeyringStorageMnemonic` inside the `KeyringStorage`
+	 *
+	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
 	public async deleteMnemonic(index: number): Promise<WalletDataResponse> {
 		assertKeyringUnlocked(this.#passphrase);
