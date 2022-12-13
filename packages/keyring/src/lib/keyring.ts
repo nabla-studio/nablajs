@@ -22,8 +22,9 @@ import {
  *
  * @typeParam T - Object, corresponding to information linked to encryption/decryption activities (e.g., the **IV** for an AES method encryption, parameters for the key generation method).
  * @typeParam K - Object, that contains information about the cipher method (e.g., the **cipherType**, the **keyLength**, the **keyGenerationMethod**, etc.)
+ * @typeParam R - Object, for optional metadata
  */
-export abstract class Keyring<T = undefined, K = undefined> {
+export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @private
 	 * the mnemonics currently selected to operate
@@ -183,7 +184,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	public async init(passphrase: string, mnemonic: string, name: string) {
 		const passphraseHash = await this.hash(passphrase);
 
-		const storage: KeyringStorage<T, K> = {
+		const storage: KeyringStorage<T, K, R> = {
 			passphraseHash: passphraseHash,
 			currentMnemonicIndex: 0,
 			mnemonics: [],
@@ -246,7 +247,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @public
 	 * Save a mnemonic string inside the `KeyringStorage`
 	 */
-	public async saveMnemonic(mnemonic: string, name: string) {
+	public async saveMnemonic(mnemonic: string, name: string, metadata?: R) {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -255,10 +256,11 @@ export abstract class Keyring<T = undefined, K = undefined> {
 
 		const encryptResult = await this.encrypt(mnemonic, this.#passphrase);
 
-		const storageMnemonic: KeyringStorageMnemonic<T> = {
+		const storageMnemonic: KeyringStorageMnemonic<T, R> = {
 			name,
 			cipherText: encryptResult.cipherText,
 			cipheredMetadata: encryptResult.cipheredMetadata,
+			metadata,
 		};
 
 		const mnemonics = [...storage.mnemonics, storageMnemonic];
@@ -272,7 +274,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @public
 	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
-	public async editMnemonic(index: number, name: string) {
+	public async editMnemonic(index: number, name: string, metadata?: R) {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -284,6 +286,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 		const storageMnemonic = Object.assign({}, storage.mnemonics[index]);
 
 		storageMnemonic.name = name;
+		storageMnemonic.metadata = metadata;
 
 		const mnemonics = [...storage.mnemonics];
 
@@ -360,7 +363,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @public
 	 * Get all the encrypted mnemonics present in the storage
 	 */
-	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T>[]> {
+	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T, R>[]> {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -425,7 +428,9 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 * @typeParam K - The type of data storage in the storage location
 	 * @returns Returns `Promise<K>` data
 	 */
-	protected abstract read(key: string): Promise<Nullable<KeyringStorage<T, K>>>;
+	protected abstract read(
+		key: string,
+	): Promise<Nullable<KeyringStorage<T, K, R>>>;
 
 	/**
 	 * @virtual
@@ -436,7 +441,7 @@ export abstract class Keyring<T = undefined, K = undefined> {
 	 */
 	protected abstract write(
 		key: string,
-		data: KeyringStorage<T, K>,
+		data: KeyringStorage<T, K, R>,
 	): Promise<boolean>;
 
 	/**
