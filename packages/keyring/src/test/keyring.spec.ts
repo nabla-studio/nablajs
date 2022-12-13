@@ -129,5 +129,20 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(testKeyring.getAllMnemonics);
 		});
+		it('Should save a new mnemonic with metadata', async () => {
+			const newMnemonic = await testKeyring.generateMnemonic(
+				24,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			await testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic', {
+				bip85: true,
+			});
+
+			const mnemonics = await testKeyring.getAllMnemonics();
+
+			expect(mnemonics.length).toBe(2);
+		});
 	});
 });
