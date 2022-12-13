@@ -11,6 +11,7 @@ import {
 	Nullable,
 	assertKeyringUnlocked,
 	assertOutOfIndex,
+	WalletDataResponse,
 } from './types';
 import {
 	BIP85,
@@ -283,7 +284,11 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @public
 	 * Save a mnemonic string inside the `KeyringStorage`
 	 */
-	public async saveMnemonic(mnemonic: string, name: string, metadata?: R) {
+	public async saveMnemonic(
+		mnemonic: string,
+		name: string,
+		metadata?: R,
+	): Promise<WalletDataResponse> {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -304,13 +309,21 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		storage.mnemonics = mnemonics;
 
 		await this.write(this.storageKey, storage);
+
+		return {
+			walletsLength: mnemonics.length,
+		};
 	}
 
 	/**
 	 * @public
 	 * Edit a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
-	public async editMnemonic(index: number, name: string, metadata?: R) {
+	public async editMnemonic(
+		index: number,
+		name: string,
+		metadata?: R,
+	): Promise<WalletDataResponse> {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -331,13 +344,17 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		storage.mnemonics = mnemonics;
 
 		await this.write(this.storageKey, storage);
+
+		return {
+			walletsLength: mnemonics.length,
+		};
 	}
 
 	/**
 	 * @public
 	 * Delete a `KeyringStorageMnemonic` inside the `KeyringStorage`
 	 */
-	public async deleteMnemonic(index: number) {
+	public async deleteMnemonic(index: number): Promise<WalletDataResponse> {
 		assertKeyringUnlocked(this.#passphrase);
 
 		const storage = await this.read(this.storageKey);
@@ -361,6 +378,10 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		}
 
 		await this.write(this.storageKey, storage);
+
+		return {
+			walletsLength: mnemonics.length,
+		};
 	}
 
 	/**

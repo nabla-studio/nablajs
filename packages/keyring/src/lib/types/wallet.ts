@@ -12,3 +12,15 @@ export interface Wallet {
 	wallet: DirectSecp256k1HdWallet;
 	prefix: string;
 }
+
+/**
+ * The data structure that define response data relating to I/O operations
+ *
+ * @interface WalletDataResponse
+ */
+export interface WalletDataResponse {
+	/**
+	 * The number of wallets in memory
+	 */
+	walletsLength: number;
+}

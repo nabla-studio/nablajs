@@ -99,8 +99,11 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			const [newAccount] = await newMnemonic.getAccounts();
 
-			await testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic');
-			await testKeyring.changeCurrentMnemonic(1);
+			const response = await testKeyring.saveMnemonic(
+				newMnemonic.mnemonic,
+				'newmnemonic',
+			);
+			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
 
 			const mnemonics = await testKeyring.getAllMnemonics();
 
@@ -187,12 +190,16 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			const [newAccount] = await childMnemonic.getAccounts();
 
-			await testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
-				bip85: true,
-				index: 0,
-			});
+			const response = await testKeyring.saveMnemonic(
+				childMnemonic.mnemonic,
+				'newmnemonic',
+				{
+					bip85: true,
+					index: 0,
+				},
+			);
 
-			await testKeyring.changeCurrentMnemonic(3);
+			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
 
 			const mnemonics = await testKeyring.getAllMnemonics();
 
