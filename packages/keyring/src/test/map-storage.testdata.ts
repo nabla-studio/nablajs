@@ -16,6 +16,7 @@ interface AESEcrypted {
 
 interface KeyringStorageMnemonicMetadata {
 	bip85: boolean;
+	index?: number;
 }
 
 /**

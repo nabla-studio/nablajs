@@ -144,5 +144,67 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(mnemonics.length).toBe(2);
 		});
+		it('Should create a new mnemonic from a master mneminic using BIP85 and save it', async () => {
+			const newMnemonic = await testKeyring.generateMnemonic(
+				24,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			const childMnemonic = await testKeyring.generateMnemonicFromMaster(
+				newMnemonic.mnemonic,
+				0,
+				24,
+				0,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			await testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
+				bip85: true,
+				index: 0,
+			});
+
+			const mnemonics = await testKeyring.getAllMnemonics();
+
+			expect(mnemonics.length).toBe(3);
+		});
+		it('Should create a new mnemonic from a master mneminic using BIP85, save it and set it as current one', async () => {
+			const newMnemonic = await testKeyring.generateMnemonic(
+				24,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			const childMnemonic = await testKeyring.generateMnemonicFromMaster(
+				newMnemonic.mnemonic,
+				0,
+				24,
+				0,
+				[stringToPath(`m/44'/639'/0'/0/0`)],
+				'bitsong',
+			);
+
+			const [newAccount] = await childMnemonic.getAccounts();
+
+			await testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
+				bip85: true,
+				index: 0,
+			});
+
+			await testKeyring.changeCurrentMnemonic(3);
+
+			const mnemonics = await testKeyring.getAllMnemonics();
+
+			expect(mnemonics.length).toBe(4);
+
+			const accounts = await testKeyring.accounts();
+
+			const bitsongAccount = accounts.find(
+				account => account.address === newAccount.address,
+			);
+
+			expect(bitsongAccount).not.toBeUndefined();
+		});
 	});
 });
