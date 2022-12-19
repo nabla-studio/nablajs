@@ -1,4 +1,5 @@
 import { stringToPath } from '@cosmjs/crypto';
+import { asyncFlowResult } from '../lib';
 import { TestKeyring } from './map-storage.testdata';
 
 const passphrase = 'test';
@@ -99,10 +100,10 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			const [newAccount] = await newMnemonic.getAccounts();
 
-			const response = await testKeyring.saveMnemonic(
-				newMnemonic.mnemonic,
-				'newmnemonic',
+			const response = await asyncFlowResult(
+				testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic'),
 			);
+
 			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
 
 			const mnemonics = await testKeyring.getAllMnemonics();
@@ -190,13 +191,11 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			const [newAccount] = await childMnemonic.getAccounts();
 
-			const response = await testKeyring.saveMnemonic(
-				childMnemonic.mnemonic,
-				'newmnemonic',
-				{
+			const response = await asyncFlowResult(
+				testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
 					bip85: true,
 					index: 0,
-				},
+				}),
 			);
 
 			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
