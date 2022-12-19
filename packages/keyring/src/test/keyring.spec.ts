@@ -64,7 +64,8 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			expect(wallets.length).toBe(2);
 		});
 		it('Should get accounts', async () => {
-			const accounts = await testKeyring.accounts();
+			await new Promise(r => setTimeout(r, 500));
+			const accounts = testKeyring.currentAccounts;
 
 			const bitsongAccount = accounts.find(
 				account => account.address === bitsongAddress,
@@ -110,7 +111,8 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(mnemonics.length).toBe(2);
 
-			const accounts = await testKeyring.accounts();
+			await new Promise(r => setTimeout(r, 500));
+			const accounts = testKeyring.currentAccounts;
 
 			const bitsongAccount = accounts.find(
 				account => account.address === newAccount.address,
@@ -204,7 +206,8 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(mnemonics.length).toBe(4);
 
-			const accounts = await testKeyring.accounts();
+			await new Promise(r => setTimeout(r, 500));
+			const accounts = testKeyring.currentAccounts;
 
 			const bitsongAccount = accounts.find(
 				account => account.address === newAccount.address,
