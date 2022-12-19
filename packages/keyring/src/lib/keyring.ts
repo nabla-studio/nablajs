@@ -18,6 +18,7 @@ import {
 	BIP85_WORD_LENGTHS,
 	BIP39_LANGUAGES,
 } from '@nabla-studio/bip85';
+import { makeObservable, observable, action } from 'mobx';
 
 /**
  * Definition of Keyring class structure,
@@ -35,19 +36,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @private
 	 * the mnemonics currently selected to operate
 	 */
-	#currentMnemonic?: string;
+	private currentMnemonic?: string;
+
+	/**
+	 * @private
+	 * current passphrase used for mnemonics encryption
+	 */
+	private passphrase?: string;
 
 	/**
 	 * @private
 	 * current wallets associated with current mnemonic
 	 */
 	#currentWallets: Wallet[] = [];
-
-	/**
-	 * @private
-	 * current passphrase used for mnemonics encryption
-	 */
-	#passphrase?: string;
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -57,7 +58,21 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		public storageKey: string = 'keyring',
 		public walletsOptions: WalletOptions[],
 		public cipherMetadata?: K,
-	) {}
+	) {
+		makeObservable<this, 'currentMnemonic' | 'passphrase'>(this, {
+			currentMnemonic: observable,
+			passphrase: observable,
+			init: action,
+			unlock: action,
+			lock: action,
+			saveMnemonic: action,
+			editMnemonic: action,
+			deleteMnemonic: action,
+			changeCurrentMnemonic: action,
+			/* unlocked: computed,
+			currentWallets: computed, */
+		});
+	}
 
 	/**
 	 * @public
@@ -142,7 +157,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 */
 	public async wallets(): Promise<Wallet[]> {
 		let wallets: Wallet[] = [];
-		const currentMnemonic = this.#currentMnemonic;
+		const currentMnemonic = this.currentMnemonic;
 
 		if (currentMnemonic) {
 			const walletsPromises = this.walletsOptions.map(option =>
@@ -167,7 +182,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @returns Returns an array of `AccountData`
 	 */
 	public async accounts(): Promise<AccountData[]> {
-		if (!this.#currentMnemonic && this.#currentWallets.length === 0) {
+		if (!this.currentMnemonic && this.#currentWallets.length === 0) {
 			await this.wallets();
 		}
 
@@ -230,11 +245,11 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		await this.write(this.storageKey, storage);
 
-		this.#passphrase = passphrase;
+		this.passphrase = passphrase;
 
 		await this.saveMnemonic(mnemonic, name);
 
-		this.#currentMnemonic = mnemonic;
+		this.currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -264,8 +279,8 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		const mnemonic = await this.decrypt(chipherMnemonic, passphrase);
 
-		this.#passphrase = passphrase;
-		this.#currentMnemonic = mnemonic;
+		this.passphrase = passphrase;
+		this.currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -275,8 +290,8 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * Lock the `Keyring` and reset the current state
 	 */
 	public lock() {
-		this.#passphrase = undefined;
-		this.#currentMnemonic = undefined;
+		this.passphrase = undefined;
+		this.currentMnemonic = undefined;
 		this.#currentWallets = [];
 	}
 
@@ -291,13 +306,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		name: string,
 		metadata?: R,
 	): Promise<WalletDataResponse> {
-		assertKeyringUnlocked(this.#passphrase);
+		assertKeyringUnlocked(this.passphrase);
 
 		const storage = await this.read(this.storageKey);
 
 		assertIsDefined(storage);
 
-		const encryptResult = await this.encrypt(mnemonic, this.#passphrase);
+		const encryptResult = await this.encrypt(mnemonic, this.passphrase);
 
 		const storageMnemonic: KeyringStorageMnemonic<T, R> = {
 			name,
@@ -328,7 +343,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		name: string,
 		metadata?: R,
 	): Promise<WalletDataResponse> {
-		assertKeyringUnlocked(this.#passphrase);
+		assertKeyringUnlocked(this.passphrase);
 
 		const storage = await this.read(this.storageKey);
 
@@ -361,7 +376,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
 	public async deleteMnemonic(index: number): Promise<WalletDataResponse> {
-		assertKeyringUnlocked(this.#passphrase);
+		assertKeyringUnlocked(this.passphrase);
 
 		const storage = await this.read(this.storageKey);
 
@@ -397,7 +412,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @param index The index of the mnemonics with which you want to replace the current one
 	 */
 	public async changeCurrentMnemonic(index: number) {
-		assertKeyringUnlocked(this.#passphrase);
+		assertKeyringUnlocked(this.passphrase);
 
 		const storage = await this.read(this.storageKey);
 
@@ -411,13 +426,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		assertIsDefined(chipherMnemonic);
 
-		const mnemonic = await this.decrypt(chipherMnemonic, this.#passphrase);
+		const mnemonic = await this.decrypt(chipherMnemonic, this.passphrase);
 
 		storage.currentMnemonicIndex = index;
 
 		await this.write(this.storageKey, storage);
 
-		this.#currentMnemonic = mnemonic;
+		this.currentMnemonic = mnemonic;
 
 		await this.wallets();
 	}
@@ -427,7 +442,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * Get all the encrypted mnemonics present in the storage
 	 */
 	public async getAllMnemonics(): Promise<KeyringStorageMnemonic<T, R>[]> {
-		assertKeyringUnlocked(this.#passphrase);
+		assertKeyringUnlocked(this.passphrase);
 
 		const storage = await this.read(this.storageKey);
 
@@ -459,15 +474,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * Check if the `Keyring` is unlocked
 	 */
 	public get unlocked() {
-		return this.#passphrase !== undefined;
-	}
-
-	/**
-	 * @public
-	 * the mnemonics currently selected to operate
-	 */
-	public get currentMnemonic() {
-		return this.#currentMnemonic;
+		return this.passphrase !== undefined;
 	}
 
 	/**
