@@ -18,7 +18,14 @@ import {
 	BIP85_WORD_LENGTHS,
 	BIP39_LANGUAGES,
 } from '@nabla-studio/bip85';
-import { makeObservable, observable, action, flow } from 'mobx';
+import {
+	makeObservable,
+	observable,
+	action,
+	flow,
+	computed,
+	autorun,
+} from 'mobx';
 
 /**
  * Definition of Keyring class structure,
@@ -34,21 +41,23 @@ import { makeObservable, observable, action, flow } from 'mobx';
 export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @private
-	 * the mnemonics currently selected to operate
-	 */
-	private currentMnemonic?: string;
-
-	/**
-	 * @private
 	 * current passphrase used for mnemonics encryption
 	 */
 	private passphrase?: string;
 
 	/**
-	 * @private
+	 * @public
+	 * the mnemonics currently selected to operate
+	 */
+	public currentMnemonic?: string;
+
+	/**
+	 * @public
 	 * current wallets associated with current mnemonic
 	 */
-	#currentWallets: Wallet[] = [];
+	public currentWallets: Wallet[] = [];
+
+	public currentAccounts: AccountData[] = [];
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -59,19 +68,33 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		public walletsOptions: WalletOptions[],
 		public cipherMetadata?: K,
 	) {
-		makeObservable<this, 'currentMnemonic' | 'passphrase'>(this, {
+		makeObservable<this, 'passphrase'>(this, {
 			currentMnemonic: observable,
 			passphrase: observable,
+			currentWallets: observable,
 			init: flow,
 			unlock: flow,
 			lock: action,
+			wallets: action,
+			accounts: action,
 			saveMnemonic: flow,
 			editMnemonic: flow,
 			deleteMnemonic: flow,
 			changeCurrentMnemonic: flow,
-			/* unlocked: computed,
-			currentWallets: computed, */
+			unlocked: computed,
 		});
+
+		autorun(
+			async () => {
+				if (this.currentMnemonic) {
+					await this.wallets();
+					await this.accounts();
+				}
+			},
+			{
+				name: 'UpdateWallets',
+			},
+		);
 	}
 
 	/**
@@ -171,7 +194,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			wallets = await Promise.all(walletsPromises);
 		}
 
-		this.#currentWallets = wallets;
+		this.currentWallets = wallets;
 
 		return wallets;
 	}
@@ -181,18 +204,18 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * Get all the addresses available inside each `Wallet`
 	 * @returns Returns an array of `AccountData`
 	 */
-	public async accounts(): Promise<AccountData[]> {
-		if (!this.currentMnemonic && this.#currentWallets.length === 0) {
+	public async accounts() {
+		if (!this.currentMnemonic && this.currentWallets.length === 0) {
 			await this.wallets();
 		}
 
-		const accountsPromises = this.#currentWallets.map(({ wallet }) =>
+		const accountsPromises = this.currentWallets.map(({ wallet }) =>
 			wallet.getAccounts(),
 		);
 
 		const accounts = await Promise.all(accountsPromises);
 
-		return accounts.flat();
+		this.currentAccounts = accounts.flat();
 	}
 
 	/**
@@ -250,8 +273,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		yield await this.saveMnemonic(mnemonic, name);
 
 		this.currentMnemonic = mnemonic;
-
-		yield await this.wallets();
 	}
 
 	/**
@@ -289,8 +310,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		this.passphrase = passphrase;
 		this.currentMnemonic = mnemonic;
-
-		await this.wallets();
 	}
 
 	/**
@@ -300,7 +319,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	public lock() {
 		this.passphrase = undefined;
 		this.currentMnemonic = undefined;
-		this.#currentWallets = [];
+		this.currentWallets = [];
 	}
 
 	/**
@@ -447,8 +466,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		yield await this.write(this.storageKey, storage);
 
 		this.currentMnemonic = mnemonic;
-
-		yield await this.wallets();
 	}
 
 	/**
@@ -489,14 +506,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 */
 	public get unlocked() {
 		return this.passphrase !== undefined;
-	}
-
-	/**
-	 * @public
-	 * current wallets associated with current mnemonic
-	 */
-	public get currentWallets() {
-		return this.#currentWallets;
 	}
 
 	/*
