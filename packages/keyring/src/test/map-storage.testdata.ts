@@ -14,17 +14,30 @@ interface AESEcrypted {
 	iv: Uint8Array;
 }
 
+interface KeyringStorageMnemonicMetadata {
+	bip85: boolean;
+	index?: number;
+}
+
 /**
  * User for storage data simulation
  */
 const storage = new Map<string, Nullable<string>>();
 
-export class TestKeyring extends Keyring<AESMetadata> {
+export class TestKeyring extends Keyring<
+	AESMetadata,
+	undefined,
+	KeyringStorageMnemonicMetadata
+> {
 	salt = Buffer.from('salt');
 
 	protected async read(
 		key: string,
-	): Promise<Nullable<KeyringStorage<AESMetadata, undefined>>> {
+	): Promise<
+		Nullable<
+			KeyringStorage<AESMetadata, undefined, KeyringStorageMnemonicMetadata>
+		>
+	> {
 		const data = await storage.get(key);
 
 		if (!data) {
@@ -36,7 +49,7 @@ export class TestKeyring extends Keyring<AESMetadata> {
 
 	protected async write(
 		key: string,
-		data: KeyringStorage<AESMetadata, undefined>,
+		data: KeyringStorage<AESMetadata, undefined, KeyringStorageMnemonicMetadata>,
 	): Promise<boolean> {
 		await storage.set(key, JSON.stringify(data));
 
