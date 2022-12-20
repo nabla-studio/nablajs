@@ -7,10 +7,6 @@ permissions:
  pull-requests: write
 
 on:
- push:
-  branches:
-   - main
-   - next
  pull_request:
   types: [closed]
   branches:
