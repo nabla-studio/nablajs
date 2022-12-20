@@ -11,11 +11,6 @@ on:
   branches:
    - main
    - next
- pull_request:
-  types: [closed]
-  branches:
-    - main
-    - next
 
 env:
  HUSKY: 0
