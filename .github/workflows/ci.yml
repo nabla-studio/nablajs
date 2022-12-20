@@ -7,11 +7,10 @@ permissions:
  pull-requests: write
 
 on:
- pull_request:
-  types: [closed]
+ push:
   branches:
-    - main
-    - next
+   - main
+   - next
 
 env:
  HUSKY: 0
