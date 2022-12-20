@@ -1,3 +1,15 @@
+# [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.1...keyring-v1.0.0-next.2) (2022-12-20)
+
+
+### Features
+
+* **keyring:** :sparkles: add basic setup for mobx and removed hash field ([c567e43](https://github.com/nabla-studio/nablajs/commit/c567e43b42437b8e33bd3e301562661e1c32101e)), closes [#4](https://github.com/nabla-studio/nablajs/issues/4)
+* **keyring:** :sparkles: add computed and autorun properties ([73c0ba3](https://github.com/nabla-studio/nablajs/commit/73c0ba3850398c1aa7fe8e81619799fcf83a2d5a)), closes [#4](https://github.com/nabla-studio/nablajs/issues/4)
+* **keyring:** :sparkles: add flow instead of async/await ([641f104](https://github.com/nabla-studio/nablajs/commit/641f1048bb51acc486cb3e7a12363bb9651ee5a6)), closes [#4](https://github.com/nabla-studio/nablajs/issues/4)
+* **keyring:** :sparkles: add mnemonic generation from master ([ed00069](https://github.com/nabla-studio/nablajs/commit/ed000693071679ccb794263b9aff56ec00ff498a)), closes [#3](https://github.com/nabla-studio/nablajs/issues/3)
+* **keyring:** :sparkles: add optional metadata for mnemonic storage ([e0dadd1](https://github.com/nabla-studio/nablajs/commit/e0dadd13248f515a257d03203ea3fb7a8fcc10b0)), closes [#2](https://github.com/nabla-studio/nablajs/issues/2)
+* **keyring:** add data response for I/O operations ([db6972e](https://github.com/nabla-studio/nablajs/commit/db6972eb9f0358640b20187dff44ac5e8ed0d25d))
+
 # 1.0.0-next.1 (2022-12-06)
 
 
