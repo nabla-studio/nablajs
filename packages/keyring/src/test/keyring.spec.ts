@@ -150,7 +150,7 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(mnemonics.length).toBe(2);
 		});
-		it('Should create a new mnemonic from a master mneminic using BIP85 and save it', async () => {
+		it('Should create a new mnemonic from a master mnemonic using BIP85 and save it', async () => {
 			const newMnemonic = await testKeyring.generateMnemonic(
 				24,
 				[stringToPath(`m/44'/639'/0'/0/0`)],
@@ -175,7 +175,7 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(mnemonics.length).toBe(3);
 		});
-		it('Should create a new mnemonic from a master mneminic using BIP85, save it and set it as current one', async () => {
+		it('Should create a new mnemonic from a master mnemonic using BIP85, save it and set it as current one', async () => {
 			const newMnemonic = await testKeyring.generateMnemonic(
 				24,
 				[stringToPath(`m/44'/639'/0'/0/0`)],
