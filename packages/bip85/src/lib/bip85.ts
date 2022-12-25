@@ -23,7 +23,7 @@ import {
 	BIP85_ENTROPY_LENGTHS,
 } from './types';
 import { bytesToHex } from '@noble/hashes/utils';
-import { bytesToString, stringToBytes } from '@scure/base';
+import { stringToBytes } from '@scure/base';
 
 export class BIP85 {
 	private node: HDKey;
