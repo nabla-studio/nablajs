@@ -114,18 +114,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		language: BIP39_LANGUAGES = 0,
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
-		hdPaths?: HdPath[],
-		prefix?: string,
+		hdPaths: HdPath[],
+		prefix: string,
 	): Promise<DirectSecp256k1HdWallet> {
 		const master = BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
 
-		const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+		const { wallet } = await this.generateWalletFromMnemonic(
+			mnemonic,
 			hdPaths,
 			prefix,
-		});
+		);
 
 		return wallet;
 	}
