@@ -1,6 +1,11 @@
 import { EnglishMnemonic, HdPath } from '@cosmjs/crypto';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import {
+	BIP39_LANGUAGES,
+	BIP85,
+	BIP85_WORD_LENGTHS,
+} from '@nabla-studio/bip85';
+import {
 	EncryptResponse,
 	Keyring,
 	KeyringStorage,
@@ -34,6 +39,28 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		},
 	) {
 		super(storageKey, walletsOptions);
+	}
+
+	public override async generateMnemonicFromMaster(
+		masterMnemonic: string,
+		language: BIP39_LANGUAGES = 0,
+		length: BIP85_WORD_LENGTHS = 24,
+		index = 0,
+		hdPaths: HdPath[],
+		prefix: string,
+	): Promise<DirectSecp256k1HdWallet> {
+		const master = BIP85.fromMnemonic(masterMnemonic);
+		const child = master.deriveBIP39(language, length, index);
+
+		const mnemonic = child.toMnemonic();
+
+		const { wallet } = await this.generateWalletFromMnemonic(
+			mnemonic,
+			hdPaths,
+			prefix,
+		);
+
+		return wallet;
 	}
 
 	public override async generateWalletFromMnemonic(
