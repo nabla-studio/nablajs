@@ -1,4 +1,4 @@
-import { EnglishMnemonic, HdPath } from '@cosmjs/crypto';
+import { HdPath } from '@cosmjs/crypto';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import {
 	BIP39_LANGUAGES,
@@ -21,6 +21,7 @@ import {
 	AESStorageOptions,
 	AESWalletOptions,
 } from './types';
+import { RNDirectSecp256k1HdWallet } from './rn-directsecp256k1hdwallet';
 
 export class RNKeyring extends Keyring<AESMetadata> {
 	constructor(
@@ -68,21 +69,14 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		hdPaths: HdPath[],
 		prefix: string,
 	): Promise<Wallet> {
-		const mnemonicChecked = new EnglishMnemonic(mnemonic);
-		const seed = await this.mnemonicToSeed(mnemonic);
-
-		/**
-		 * We must ignore this, because the construct of  `DirectSecp256k1HdWallet` is protected, but this is the only way
-		 * to create a `DirectSecp256k1HdWallet` instance without using `pbkdf2` from `@noble/hash`, which is very slow on react native
-		 */
-		// @ts-ignore
-		const wallet: DirectSecp256k1HdWallet = new DirectSecp256k1HdWallet(
-			mnemonicChecked,
+		const wallet = await RNDirectSecp256k1HdWallet.fromMnemonic(
+			mnemonic,
 			{
-				seed,
 				hdPaths,
 				prefix,
 			},
+			this.walletOptions.pbkdf2cost,
+			this.walletOptions.pbkdf2length,
 		);
 
 		return {
@@ -187,32 +181,5 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		);
 
 		return decrypt;
-	}
-
-	private nfkd(str: string) {
-		if (typeof str !== 'string') {
-			throw new TypeError(`Invalid mnemonic type: ${typeof str}`);
-		}
-		return str.normalize('NFKD');
-	}
-
-	private normalize(str: string) {
-		const norm = this.nfkd(str);
-		const words = norm.split(' ');
-		if (![12, 15, 18, 21, 24].includes(words.length)) {
-			throw new Error('Invalid mnemonic');
-		}
-		return { nfkd: norm, words };
-	}
-
-	private async mnemonicToSeed(mnemonic: string, passphrase = '') {
-		const salt = 'mnemonic' + (passphrase ? this.normalize(passphrase).nfkd : '');
-
-		return await AES.pbkdf2(
-			this.normalize(mnemonic).nfkd,
-			salt,
-			this.walletOptions.pbkdf2cost,
-			this.walletOptions.pbkdf2length,
-		);
 	}
 }
