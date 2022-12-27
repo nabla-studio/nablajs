@@ -1,0 +1,17 @@
+{
+	"name": "@nabla-studio/utils",
+	"version": "0.0.0-semantic-release",
+	"author": "nabla <tech@nabla.studio>",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nabla-studio/nablajs.git",
+		"directory": "packages/utils"
+	},
+	"bugs": {
+		"url": "https://github.com/nabla-studio/nablajs/issues"
+	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	}
+}
