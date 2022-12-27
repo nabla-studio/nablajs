@@ -137,8 +137,10 @@ jobs:
       NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
      run: |
+      npx nx release utils
       npx nx release keyring
       npx nx release rn-keyring
       npx nx release wif
       npx nx release bip85
+      npx nx release rn-bip85
       npx semantic-release-plus
