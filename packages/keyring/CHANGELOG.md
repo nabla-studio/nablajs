@@ -1,11 +1,3 @@
-# [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.2...keyring-v1.0.0-next.3) (2022-12-28)
-
-
-### Features
-
-* **keyring:** :boom: improve mnemonic generation performance ([565531f](https://github.com/nabla-studio/nablajs/commit/565531fb46b4bcf83f5e7937d42a87673def44fa)), closes [#9](https://github.com/nabla-studio/nablajs/issues/9)
-* **keyring:** :sparkles: add support for bip85 async fromMnemonic ([93329f6](https://github.com/nabla-studio/nablajs/commit/93329f62df120832b6a07749835837faff824ad0)), closes [#9](https://github.com/nabla-studio/nablajs/issues/9)
-
 # [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.1...keyring-v1.0.0-next.2) (2022-12-20)
 
 
