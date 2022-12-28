@@ -50,7 +50,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		hdPaths: HdPath[],
 		prefix: string,
 	): Promise<DirectSecp256k1HdWallet> {
-		const master = BIP85.fromMnemonic(masterMnemonic);
+		const master = await BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
