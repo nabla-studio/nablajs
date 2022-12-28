@@ -1,3 +1,10 @@
+# [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.1...bip85-v1.0.0-next.2) (2022-12-28)
+
+
+### Features
+
+* **bip85:** :sparkles: change fromMnemonic method di async ([98647df](https://github.com/nabla-studio/nablajs/commit/98647df6671e4dd4caed9fa5ce6043369a19ffdf)), closes [#9](https://github.com/nabla-studio/nablajs/issues/9)
+
 # 1.0.0-next.1 (2022-12-06)
 
 
