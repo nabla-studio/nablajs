@@ -1,5 +1,7 @@
 import { AccountData, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { HdPath } from '@cosmjs/crypto';
+import { generateMnemonic } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english';
 import {
 	WalletLength,
 	WalletOptions,
@@ -112,18 +114,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		language: BIP39_LANGUAGES = 0,
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
-		hdPaths?: HdPath[],
-		prefix?: string,
+		hdPaths: HdPath[],
+		prefix: string,
 	): Promise<DirectSecp256k1HdWallet> {
-		const master = BIP85.fromMnemonic(masterMnemonic);
+		const master = await BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
 
-		const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+		const { wallet } = await this.generateWalletFromMnemonic(
+			mnemonic,
 			hdPaths,
 			prefix,
-		});
+		);
 
 		return wallet;
 	}
@@ -131,22 +134,23 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	/**
 	 * @public
 	 * Generates a new wallet with a BIP39 mnemonic of the given length.
-	 * @optional length - The number of words in the mnemonic (12, 15, 18, 21 or 24).
-	 * @optional hdpaths - An array of `HdPath`
-	 * @optional prefix - Chain prefix
-	 * @returns Returns a `DirectSecp256k1HdWallet` instance
+	 * @optional length - The number of words in the mnemonic (12 or 24).
+	 * @returns Returns a mnemonic string
 	 */
-	public async generateMnemonic(
-		length?: WalletLength,
-		hdPaths?: HdPath[],
-		prefix?: string,
-	): Promise<DirectSecp256k1HdWallet> {
-		const wallet = await DirectSecp256k1HdWallet.generate(length, {
-			hdPaths,
-			prefix,
-		});
+	public generateMnemonic(length?: WalletLength): string {
+		let strength = 256;
 
-		return wallet;
+		switch (length) {
+			case 12:
+				strength = 128;
+				break;
+			case 24:
+			default:
+				strength = 256;
+				break;
+		}
+
+		return generateMnemonic(wordlist, strength);
 	}
 
 	/**
@@ -299,7 +303,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		const mnemonics = [...storage.mnemonics];
 
-		const chipherMnemonic = mnemonics.at(storage.currentMnemonicIndex);
+		const chipherMnemonic = mnemonics[storage.currentMnemonicIndex];
 
 		assertIsDefined(chipherMnemonic);
 
@@ -452,7 +456,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		const mnemonics = [...storage.mnemonics];
 
-		const chipherMnemonic = mnemonics.at(index);
+		const chipherMnemonic = mnemonics[index];
 
 		assertIsDefined(chipherMnemonic);
 

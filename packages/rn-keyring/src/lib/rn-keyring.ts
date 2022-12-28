@@ -1,25 +1,88 @@
+import { HdPath } from '@cosmjs/crypto';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import {
+	BIP39_LANGUAGES,
+	BIP85,
+	BIP85_WORD_LENGTHS,
+} from '@nabla-studio/bip85';
 import {
 	EncryptResponse,
 	Keyring,
 	KeyringStorage,
 	Nullable,
+	Wallet,
 	WalletOptions,
 } from '@nabla-studio/keyring';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AES from 'react-native-aes-crypto';
-import { AESEcrypted, AESMetadata } from './types';
+import {
+	AESEcrypted,
+	AESMetadata,
+	AESStorageOptions,
+	AESWalletOptions,
+} from './types';
+import { RNDirectSecp256k1HdWallet } from './rn-directsecp256k1hdwallet';
 
 export class RNKeyring extends Keyring<AESMetadata> {
 	constructor(
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
 		public salt: string,
-		public pbkdf2cost: number = 5000,
-		public pbkdf2length: number = 256,
-		public randomKeyLength: number = 16,
-		public algorithm: AES.Algorithms = 'aes-256-cbc',
+		public storageOptions: AESStorageOptions = {
+			pbkdf2cost: 5000,
+			pbkdf2length: 256,
+			randomKeyLength: 16,
+			algorithm: 'aes-256-cbc',
+		},
+		public walletOptions: AESWalletOptions = {
+			pbkdf2cost: 2048,
+			pbkdf2length: 64,
+		},
 	) {
 		super(storageKey, walletsOptions);
+	}
+
+	public override async generateMnemonicFromMaster(
+		masterMnemonic: string,
+		language: BIP39_LANGUAGES = 0,
+		length: BIP85_WORD_LENGTHS = 24,
+		index = 0,
+		hdPaths: HdPath[],
+		prefix: string,
+	): Promise<DirectSecp256k1HdWallet> {
+		const master = BIP85.fromMnemonic(masterMnemonic);
+		const child = master.deriveBIP39(language, length, index);
+
+		const mnemonic = child.toMnemonic();
+
+		const { wallet } = await this.generateWalletFromMnemonic(
+			mnemonic,
+			hdPaths,
+			prefix,
+		);
+
+		return wallet;
+	}
+
+	public override async generateWalletFromMnemonic(
+		mnemonic: string,
+		hdPaths: HdPath[],
+		prefix: string,
+	): Promise<Wallet> {
+		const wallet = await RNDirectSecp256k1HdWallet.fromMnemonic(
+			mnemonic,
+			{
+				hdPaths,
+				prefix,
+			},
+			this.walletOptions.pbkdf2cost,
+			this.walletOptions.pbkdf2length,
+		);
+
+		return {
+			wallet,
+			prefix,
+		};
 	}
 
 	protected async read(
@@ -86,17 +149,22 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		const key = await AES.pbkdf2(
 			password,
 			this.salt,
-			this.pbkdf2cost,
-			this.pbkdf2length,
+			this.storageOptions.pbkdf2cost,
+			this.storageOptions.pbkdf2length,
 		);
 
 		return key;
 	}
 
 	private async encryptData(text: string, key: string) {
-		const iv = await AES.randomKey(this.randomKeyLength);
+		const iv = await AES.randomKey(this.storageOptions.randomKeyLength);
 
-		const cipher = await AES.encrypt(text, key, iv, this.algorithm);
+		const cipher = await AES.encrypt(
+			text,
+			key,
+			iv,
+			this.storageOptions.algorithm,
+		);
 
 		return {
 			cipher,
@@ -109,7 +177,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 			encryptedData.cipherText,
 			key,
 			encryptedData.iv,
-			this.algorithm,
+			this.storageOptions.algorithm,
 		);
 
 		return decrypt;

@@ -23,7 +23,7 @@ import {
 	BIP85_ENTROPY_LENGTHS,
 } from './types';
 import { bytesToHex } from '@noble/hashes/utils';
-import { bytesToString, stringToBytes } from '@scure/base';
+import { stringToBytes } from '@scure/base';
 
 export class BIP85 {
 	private node: HDKey;
@@ -143,13 +143,13 @@ export class BIP85 {
 		return new BIP85(node);
 	}
 
-	static fromEntropy(entropy: string, password = '') {
+	static async fromEntropy(entropy: string, password = '') {
 		const mnemonic = entropyToMnemonic(stringToBytes('utf8', entropy), wordlist);
 
 		return BIP85.fromMnemonic(mnemonic, password);
 	}
 
-	static fromMnemonic(mnemonic: string, password = '') {
+	static async fromMnemonic(mnemonic: string, password = '') {
 		if (!validateMnemonic(mnemonic, wordlist)) {
 			throw new Error('Invalid mnemonic');
 		}

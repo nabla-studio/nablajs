@@ -1,0 +1,29 @@
+{
+	"extends": ".releaserc.base.json",
+	"pkgRoot": "dist/packages/utils",
+	"tagFormat": "utils-v${version}",
+	"commitPaths": ["packages/utils/*"],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		[
+			"@semantic-release/changelog",
+			{
+				"changelogFile": "packages/utils/CHANGELOG.md"
+			}
+		],
+		[
+			"@semantic-release/npm",
+			{
+				"pkgRoot": "dist/packages/utils"
+			}
+		],
+		[
+			"@semantic-release/git",
+			{
+				"assets": ["packages/utils/package.json", "packages/utils/CHANGELOG.md"],
+				"message": "release(version): Release utils ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+			}
+		]
+	]
+}

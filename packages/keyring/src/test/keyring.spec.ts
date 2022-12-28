@@ -93,16 +93,18 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			await testKeyring.unlock(passphrase);
 		});
 		it('Should save a new mnemonic and set it as current one', async () => {
-			const newMnemonic = await testKeyring.generateMnemonic(
-				24,
+			const newMnemonicString = testKeyring.generateMnemonic(24);
+
+			const newMnemonic = await testKeyring.generateWalletFromMnemonic(
+				newMnemonicString,
 				[stringToPath(`m/44'/639'/0'/0/0`)],
 				'bitsong',
 			);
 
-			const [newAccount] = await newMnemonic.getAccounts();
+			const [newAccount] = await newMnemonic.wallet.getAccounts();
 
 			const response = await asyncFlowResult(
-				testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic'),
+				testKeyring.saveMnemonic(newMnemonicString, 'newmnemonic'),
 			);
 
 			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
@@ -136,13 +138,9 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			expect(testKeyring.getAllMnemonics);
 		});
 		it('Should save a new mnemonic with metadata', async () => {
-			const newMnemonic = await testKeyring.generateMnemonic(
-				24,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
+			const newMnemonic = testKeyring.generateMnemonic(24);
 
-			await testKeyring.saveMnemonic(newMnemonic.mnemonic, 'newmnemonic', {
+			await testKeyring.saveMnemonic(newMnemonic, 'newmnemonic', {
 				bip85: true,
 			});
 
@@ -151,14 +149,10 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			expect(mnemonics.length).toBe(2);
 		});
 		it('Should create a new mnemonic from a master mnemonic using BIP85 and save it', async () => {
-			const newMnemonic = await testKeyring.generateMnemonic(
-				24,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
+			const newMnemonic = testKeyring.generateMnemonic(24);
 
 			const childMnemonic = await testKeyring.generateMnemonicFromMaster(
-				newMnemonic.mnemonic,
+				newMnemonic,
 				0,
 				24,
 				0,
@@ -176,14 +170,10 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			expect(mnemonics.length).toBe(3);
 		});
 		it('Should create a new mnemonic from a master mnemonic using BIP85, save it and set it as current one', async () => {
-			const newMnemonic = await testKeyring.generateMnemonic(
-				24,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
+			const masterMnemonic = testKeyring.generateMnemonic(24);
 
 			const childMnemonic = await testKeyring.generateMnemonicFromMaster(
-				newMnemonic.mnemonic,
+				masterMnemonic,
 				0,
 				24,
 				0,

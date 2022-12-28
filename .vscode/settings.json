@@ -16,6 +16,8 @@
 		"rn-keyring",
 		"rn-keyring-example",
 		"bip85",
-		"wif"
+		"wif",
+		"rn-bip85",
+		"utils"
 	]
 }

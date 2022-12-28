@@ -75,8 +75,8 @@ describe('BIP85: Child Entropy', () => {
 		expect(child.toEntropy()).toEqual(testHEX.derivedEntropy);
 	});
 
-	it('works for fromMnemonic and deriveBIP39', () => {
-		const master = BIP85.fromMnemonic(mnemonic);
+	it('works for fromMnemonic and deriveBIP39', async () => {
+		const master = await BIP85.fromMnemonic(mnemonic);
 		const child = master.deriveBIP39(0, 12, 0);
 
 		expect(child.toMnemonic()).toEqual(mnemonicChild);

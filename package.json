@@ -3,8 +3,8 @@
 	"version": "0.0.0",
 	"license": "MIT",
 	"scripts": {
-		"build:all": "nx run-many --target=build --projects=keyring,rn-keyring,bip85,wif --parallel=4",
-		"test:all": "nx run-many --target=test --projects=keyring,rn-keyring,bip85,wif --parallel=4",
+		"build:all": "nx run-many --target=build --projects=utils,keyring,rn-keyring,bip85,rn-bip85,wif --parallel=6",
+		"test:all": "nx run-many --target=test --projects=utils,keyring,rn-keyring,bip85,rn-bip85,wif --parallel=6",
 		"prepare": "husky install"
 	},
 	"release": {
