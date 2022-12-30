@@ -106,30 +106,20 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @optional language - Language identification code, for more info: https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki#bip39
 	 * @optional length - The number of words in the mnemonic (12, 18 or 24).
 	 * @optional index - The account index
-	 * @optional hdpaths - An array of `HdPath`
-	 * @optional prefix - Chain prefix
-	 * @returns Returns a `DirectSecp256k1HdWallet` instance
+	 * @returns Returns a mnemonic string
 	 */
 	public async generateMnemonicFromMaster(
 		masterMnemonic: string,
 		language: BIP39_LANGUAGES = 0,
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<DirectSecp256k1HdWallet> {
+	): Promise<string> {
 		const master = await BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
 
-		const { wallet } = await this.generateWalletFromMnemonic(
-			mnemonic,
-			hdPaths,
-			prefix,
-		);
-
-		return wallet;
+		return mnemonic;
 	}
 
 	/**
