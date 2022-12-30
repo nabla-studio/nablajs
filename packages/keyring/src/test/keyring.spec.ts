@@ -205,5 +205,13 @@ describe('Keyring tests using TestKeyring implementation', () => {
 
 			expect(bitsongAccount).not.toBeUndefined();
 		});
+		it('Should reset the keyring', async () => {
+			await asyncFlowResult(testKeyring.reset());
+
+			const empty = await testKeyring.empty();
+
+			expect(empty).toBeTruthy();
+			expect(testKeyring.unlocked).not.toBeTruthy();
+		});
 	});
 });
