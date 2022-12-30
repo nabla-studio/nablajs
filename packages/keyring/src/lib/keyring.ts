@@ -259,8 +259,14 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @param passphrase the passphrase to set for the keyring
 	 * @param mnemonic the first mnemonic to save
 	 * @param name an alias for mnemonics
+	 * @param metadata - Object, for optional metadata
 	 */
-	public async *init(passphrase: string, mnemonic: string, name: string) {
+	public async *init(
+		passphrase: string,
+		mnemonic: string,
+		name: string,
+		metadata?: R,
+	) {
 		const passphraseHash: string = yield await this.hash(passphrase);
 
 		const storage: KeyringStorage<T, K, R> = {
@@ -274,7 +280,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		this.passphrase = passphrase;
 
-		yield await this.saveMnemonic(mnemonic, name);
+		yield await this.saveMnemonic(mnemonic, name, metadata);
 
 		this.currentMnemonic = mnemonic;
 	}
