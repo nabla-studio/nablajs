@@ -27,6 +27,7 @@ import {
 	flow,
 	computed,
 	autorun,
+	runInAction,
 } from 'mobx';
 
 /**
@@ -89,10 +90,12 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		});
 
 		autorun(
-			async () => {
+			() => {
 				if (this.currentMnemonic) {
-					await this.wallets();
-					await this.accounts();
+					runInAction(async () => {
+						await this.wallets();
+						await this.accounts();
+					});
 				}
 			},
 			{
