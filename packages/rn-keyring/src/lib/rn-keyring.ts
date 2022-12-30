@@ -1,10 +1,6 @@
 import { HdPath } from '@cosmjs/crypto';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import {
-	BIP39_LANGUAGES,
-	BIP85,
-	BIP85_WORD_LENGTHS,
-} from '@nabla-studio/bip85';
+import { BIP39_LANGUAGES, BIP85_WORD_LENGTHS } from '@nabla-studio/bip85';
+import { RNBIP85 } from '@nabla-studio/rn-bip85';
 import {
 	EncryptResponse,
 	Keyring,
@@ -48,7 +44,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
 	): Promise<string> {
-		const master = await BIP85.fromMnemonic(masterMnemonic);
+		const master = await RNBIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
