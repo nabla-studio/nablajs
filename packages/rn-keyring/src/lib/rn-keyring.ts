@@ -47,21 +47,13 @@ export class RNKeyring extends Keyring<AESMetadata> {
 		language: BIP39_LANGUAGES = 0,
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<DirectSecp256k1HdWallet> {
+	): Promise<string> {
 		const master = await BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
 
-		const { wallet } = await this.generateWalletFromMnemonic(
-			mnemonic,
-			hdPaths,
-			prefix,
-		);
-
-		return wallet;
+		return mnemonic;
 	}
 
 	public override async generateWalletFromMnemonic(
