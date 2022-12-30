@@ -74,6 +74,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			currentMnemonic: observable,
 			passphrase: observable,
 			currentWallets: observable,
+			currentAccounts: observable,
 			init: flow,
 			unlock: flow,
 			lock: action,
