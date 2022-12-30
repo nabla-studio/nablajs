@@ -83,6 +83,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			editMnemonic: flow,
 			deleteMnemonic: flow,
 			changeCurrentMnemonic: flow,
+			reset: flow,
 			unlocked: computed,
 		});
 
@@ -441,6 +442,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		return {
 			walletsLength: mnemonics.length,
 		} as WalletDataResponse;
+	}
+
+	/**
+	 * @public
+	 * Reset the `KeyringStorage` and lock the `Keyring`
+	 *
+	 */
+	public async *reset() {
+		assertKeyringUnlocked(this.passphrase);
+
+		yield await this.delete(this.storageKey);
+
+		this.lock();
 	}
 
 	/**
