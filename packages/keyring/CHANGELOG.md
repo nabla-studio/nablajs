@@ -1,3 +1,18 @@
+# [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.3...keyring-v1.0.0-next.4) (2022-12-31)
+
+
+### Bug Fixes
+
+* **keyring:** :bug: fix strict mode error ([eb44e57](https://github.com/nabla-studio/nablajs/commit/eb44e578160dea67056fe264c9386af47cdabb2d)), closes [#13](https://github.com/nabla-studio/nablajs/issues/13)
+
+
+### Features
+
+* **keyring:** :boom: change bip85 generation method ([3565818](https://github.com/nabla-studio/nablajs/commit/35658184237c5e9fe50bcc599d234da80f868ae6)), closes [#15](https://github.com/nabla-studio/nablajs/issues/15)
+* **keyring:** :sparkles: add metadata on init method ([93a71cb](https://github.com/nabla-studio/nablajs/commit/93a71cb3baf0a517109a4808548267117d249b89)), closes [#12](https://github.com/nabla-studio/nablajs/issues/12)
+* **keyring:** :sparkles: add observable property ([fe00299](https://github.com/nabla-studio/nablajs/commit/fe0029903b1f4e9719a09fabd04b7c98a1464644)), closes [#13](https://github.com/nabla-studio/nablajs/issues/13)
+* **keyring:** :sparkles: add reset method ([ce5c16c](https://github.com/nabla-studio/nablajs/commit/ce5c16c058033788fb192eabded7730ac6dbeba6)), closes [#14](https://github.com/nabla-studio/nablajs/issues/14)
+
 # [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.2...keyring-v1.0.0-next.3) (2022-12-28)
 
 
