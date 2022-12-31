@@ -1,3 +1,10 @@
+# [1.0.0-next.5](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.4...keyring-v1.0.0-next.5) (2022-12-31)
+
+
+### Features
+
+* **keyring:** :sparkles: improve mobx action cycle ([610f049](https://github.com/nabla-studio/nablajs/commit/610f04975bf49cb876726b7ae61072035668b168)), closes [#13](https://github.com/nabla-studio/nablajs/issues/13)
+
 # [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.3...keyring-v1.0.0-next.4) (2022-12-31)
 
 
