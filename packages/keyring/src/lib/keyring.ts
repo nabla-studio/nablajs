@@ -27,6 +27,7 @@ import {
 	flow,
 	computed,
 	autorun,
+	runInAction,
 } from 'mobx';
 
 /**
@@ -74,6 +75,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			currentMnemonic: observable,
 			passphrase: observable,
 			currentWallets: observable,
+			currentAccounts: observable,
 			init: flow,
 			unlock: flow,
 			lock: action,
@@ -83,14 +85,17 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			editMnemonic: flow,
 			deleteMnemonic: flow,
 			changeCurrentMnemonic: flow,
+			reset: flow,
 			unlocked: computed,
 		});
 
 		autorun(
-			async () => {
+			() => {
 				if (this.currentMnemonic) {
-					await this.wallets();
-					await this.accounts();
+					runInAction(async () => {
+						await this.wallets();
+						await this.accounts();
+					});
 				}
 			},
 			{
@@ -105,30 +110,20 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @optional language - Language identification code, for more info: https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki#bip39
 	 * @optional length - The number of words in the mnemonic (12, 18 or 24).
 	 * @optional index - The account index
-	 * @optional hdpaths - An array of `HdPath`
-	 * @optional prefix - Chain prefix
-	 * @returns Returns a `DirectSecp256k1HdWallet` instance
+	 * @returns Returns a mnemonic string
 	 */
 	public async generateMnemonicFromMaster(
 		masterMnemonic: string,
 		language: BIP39_LANGUAGES = 0,
 		length: BIP85_WORD_LENGTHS = 24,
 		index = 0,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<DirectSecp256k1HdWallet> {
+	): Promise<string> {
 		const master = await BIP85.fromMnemonic(masterMnemonic);
 		const child = master.deriveBIP39(language, length, index);
 
 		const mnemonic = child.toMnemonic();
 
-		const { wallet } = await this.generateWalletFromMnemonic(
-			mnemonic,
-			hdPaths,
-			prefix,
-		);
-
-		return wallet;
+		return mnemonic;
 	}
 
 	/**
@@ -259,8 +254,14 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @param passphrase the passphrase to set for the keyring
 	 * @param mnemonic the first mnemonic to save
 	 * @param name an alias for mnemonics
+	 * @param metadata - Object, for optional metadata
 	 */
-	public async *init(passphrase: string, mnemonic: string, name: string) {
+	public async *init(
+		passphrase: string,
+		mnemonic: string,
+		name: string,
+		metadata?: R,
+	) {
 		const passphraseHash: string = yield await this.hash(passphrase);
 
 		const storage: KeyringStorage<T, K, R> = {
@@ -274,7 +275,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		this.passphrase = passphrase;
 
-		yield await this.saveMnemonic(mnemonic, name);
+		yield await this.saveMnemonic(mnemonic, name, metadata);
 
 		this.currentMnemonic = mnemonic;
 	}
@@ -435,6 +436,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		return {
 			walletsLength: mnemonics.length,
 		} as WalletDataResponse;
+	}
+
+	/**
+	 * @public
+	 * Reset the `KeyringStorage` and lock the `Keyring`
+	 *
+	 */
+	public async *reset() {
+		assertKeyringUnlocked(this.passphrase);
+
+		yield await this.delete(this.storageKey);
+
+		this.lock();
 	}
 
 	/**

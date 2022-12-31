@@ -156,11 +156,15 @@ describe('Keyring tests using TestKeyring implementation', () => {
 				0,
 				24,
 				0,
+			);
+
+			const childWallet = await testKeyring.generateWalletFromMnemonic(
+				childMnemonic,
 				[stringToPath(`m/44'/639'/0'/0/0`)],
 				'bitsong',
 			);
 
-			await testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
+			await testKeyring.saveMnemonic(childWallet.wallet.mnemonic, 'newmnemonic', {
 				bip85: true,
 				index: 0,
 			});
@@ -177,14 +181,18 @@ describe('Keyring tests using TestKeyring implementation', () => {
 				0,
 				24,
 				0,
+			);
+
+			const childWallet = await testKeyring.generateWalletFromMnemonic(
+				childMnemonic,
 				[stringToPath(`m/44'/639'/0'/0/0`)],
 				'bitsong',
 			);
 
-			const [newAccount] = await childMnemonic.getAccounts();
+			const [newAccount] = await childWallet.wallet.getAccounts();
 
 			const response = await asyncFlowResult(
-				testKeyring.saveMnemonic(childMnemonic.mnemonic, 'newmnemonic', {
+				testKeyring.saveMnemonic(childWallet.wallet.mnemonic, 'newmnemonic', {
 					bip85: true,
 					index: 0,
 				}),
@@ -204,6 +212,14 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			);
 
 			expect(bitsongAccount).not.toBeUndefined();
+		});
+		it('Should reset the keyring', async () => {
+			await asyncFlowResult(testKeyring.reset());
+
+			const empty = await testKeyring.empty();
+
+			expect(empty).toBeTruthy();
+			expect(testKeyring.unlocked).not.toBeTruthy();
 		});
 	});
 });
