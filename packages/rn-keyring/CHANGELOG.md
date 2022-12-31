@@ -1,3 +1,11 @@
+# [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.2...rn-keyring-v1.0.0-next.3) (2022-12-31)
+
+
+### Features
+
+* **rn-keyring:** :boom: change generateMnemonicFromMaster method ([5d92306](https://github.com/nabla-studio/nablajs/commit/5d92306c7038c8e61b9b535d533cc91b25b6e312)), closes [#15](https://github.com/nabla-studio/nablajs/issues/15)
+* **rn-keyring:** :sparkles: add RNBIP85 implementation ([b485f35](https://github.com/nabla-studio/nablajs/commit/b485f35014e845a96b66e05adaf1643a89d7f940))
+
 # [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.1...rn-keyring-v1.0.0-next.2) (2022-12-28)
 
 
