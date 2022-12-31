@@ -20,15 +20,7 @@ import {
 	BIP85_WORD_LENGTHS,
 	BIP39_LANGUAGES,
 } from '@nabla-studio/bip85';
-import {
-	makeObservable,
-	observable,
-	action,
-	flow,
-	computed,
-	autorun,
-	runInAction,
-} from 'mobx';
+import { makeObservable, observable, action, flow, computed } from 'mobx';
 
 /**
  * Definition of Keyring class structure,
@@ -71,7 +63,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		public walletsOptions: WalletOptions[],
 		public cipherMetadata?: K,
 	) {
-		makeObservable<this, 'passphrase'>(this, {
+		makeObservable<this, 'passphrase' | 'setCurrentMnemonic'>(this, {
 			currentMnemonic: observable,
 			passphrase: observable,
 			currentWallets: observable,
@@ -81,6 +73,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			lock: action,
 			wallets: action,
 			accounts: action,
+			setCurrentMnemonic: action,
 			saveMnemonic: flow,
 			editMnemonic: flow,
 			deleteMnemonic: flow,
@@ -88,20 +81,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			reset: flow,
 			unlocked: computed,
 		});
-
-		autorun(
-			() => {
-				if (this.currentMnemonic) {
-					runInAction(async () => {
-						await this.wallets();
-						await this.accounts();
-					});
-				}
-			},
-			{
-				name: 'UpdateWallets',
-			},
-		);
 	}
 
 	/**
@@ -277,7 +256,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		yield await this.saveMnemonic(mnemonic, name, metadata);
 
-		this.currentMnemonic = mnemonic;
+		this.setCurrentMnemonic(mnemonic);
 	}
 
 	/**
@@ -314,7 +293,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		);
 
 		this.passphrase = passphrase;
-		this.currentMnemonic = mnemonic;
+		this.setCurrentMnemonic(mnemonic);
 	}
 
 	/**
@@ -323,7 +302,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 */
 	public lock() {
 		this.passphrase = undefined;
-		this.currentMnemonic = undefined;
+		this.setCurrentMnemonic(undefined);
 		this.currentWallets = [];
 	}
 
@@ -483,7 +462,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		yield await this.write(this.storageKey, storage);
 
-		this.currentMnemonic = mnemonic;
+		this.setCurrentMnemonic(mnemonic);
 	}
 
 	/**
@@ -512,6 +491,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		}
 
 		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
+	}
+
+	private async setCurrentMnemonic(currentMnemonic?: string) {
+		this.currentMnemonic = currentMnemonic;
+
+		await this.wallets();
+		await this.accounts();
 	}
 
 	/**
