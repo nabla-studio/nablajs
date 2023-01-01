@@ -27,7 +27,7 @@ export class RNDirectSecp256k1HdWallet extends DirectSecp256k1HdWallet {
 
 		return new DirectSecp256k1HdWallet(mnemonicChecked, {
 			...options,
-			seed: stringToBytes('utf8', seed),
+			seed: stringToBytes('hex', seed),
 		});
 	}
 }
