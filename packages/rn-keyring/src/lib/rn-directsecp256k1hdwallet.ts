@@ -15,7 +15,7 @@ export class RNDirectSecp256k1HdWallet extends DirectSecp256k1HdWallet {
 		mnemonic: string,
 		options?: Partial<DirectSecp256k1HdWalletOptions>,
 		pbkdf2cost = 2048,
-		pbkdf2length = 64,
+		pbkdf2length = 512,
 	): Promise<DirectSecp256k1HdWallet> {
 		const mnemonicChecked = new EnglishMnemonic(mnemonic);
 		const seed = await mnemonicToSeed(
