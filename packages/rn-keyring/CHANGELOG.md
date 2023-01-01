@@ -1,3 +1,11 @@
+# [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.3...rn-keyring-v1.0.0-next.4) (2023-01-01)
+
+
+### Features
+
+* **rn-keyring:** :sparkles: add metadata generic ([f9d326a](https://github.com/nabla-studio/nablajs/commit/f9d326a08d4770bec04defa7a7bc54679250d85e)), closes [#19](https://github.com/nabla-studio/nablajs/issues/19)
+* **rn-keyring:** :sparkles: increase pbkdf2 default length ([b4ab1fe](https://github.com/nabla-studio/nablajs/commit/b4ab1fee66ed6887021e2c8c92835a0a60a7826b)), closes [#20](https://github.com/nabla-studio/nablajs/issues/20)
+
 # [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.2...rn-keyring-v1.0.0-next.3) (2022-12-31)
 
 
