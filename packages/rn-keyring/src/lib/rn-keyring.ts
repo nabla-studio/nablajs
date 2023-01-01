@@ -30,13 +30,13 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		public salt: string,
 		public storageOptions: AESStorageOptions = {
 			pbkdf2cost: 5000,
-			pbkdf2length: 256,
+			pbkdf2length: 512,
 			randomKeyLength: 16,
 			algorithm: 'aes-256-cbc',
 		},
 		public walletOptions: AESWalletOptions = {
 			pbkdf2cost: 2048,
-			pbkdf2length: 64,
+			pbkdf2length: 512,
 		},
 	) {
 		super(storageKey, walletsOptions);
