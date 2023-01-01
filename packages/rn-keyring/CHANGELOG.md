@@ -1,3 +1,11 @@
+# [1.0.0-next.5](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.4...rn-keyring-v1.0.0-next.5) (2023-01-01)
+
+
+### Bug Fixes
+
+* **rn-keyring:** :bug: fix mnemonic seed encode ([9db6201](https://github.com/nabla-studio/nablajs/commit/9db6201d2d9316040010048f690e5d73bfa7bc6a)), closes [#22](https://github.com/nabla-studio/nablajs/issues/22)
+* **rn-keyring:** :bug: fix pbkdf2 length default value ([cfc629b](https://github.com/nabla-studio/nablajs/commit/cfc629b7978252c504802ba22c362c252ade3643))
+
 # [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.3...rn-keyring-v1.0.0-next.4) (2023-01-01)
 
 
