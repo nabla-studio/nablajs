@@ -30,7 +30,7 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		public salt: string,
 		public storageOptions: AESStorageOptions = {
 			pbkdf2cost: 5000,
-			pbkdf2length: 512,
+			pbkdf2length: 256,
 			randomKeyLength: 16,
 			algorithm: 'aes-256-cbc',
 		},
