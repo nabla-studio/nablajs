@@ -19,7 +19,11 @@ import {
 } from './types';
 import { RNDirectSecp256k1HdWallet } from './rn-directsecp256k1hdwallet';
 
-export class RNKeyring extends Keyring<AESMetadata> {
+export class RNKeyring<K = undefined, R = undefined> extends Keyring<
+	AESMetadata,
+	K,
+	R
+> {
 	constructor(
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
@@ -75,7 +79,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 
 	protected async read(
 		key: string,
-	): Promise<Nullable<KeyringStorage<AESMetadata>>> {
+	): Promise<Nullable<KeyringStorage<AESMetadata, K, R>>> {
 		const data = await AsyncStorage.getItem(key);
 
 		return data ? JSON.parse(data) : null;
@@ -83,7 +87,7 @@ export class RNKeyring extends Keyring<AESMetadata> {
 
 	protected async write(
 		key: string,
-		data: KeyringStorage<AESMetadata>,
+		data: KeyringStorage<AESMetadata, K, R>,
 	): Promise<boolean> {
 		await AsyncStorage.setItem(key, JSON.stringify(data));
 
