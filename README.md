@@ -97,4 +97,4 @@ our GitHub repo.
 
 This software is provided together with a license. All rights are reserved.
 
-Copyright © 2022 [nabla](https://github.com/nabla-studio).
+Copyright © 2023 [nabla](https://github.com/nabla-studio).
