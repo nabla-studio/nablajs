@@ -38,7 +38,7 @@ nabla JS is composed of the following packages:
 
 ## 📖 Docs
 
-[Docs](./docs/README.md) are available through this repo. They are specified information about packages usage and implementation.
+[Docs](./docs/index.md) are available through this repo. They are specified information about packages usage and implementation.
 
 ## 🚀 Dev enviroment requirements
 
