@@ -9,7 +9,7 @@ import {
 	Wallet,
 	WalletOptions,
 } from '@nabla-studio/keyring';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MMKV } from 'react-native-mmkv';
 import AES from 'react-native-aes-crypto';
 import {
 	AESEcrypted,
@@ -24,6 +24,8 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 	K,
 	R
 > {
+	private storage: MMKV;
+
 	constructor(
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
@@ -40,6 +42,11 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		},
 	) {
 		super(storageKey, walletsOptions);
+
+		this.storage = new MMKV({
+			id: 'custom-keyring-storage',
+			fastWrites: false,
+		});
 	}
 
 	public override async generateMnemonicFromMaster(
@@ -80,7 +87,7 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 	protected async read(
 		key: string,
 	): Promise<Nullable<KeyringStorage<AESMetadata, K, R>>> {
-		const data = await AsyncStorage.getItem(key);
+		const data = await this.storage.getString(key);
 
 		return data ? JSON.parse(data) : null;
 	}
@@ -89,13 +96,13 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		key: string,
 		data: KeyringStorage<AESMetadata, K, R>,
 	): Promise<boolean> {
-		await AsyncStorage.setItem(key, JSON.stringify(data));
+		await this.storage.set(key, JSON.stringify(data));
 
 		return true;
 	}
 
 	protected async delete(key: string): Promise<boolean> {
-		await AsyncStorage.removeItem(key);
+		await this.storage.delete(key);
 
 		return true;
 	}
