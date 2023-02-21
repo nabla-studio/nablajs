@@ -1,3 +1,11 @@
+# [1.0.0-next.6](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.5...rn-keyring-v1.0.0-next.6) (2023-02-21)
+
+
+### Features
+
+* **rn-keyring:** :sparkles: add MMKV storage ([8db7795](https://github.com/nabla-studio/nablajs/commit/8db7795c789d25291fc331b64f6e78be852df861)), closes [#25](https://github.com/nabla-studio/nablajs/issues/25)
+* **rn-keyring:** :sparkles: add storageId class property ([78ab185](https://github.com/nabla-studio/nablajs/commit/78ab1856b5de299194f6985188f091a832093a0e))
+
 # [1.0.0-next.5](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.4...rn-keyring-v1.0.0-next.5) (2023-01-01)
 
 
