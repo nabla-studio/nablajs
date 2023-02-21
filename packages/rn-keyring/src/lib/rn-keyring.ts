@@ -40,11 +40,12 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 			pbkdf2cost: 2048,
 			pbkdf2length: 512,
 		},
+		public readonly storageId = 'custom-keyring-storage',
 	) {
 		super(storageKey, walletsOptions);
 
 		this.storage = new MMKV({
-			id: 'custom-keyring-storage',
+			id: storageId,
 			fastWrites: false,
 		});
 	}
