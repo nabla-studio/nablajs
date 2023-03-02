@@ -126,7 +126,7 @@ jobs:
 
    - run: |
       npx nx workspace-lint
-      npx nx format:check
+      npx nx format:check --libs-and-apps
       npx nx affected --target lint --parallel 4
       npx nx affected --target test --parallel 4 --ci --code-coverage
       npx nx affected --target build --parallel 4
