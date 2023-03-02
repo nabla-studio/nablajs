@@ -46,7 +46,6 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 
 		this.storage = new MMKV({
 			id: storageId,
-			fastWrites: false,
 		});
 	}
 
