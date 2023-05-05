@@ -39,7 +39,7 @@
 		"js-crypto-utils": "^1.0.4",
 		"mobx": "^6.9.0",
 		"react": "18.2.0",
-		"react-native": "0.70.1",
+		"react-native": "^0.71.7",
 		"react-native-aes-crypto": "^2.1.1",
 		"react-native-mmkv": "^2.8.0",
 		"tslib": "^2.3.0"
