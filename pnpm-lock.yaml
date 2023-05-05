@@ -26,8 +26,8 @@ dependencies:
     specifier: ^1.0.4
     version: 1.0.4
   mobx:
-    specifier: ^6.7.0
-    version: 6.7.0
+    specifier: ^6.9.0
+    version: 6.9.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -12573,8 +12573,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mobx@6.7.0:
-    resolution: {integrity: sha512-1kBLBdSNG2bA522HQdbsTvwAwYf9hq9FWxmlhX7wTsJUAI54907J+ozfGW+LoYUo06vjit748g6QH1AAGLNebw==, tarball: https://registry.npmjs.com/mobx/-/mobx-6.7.0.tgz}
+  /mobx@6.9.0:
+    resolution: {integrity: sha512-HdKewQEREEJgsWnErClfbFoVebze6rGazxFLU/XUyrII8dORfVszN1V0BMRnQSzcgsNNtkX8DHj3nC6cdWE9YQ==}
     dev: false
 
   /modify-values@1.0.1:
