@@ -44,6 +44,11 @@ jobs:
       token: ${{ secrets.GH_TOKEN }}
       fetch-depth: 0
 
+   - name: Derive appropriate SHAs for base and head for `nx affected` commands
+     uses: nrwl/nx-set-shas@v2
+     with:
+      main-branch-name: ${{ github.base_ref }}
+
    - name: Detect package manager
      id: package_manager
      run: |
