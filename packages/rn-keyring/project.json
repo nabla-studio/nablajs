@@ -38,14 +38,6 @@
 				"jestConfig": "packages/rn-keyring/jest.config.ts",
 				"passWithNoTests": true
 			}
-		},
-		"release": {
-			"executor": "nx:run-commands",
-			"outputs": [],
-			"options": {
-				"command": "npx semantic-release-plus --extends ./packages/rn-keyring/.releaserc.json",
-				"parallel": false
-			}
 		}
 	}
 }

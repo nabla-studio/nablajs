@@ -35,14 +35,6 @@
 				"jestConfig": "packages/bip85/jest.config.ts",
 				"passWithNoTests": true
 			}
-		},
-		"release": {
-			"executor": "nx:run-commands",
-			"outputs": [],
-			"options": {
-				"command": "npx semantic-release-plus --extends ./packages/bip85/.releaserc.json",
-				"parallel": false
-			}
 		}
 	},
 	"tags": []

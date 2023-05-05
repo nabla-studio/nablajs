@@ -35,14 +35,6 @@
 				"jestConfig": "packages/wif/jest.config.ts",
 				"passWithNoTests": true
 			}
-		},
-		"release": {
-			"executor": "nx:run-commands",
-			"outputs": [],
-			"options": {
-				"command": "npx semantic-release-plus --extends ./packages/wif/.releaserc.json",
-				"parallel": false
-			}
 		}
 	},
 	"tags": []
