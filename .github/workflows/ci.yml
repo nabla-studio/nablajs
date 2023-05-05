@@ -130,10 +130,9 @@ jobs:
       NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
      run: |
-      npx nx release utils
-      npx nx release keyring
-      npx nx release rn-keyring
-      npx nx release wif
-      npx nx release bip85
-      npx nx release rn-bip85
-      npx semantic-release-plus
+      npx nx run utils:semantic-release
+      npx nx run keyring:semantic-release
+      npx nx run rn-keyring:semantic-release
+      npx nx run wif:semantic-release
+      npx nx run bip85:semantic-release
+      npx nx run rn-bip85:semantic-release
