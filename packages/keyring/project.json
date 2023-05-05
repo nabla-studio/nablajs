@@ -35,7 +35,18 @@
 				"jestConfig": "packages/keyring/jest.config.ts",
 				"passWithNoTests": true
 			}
-		}
+		},
+		"semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+        "github": true,
+        "changelog": true,
+        "npm": true,
+        "tagFormat": "keyring-v${VERSION}",
+        "outputPath": "dist/packages/keyring",
+        "buildTarget": "${PROJECT_NAME}:build"
+      }
+    }
 	},
 	"tags": []
 }
