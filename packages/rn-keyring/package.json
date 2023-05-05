@@ -1,6 +1,6 @@
 {
 	"name": "@nabla-studio/rn-keyring",
-	"version": "0.0.0-semantic-release",
+	"version": "1.0.0-next.7",
 	"author": "nabla <tech@nabla.studio>",
 	"type": "module",
 	"repository": {
