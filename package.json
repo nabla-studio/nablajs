@@ -7,26 +7,6 @@
 		"test:all": "nx run-many --target=test --projects=utils,keyring,rn-keyring,bip85,rn-bip85,wif --parallel=6",
 		"prepare": "husky install"
 	},
-	"release": {
-		"branches": [
-			"main",
-			{
-				"name": "next",
-				"channel": "next",
-				"prerelease": true
-			},
-			{
-				"name": "beta",
-				"channel": "beta",
-				"prerelease": true
-			},
-			{
-				"name": "alpha",
-				"channel": "alpha",
-				"prerelease": true
-			}
-		]
-	},
 	"private": true,
 	"dependencies": {
 		"@cosmjs/amino": "^0.30.1",
@@ -101,7 +81,6 @@
 		"react-native-svg-transformer": "1.0.0",
 		"react-test-renderer": "18.2.0",
 		"semantic-release": "19.0.5",
-		"semantic-release-npm-github-publish": "1.5.4",
 		"semantic-release-plus": "20.0.0",
 		"ts-jest": "29.1.0",
 		"ts-node": "10.9.1",

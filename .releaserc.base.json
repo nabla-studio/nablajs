@@ -1,6 +1,9 @@
 {
-	"extends": "semantic-release-npm-github-publish",
-	"branches": [
+  "changelog": true,
+  "npm": true,
+  "github": true,
+  "repositoryUrl": "https://github.com/nabla-studio/nablajs",
+  "branches": [
 		"main",
 		{
 			"name": "next",
