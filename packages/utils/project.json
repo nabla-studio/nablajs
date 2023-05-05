@@ -35,7 +35,18 @@
 				"jestConfig": "packages/utils/jest.config.ts",
 				"passWithNoTests": true
 			}
-		}
+		},
+		"semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+        "github": true,
+        "changelog": true,
+        "npm": true,
+        "tagFormat": "utils-v${VERSION}",
+        "outputPath": "dist/packages/utils",
+        "buildTarget": "${PROJECT_NAME}:build"
+      }
+    }
 	},
 	"tags": []
 }

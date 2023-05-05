@@ -35,7 +35,18 @@
 				"jestConfig": "packages/bip85/jest.config.ts",
 				"passWithNoTests": true
 			}
-		}
+		},
+		"semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+        "github": true,
+        "changelog": true,
+        "npm": true,
+        "tagFormat": "bip85-v${VERSION}",
+        "outputPath": "dist/packages/bip85",
+        "buildTarget": "${PROJECT_NAME}:build"
+      }
+    }
 	},
 	"tags": []
 }

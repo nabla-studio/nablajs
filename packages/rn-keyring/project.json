@@ -38,6 +38,17 @@
 				"jestConfig": "packages/rn-keyring/jest.config.ts",
 				"passWithNoTests": true
 			}
-		}
+		},
+		"semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "options": {
+        "github": true,
+        "changelog": true,
+        "npm": true,
+        "tagFormat": "rn-keyring-v${VERSION}",
+        "outputPath": "dist/packages/rn-keyring",
+        "buildTarget": "${PROJECT_NAME}:build"
+      }
+    }
 	}
 }
