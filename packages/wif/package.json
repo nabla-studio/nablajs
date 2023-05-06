@@ -4,6 +4,7 @@
 	"author": "nabla <tech@nabla.studio>",
 	"description": "Bitcoin Wallet Import Format encoding/decoding module.",
 	"type": "module",
+	"main": "src/index.ts",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nabla-studio/nablajs.git",
