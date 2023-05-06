@@ -1,6 +1,5 @@
 import { BIP85 } from '@nabla-studio/bip85';
 import { mnemonicToSeed } from '@nabla-studio/utils';
-import { stringToBytes } from '@scure/base';
 import { validateMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
 
@@ -12,6 +11,6 @@ export class RNBIP85 extends BIP85 {
 
 		const seed = await mnemonicToSeed(mnemonic, password);
 
-		return BIP85.fromSeed(stringToBytes('utf8', seed));
+		return BIP85.fromSeed(seed);
 	}
 }
