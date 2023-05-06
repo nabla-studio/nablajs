@@ -46,8 +46,7 @@
         "changelog": true,
         "npm": true,
         "tagFormat": "rn-keyring-v${VERSION}",
-        "outputPath": "dist/packages/rn-keyring",
-        "buildTarget": "${PROJECT_NAME}:build"
+        "outputPath": "dist/packages/rn-keyring"
       }
     }
 	}

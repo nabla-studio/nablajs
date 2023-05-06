@@ -43,8 +43,7 @@
         "changelog": true,
         "npm": true,
         "tagFormat": "bip85-v${VERSION}",
-        "outputPath": "dist/packages/bip85",
-        "buildTarget": "${PROJECT_NAME}:build"
+        "outputPath": "dist/packages/bip85"
       }
     }
 	},

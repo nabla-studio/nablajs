@@ -43,8 +43,7 @@
         "changelog": true,
         "npm": true,
         "tagFormat": "utils-v${VERSION}",
-        "outputPath": "dist/packages/utils",
-        "buildTarget": "${PROJECT_NAME}:build"
+        "outputPath": "dist/packages/utils"
       }
     }
 	},

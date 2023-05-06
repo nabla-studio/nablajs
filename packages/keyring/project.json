@@ -43,8 +43,7 @@
         "changelog": true,
         "npm": true,
         "tagFormat": "keyring-v${VERSION}",
-        "outputPath": "dist/packages/keyring",
-        "buildTarget": "${PROJECT_NAME}:build"
+        "outputPath": "dist/packages/keyring"
       }
     }
 	},
