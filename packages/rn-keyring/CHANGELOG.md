@@ -1,3 +1,26 @@
+# [1.0.0-next.8](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.7...rn-keyring-v1.0.0-next.8) (2023-05-06)
+
+
+### Bug Fixes
+
+* **bip85:** :bug: fix package main ([03157fe](https://github.com/nabla-studio/nablajs/commit/03157fe6a1f5c6901c5845d161206fb3459e29fb))
+* **keyring:** :bug: fix export and definitions ([8e490ca](https://github.com/nabla-studio/nablajs/commit/8e490ca3f11400aaf2c3a83d4a2126153ff0a69f))
+* **keyring:** :bug: fix mobx warning ([99724b1](https://github.com/nabla-studio/nablajs/commit/99724b1c48c3b8494b7b246148e2f7154dded2f8))
+* **rn-bip85:** :bug: fix package main ([6b83773](https://github.com/nabla-studio/nablajs/commit/6b83773b81c0ca60413924e44347e559a6026f6f))
+* **rn-keyring:** :bug: fix seed type ([7101cb9](https://github.com/nabla-studio/nablajs/commit/7101cb9802843e0896ac52b4cd346edf93cc9609))
+* **utils:** :bug: fix package main ([33c90d8](https://github.com/nabla-studio/nablajs/commit/33c90d8d0f443f4c84d173c3af4d450cfcc0b6ba))
+* **wif:** :bug: fix package main ([fe070ef](https://github.com/nabla-studio/nablajs/commit/fe070ef92825a03f34d6dcc63cb4b172aab46164))
+
+
+### Features
+
+* :heavy_plus_sign: add quick crypto and buffer deps ([a7b578c](https://github.com/nabla-studio/nablajs/commit/a7b578ca5b364596cae04f716ff83b3040cdfb9d))
+* **demo:** :sparkles: add example demo ([cf32f63](https://github.com/nabla-studio/nablajs/commit/cf32f63289df2315ad95b2b0c4ba90e7658ef26b))
+* **rn-bip85:** :zap: add boosted mnemonicToSeed ([86175b2](https://github.com/nabla-studio/nablajs/commit/86175b224f206970e6682ab42ba3b6b019ba2b31))
+* **rn-keyring:** :wastebasket: move secp override to deprecated ([bb30796](https://github.com/nabla-studio/nablajs/commit/bb30796f773f5085a55d0aacd581d8dde9937e45))
+* **rn-keyring:** :zap: add implementation of quick-crypto ([3b113cf](https://github.com/nabla-studio/nablajs/commit/3b113cff220bd815b55a231ce7d3c5b160a37128))
+* **utils:** :zap: add quick-crypto implementation ([ce089e9](https://github.com/nabla-studio/nablajs/commit/ce089e9f647ab8b17aa84dc95eef3f095762a637))
+
 # [1.0.0-next.7](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.6...rn-keyring-v1.0.0-next.7) (2023-05-05)
 
 
