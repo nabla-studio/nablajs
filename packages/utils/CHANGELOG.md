@@ -1,3 +1,17 @@
+# [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.2...utils-v1.0.0-next.3) (2023-05-06)
+
+
+### Bug Fixes
+
+* **utils:** :bug: fix package main ([33c90d8](https://github.com/nabla-studio/nablajs/commit/33c90d8d0f443f4c84d173c3af4d450cfcc0b6ba))
+
+
+### Features
+
+* :heavy_plus_sign: add quick crypto and buffer deps ([a7b578c](https://github.com/nabla-studio/nablajs/commit/a7b578ca5b364596cae04f716ff83b3040cdfb9d))
+* **demo:** :sparkles: add example demo ([cf32f63](https://github.com/nabla-studio/nablajs/commit/cf32f63289df2315ad95b2b0c4ba90e7658ef26b))
+* **utils:** :zap: add quick-crypto implementation ([ce089e9](https://github.com/nabla-studio/nablajs/commit/ce089e9f647ab8b17aa84dc95eef3f095762a637))
+
 # [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.1...utils-v1.0.0-next.2) (2023-05-05)
 
 
