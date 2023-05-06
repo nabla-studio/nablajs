@@ -1,3 +1,10 @@
+# [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.3...rn-bip85-v1.0.0-next.4) (2023-05-06)
+
+
+### Bug Fixes
+
+* **wif:** :wrench: fix semantic release config ([a65e17d](https://github.com/nabla-studio/nablajs/commit/a65e17da83f7a9b750c824ce354aa75314d5e719))
+
 # [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.2...rn-bip85-v1.0.0-next.3) (2023-05-06)
 
 
