@@ -42,8 +42,8 @@
         "github": true,
         "changelog": true,
         "npm": true,
-        "tagFormat": "rn-keyring-v${VERSION}",
-        "outputPath": "dist/packages/rn-keyring"
+        "tagFormat": "wif-v${VERSION}",
+        "outputPath": "dist/packages/wif"
       }
     }
 	},
