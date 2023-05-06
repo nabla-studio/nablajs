@@ -17247,7 +17247,6 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-native: 0.71.7
-    react-native-aes-crypto: ^2.1.1
     react-native-config: 1.5.0
     react-native-mmkv: ^2.8.0
     react-native-quick-crypto: ^0.6.1
@@ -19920,13 +19919,6 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
-  languageName: node
-  linkType: hard
-
-"react-native-aes-crypto@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "react-native-aes-crypto@npm:2.1.1"
-  checksum: 9d0d1ad6f76367445b2d58d7c3d53b1988ce88ba6e71b0422f66dca1607e7ca38da717c991ed27173e906ce91f8c3cacb9ca267e6ec9cdc1f423a8b24974bcaa
   languageName: node
   linkType: hard
 

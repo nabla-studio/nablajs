@@ -26,7 +26,6 @@
     "@scure/bip32": "*",
     "mobx": "*",
     "js-crypto-utils": "*",
-    "react-native-aes-crypto": "*",
     "react-native-mmkv": "*",
     "react-native-quick-crypto": "*",
     "react-native-safe-area-context": "*",
