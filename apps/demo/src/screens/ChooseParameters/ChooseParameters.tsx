@@ -17,12 +17,15 @@ const ChooseParameters = () => {
 		try {
 			setLoading(true);
 			if (route.params.mnemonic) {
+				const start = performance.now()
 				const childMnemonic = await keyring.generateMnemonicFromMaster(
 					route.params.mnemonic,
 					0,
 					24,
 					index,
 				);
+				const end = performance.now()
+				console.log(`Child took ${end - start} ms.`)
 
 				navigation.navigate('ChooseNickname', {
 					mnemonic: childMnemonic,
