@@ -12,6 +12,7 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"conventionalCommits.scopes": [
+		"demo",
 		"keyring",
 		"rn-keyring",
 		"rn-keyring-example",

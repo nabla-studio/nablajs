@@ -104,3 +104,21 @@ buck-out/
 **/ios/Pods/
 **/vendor/bundle/
 apps/rn-keyring-example-e2e/artifacts
+
+# Expo
+node_modules/
+.expo/
+.yarn/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+cache/
+
+
+apps/demo-e2e/artifacts

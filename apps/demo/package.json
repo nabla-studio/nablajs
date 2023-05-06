@@ -1,0 +1,46 @@
+{
+  "name": "demo",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-native": "*",
+    "@testing-library/react-native": "*",
+    "react-native": "0.71.7",
+    "expo": "^48.0.0",
+    "react-native-svg": "*",
+    "react-native-web": "*",
+    "expo-splash-screen": "~0.18.2",
+    "expo-status-bar": "~1.4.4",
+    "react": "18.2.0",
+    "@nx/expo": "*",
+    "@expo/metro-config": "*",
+    "@babel/core": "*",
+    "@react-navigation/native-stack": "*",
+    "mobx-react": "*",
+    "@react-navigation/native": "*",
+    "@cosmjs/crypto": "*",
+    "@cosmjs/proto-signing": "*",
+    "@scure/bip39": "*",
+    "@noble/hashes": "*",
+    "@scure/base": "*",
+    "@scure/bip32": "*",
+    "mobx": "*",
+    "js-crypto-utils": "*",
+    "react-native-aes-crypto": "*",
+    "react-native-mmkv": "*",
+    "react-native-quick-crypto": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "*",
+    "@craftzdog/react-native-buffer": "*",
+    "fast-text-encoding": "*"
+  },
+  "scripts": {
+    "postinstall": "rm -r node_modules && cd ../../ && yarn install && npx nx sync-deps demo && npx nx ensure-symlink demo",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  }
+}
