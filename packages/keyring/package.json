@@ -3,6 +3,7 @@
 	"version": "1.0.0-next.6",
 	"author": "nabla <tech@nabla.studio>",
 	"type": "module",
+	"main": "src/index.ts",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nabla-studio/nablajs.git",

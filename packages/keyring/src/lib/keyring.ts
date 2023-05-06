@@ -38,13 +38,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @private
 	 * current passphrase used for mnemonics encryption
 	 */
-	private passphrase?: string;
+	private passphrase?: string = undefined;
 
 	/**
 	 * @public
 	 * the mnemonics currently selected to operate
 	 */
-	public currentMnemonic?: string;
+	public currentMnemonic?: string = undefined;
 
 	/**
 	 * @public
