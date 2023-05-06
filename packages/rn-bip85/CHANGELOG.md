@@ -1,3 +1,21 @@
+# [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.2...rn-bip85-v1.0.0-next.3) (2023-05-06)
+
+
+### Bug Fixes
+
+* **bip85:** :bug: fix package main ([03157fe](https://github.com/nabla-studio/nablajs/commit/03157fe6a1f5c6901c5845d161206fb3459e29fb))
+* **rn-bip85:** :bug: fix package main ([6b83773](https://github.com/nabla-studio/nablajs/commit/6b83773b81c0ca60413924e44347e559a6026f6f))
+* **utils:** :bug: fix package main ([33c90d8](https://github.com/nabla-studio/nablajs/commit/33c90d8d0f443f4c84d173c3af4d450cfcc0b6ba))
+* **wif:** :bug: fix package main ([fe070ef](https://github.com/nabla-studio/nablajs/commit/fe070ef92825a03f34d6dcc63cb4b172aab46164))
+
+
+### Features
+
+* :heavy_plus_sign: add quick crypto and buffer deps ([a7b578c](https://github.com/nabla-studio/nablajs/commit/a7b578ca5b364596cae04f716ff83b3040cdfb9d))
+* **demo:** :sparkles: add example demo ([cf32f63](https://github.com/nabla-studio/nablajs/commit/cf32f63289df2315ad95b2b0c4ba90e7658ef26b))
+* **rn-bip85:** :zap: add boosted mnemonicToSeed ([86175b2](https://github.com/nabla-studio/nablajs/commit/86175b224f206970e6682ab42ba3b6b019ba2b31))
+* **utils:** :zap: add quick-crypto implementation ([ce089e9](https://github.com/nabla-studio/nablajs/commit/ce089e9f647ab8b17aa84dc95eef3f095762a637))
+
 # [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.1...rn-bip85-v1.0.0-next.2) (2023-05-05)
 
 
