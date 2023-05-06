@@ -1,4 +1,5 @@
-import { HdPath } from '@cosmjs/crypto';
+import QuickCrypto from 'react-native-quick-crypto';
+import { Buffer } from '@craftzdog/react-native-buffer';
 import { BIP39_LANGUAGES, BIP85_WORD_LENGTHS } from '@nabla-studio/bip85';
 import { RNBIP85 } from '@nabla-studio/rn-bip85';
 import {
@@ -6,18 +7,18 @@ import {
 	Keyring,
 	KeyringStorage,
 	Nullable,
-	Wallet,
 	WalletOptions,
 } from '@nabla-studio/keyring';
 import { MMKV } from 'react-native-mmkv';
-import AES from 'react-native-aes-crypto';
-import {
-	AESEcrypted,
-	AESMetadata,
-	AESStorageOptions,
-	AESWalletOptions,
-} from './types';
-import { RNDirectSecp256k1HdWallet } from './rn-directsecp256k1hdwallet';
+import { AESEcrypted, AESMetadata, AESStorageOptions } from './types';
+
+function ab2str(buf: ArrayBuffer, encoding = 'hex') {
+	return Buffer.from(buf).toString(encoding);
+}
+
+function str2ab(buf: string, encoding = 'hex') {
+	return Buffer.from(buf, encoding);
+}
 
 export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 	AESMetadata,
@@ -30,17 +31,14 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		public override storageKey: string,
 		public override walletsOptions: WalletOptions[],
 		public salt: string,
+		public readonly storageId = 'custom-keyring-storage',
 		public storageOptions: AESStorageOptions = {
 			pbkdf2cost: 5000,
-			pbkdf2length: 256,
+			pbkdf2length: 16,
+			randomKeyType: 'aes',
 			randomKeyLength: 16,
-			algorithm: 'aes-256-cbc',
+			algorithm: 'aes-256-ctr',
 		},
-		public walletOptions: AESWalletOptions = {
-			pbkdf2cost: 2048,
-			pbkdf2length: 512,
-		},
-		public readonly storageId = 'custom-keyring-storage',
 	) {
 		super(storageKey, walletsOptions);
 
@@ -61,27 +59,6 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		const mnemonic = child.toMnemonic();
 
 		return mnemonic;
-	}
-
-	public override async generateWalletFromMnemonic(
-		mnemonic: string,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<Wallet> {
-		const wallet = await RNDirectSecp256k1HdWallet.fromMnemonic(
-			mnemonic,
-			{
-				hdPaths,
-				prefix,
-			},
-			this.walletOptions.pbkdf2cost,
-			this.walletOptions.pbkdf2length,
-		);
-
-		return {
-			wallet,
-			prefix,
-		};
 	}
 
 	protected async read(
@@ -115,9 +92,9 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		const encryptionResult = await this.encryptData(data, key);
 
 		return {
-			cipherText: encryptionResult.cipher,
+			cipherText: ab2str(encryptionResult.cipher as ArrayBuffer),
 			cipheredMetadata: {
-				iv: encryptionResult.iv,
+				iv: ab2str(encryptionResult.iv),
 			},
 		};
 	}
@@ -135,35 +112,39 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 
 		const decryptData = await this.decryptData(encryptData, key);
 
-		return decryptData;
+		return decryptData as string;
 	}
 
+	/**
+	 * @returns hex hash
+	 */
 	protected async hash(data: string): Promise<string> {
-		const hashResult = await AES.sha512(data);
+		const hashResult = await QuickCrypto.createHash('sha512')
+			.update(data)
+			.digest('hex');
 
 		return hashResult;
 	}
 
 	private async generateKey(password: string) {
-		const key = await AES.pbkdf2(
+		const key = await QuickCrypto.pbkdf2Sync(
 			password,
 			this.salt,
 			this.storageOptions.pbkdf2cost,
 			this.storageOptions.pbkdf2length,
 		);
 
-		return key;
+		return ab2str(key);
 	}
 
 	private async encryptData(text: string, key: string) {
-		const iv = await AES.randomKey(this.storageOptions.randomKeyLength);
+		const iv = QuickCrypto.randomBytes(this.storageOptions.randomKeyLength);
 
-		const cipher = await AES.encrypt(
-			text,
+		const cipher = await QuickCrypto.createCipheriv(
+			this.storageOptions.algorithm,
 			key,
 			iv,
-			this.storageOptions.algorithm,
-		);
+		).update(text);
 
 		return {
 			cipher,
@@ -172,13 +153,12 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 	}
 
 	private async decryptData(encryptedData: AESEcrypted, key: string) {
-		const decrypt = await AES.decrypt(
-			encryptedData.cipherText,
-			key,
-			encryptedData.iv,
+		const decrypt = await QuickCrypto.createDecipheriv(
 			this.storageOptions.algorithm,
-		);
+			key,
+			str2ab(encryptedData.iv),
+		).update(str2ab(encryptedData.cipherText, 'hex'));
 
-		return decrypt;
+		return ab2str(decrypt as ArrayBuffer, 'utf-8');
 	}
 }
