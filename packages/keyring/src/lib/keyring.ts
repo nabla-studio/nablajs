@@ -20,7 +20,14 @@ import {
 	BIP85_WORD_LENGTHS,
 	BIP39_LANGUAGES,
 } from '@nabla-studio/bip85';
-import { makeObservable, observable, action, flow, computed } from 'mobx';
+import {
+	makeObservable,
+	observable,
+	action,
+	flow,
+	computed,
+	runInAction,
+} from 'mobx';
 
 /**
  * Definition of Keyring class structure,
@@ -193,7 +200,9 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		const accounts = await Promise.all(accountsPromises);
 
-		this.currentAccounts = accounts.flat();
+		runInAction(() => {
+			this.currentAccounts = accounts.flat();
+		});
 	}
 
 	/**
