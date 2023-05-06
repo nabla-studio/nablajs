@@ -7,6 +7,10 @@ import { stringToBytes } from '@scure/base';
 import { mnemonicToSeed } from '@nabla-studio/utils';
 
 /**
+ * @deprecated
+ * We don't need it anymore, just use https://github.com/margelo/react-native-quick-crypto
+ * deps to override cryptojs behaviours
+ *
  * We must implement this, because the construct of  `DirectSecp256k1HdWallet` is protected, and this is the only way
  * to create a `DirectSecp256k1HdWallet` instance without using `pbkdf2` from `@noble/hash`, which is very slow on react native
  */
