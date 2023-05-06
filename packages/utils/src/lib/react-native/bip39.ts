@@ -1,4 +1,4 @@
-import AES from 'react-native-aes-crypto';
+import QuickCrypto from 'react-native-quick-crypto';
 
 export const nfkd = (str: string) => {
 	if (typeof str !== 'string') {
@@ -27,7 +27,7 @@ export const mnemonicToSeed = async (
 ) => {
 	const salt = 'mnemonic' + (passphrase ? normalize(passphrase).nfkd : '');
 
-	return await AES.pbkdf2(
+	return await QuickCrypto.pbkdf2Sync(
 		normalize(mnemonic).nfkd,
 		salt,
 		pbkdf2cost,
