@@ -3,7 +3,6 @@ import {
 	DirectSecp256k1HdWalletOptions,
 } from '@cosmjs/proto-signing';
 import { EnglishMnemonic } from '@cosmjs/crypto';
-import { stringToBytes } from '@scure/base';
 import { mnemonicToSeed } from '@nabla-studio/utils';
 
 /**
