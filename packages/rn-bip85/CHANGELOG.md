@@ -1,3 +1,10 @@
+# [1.0.0-next.5](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.4...rn-bip85-v1.0.0-next.5) (2023-05-07)
+
+
+### Features
+
+* **bip85:** :memo: add readme ([d0e9c05](https://github.com/nabla-studio/nablajs/commit/d0e9c05082e37b3539171f5df6f9d2c4f39d1a88))
+
 # [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.3...rn-bip85-v1.0.0-next.4) (2023-05-06)
 
 
