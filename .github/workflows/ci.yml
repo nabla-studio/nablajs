@@ -118,10 +118,10 @@ jobs:
         npm ci
       fi
 
-   - run: |
+   - name: Checks
+     run: |
       npx nx affected --target lint --parallel 4 --exclude demo
       npx nx affected --target test --parallel 4 --ci --code-coverage --exclude demo
-      npx nx affected --target build --parallel 4 --exclude demo
 
    - name: Release
      if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
@@ -130,9 +130,4 @@ jobs:
       NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
      run: |
-      npx nx run utils:semantic-release
-      npx nx run keyring:semantic-release
-      npx nx run rn-keyring:semantic-release
-      npx nx run wif:semantic-release
-      npx nx run bip85:semantic-release
-      npx nx run rn-bip85:semantic-release
+      npx nx affected --target semantic-release --parallel 4 --exclude demo
