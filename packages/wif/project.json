@@ -43,7 +43,8 @@
         "changelog": true,
         "npm": true,
         "tagFormat": "wif-v${VERSION}",
-        "outputPath": "dist/packages/wif"
+        "outputPath": "dist/packages/wif",
+				"buildTarget": "${PROJECT_NAME}:build"
       }
     }
 	},
