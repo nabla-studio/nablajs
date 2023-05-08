@@ -9,6 +9,19 @@
 ### Features
 
 * **bip85:** :memo: add readme ([d0e9c05](https://github.com/nabla-studio/nablajs/commit/d0e9c05082e37b3539171f5df6f9d2c4f39d1a88))
+* **keyring:** :memo: add keyring readme ([fafdab9](https://github.com/nabla-studio/nablajs/commit/fafdab90c5d12d9f52f9a0be9b5f7bc7a5bc29d8))
+
+# [1.0.0-next.9](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.8...keyring-v1.0.0-next.9) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
+
+### Features
+
+* **bip85:** :memo: add readme ([d0e9c05](https://github.com/nabla-studio/nablajs/commit/d0e9c05082e37b3539171f5df6f9d2c4f39d1a88))
 
 # [1.0.0-next.9](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.8...keyring-v1.0.0-next.9) (2023-05-07)
 
