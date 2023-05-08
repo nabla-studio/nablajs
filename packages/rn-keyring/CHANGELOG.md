@@ -1,3 +1,11 @@
+# [1.0.0-next.18](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.17...rn-keyring-v1.0.0-next.18) (2023-05-08)
+
+
+### Features
+
+* **rn-bip85:** :wrench: improve build bundle ([eed4b9c](https://github.com/nabla-studio/nablajs/commit/eed4b9cbb2bc66af397cf8c6e06ad5b35b4bae48))
+* **rn-keyring:** :wrench: improve build bundle ([af4873e](https://github.com/nabla-studio/nablajs/commit/af4873eeeda58a527cda9e10e12ca531ba1bee2c))
+
 # [1.0.0-next.17](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.16...rn-keyring-v1.0.0-next.17) (2023-05-08)
 
 
