@@ -1,6 +1,13 @@
 # [1.0.0-next.10](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.9...keyring-v1.0.0-next.10) (2023-05-08)
 
 
+### Features
+
+* **keyring:** :wrench: update version ([b2ca4c3](https://github.com/nabla-studio/nablajs/commit/b2ca4c3d10607ad6ad8b5c1adc769cafdb5d3d6d))
+
+# [1.0.0-next.10](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.9...keyring-v1.0.0-next.10) (2023-05-08)
+
+
 ### Bug Fixes
 
 * :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
