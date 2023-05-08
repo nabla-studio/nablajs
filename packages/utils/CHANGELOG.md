@@ -1,3 +1,10 @@
+# [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.3...utils-v1.0.0-next.4) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
 # [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.2...utils-v1.0.0-next.3) (2023-05-06)
 
 
