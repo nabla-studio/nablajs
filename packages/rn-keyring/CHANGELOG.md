@@ -1,3 +1,10 @@
+# [1.0.0-next.12](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.11...rn-keyring-v1.0.0-next.12) (2023-05-08)
+
+
+### Features
+
+* **keyring:** :memo: add keyring readme ([fafdab9](https://github.com/nabla-studio/nablajs/commit/fafdab90c5d12d9f52f9a0be9b5f7bc7a5bc29d8))
+
 # [1.0.0-next.11](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.10...rn-keyring-v1.0.0-next.11) (2023-05-08)
 
 
