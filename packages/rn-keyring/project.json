@@ -13,8 +13,9 @@
 				"tsConfig": "packages/rn-keyring/tsconfig.lib.json",
 				"project": "packages/rn-keyring/package.json",
 				"entryFile": "packages/rn-keyring/src/index.ts",
-				"external": ["react/jsx-runtime", "react-native"],
+				"external": ["react/jsx-runtime", "react-native", "react-native-quick-crypto", "react-native-mmkv"],
 				"rollupConfig": "@nx/react/plugins/bundle-rollup",
+				"format": ["esm", "cjs"],
 				"assets": [
 					{
 						"glob": "packages/rn-keyring/README.md",
