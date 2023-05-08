@@ -1,3 +1,10 @@
+# [1.0.0-next.7](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.6...bip85-v1.0.0-next.7) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
 # [1.0.0-next.6](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.5...bip85-v1.0.0-next.6) (2023-05-07)
 
 
