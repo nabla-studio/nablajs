@@ -1,3 +1,10 @@
+# [1.0.0-next.13](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.12...rn-keyring-v1.0.0-next.13) (2023-05-08)
+
+
+### Features
+
+* **wif:** :memo: add readme ([60cafd2](https://github.com/nabla-studio/nablajs/commit/60cafd2e294213d8cf6b2a6f49bb7641a89e036a))
+
 # [1.0.0-next.12](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.11...rn-keyring-v1.0.0-next.12) (2023-05-08)
 
 
