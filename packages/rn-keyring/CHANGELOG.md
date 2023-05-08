@@ -1,3 +1,10 @@
+# [1.0.0-next.17](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.16...rn-keyring-v1.0.0-next.17) (2023-05-08)
+
+
+### Features
+
+* **keyring:** :wrench: update version ([b2ca4c3](https://github.com/nabla-studio/nablajs/commit/b2ca4c3d10607ad6ad8b5c1adc769cafdb5d3d6d))
+
 # [1.0.0-next.16](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.15...rn-keyring-v1.0.0-next.16) (2023-05-08)
 
 
