@@ -11,6 +11,22 @@
 * **bip85:** :memo: add readme ([d0e9c05](https://github.com/nabla-studio/nablajs/commit/d0e9c05082e37b3539171f5df6f9d2c4f39d1a88))
 * **bip85:** :memo: update readme ([15c68f8](https://github.com/nabla-studio/nablajs/commit/15c68f8fd54ee8aabc86a1c1cd1bf7423e58115e))
 * **keyring:** :memo: add keyring readme ([fafdab9](https://github.com/nabla-studio/nablajs/commit/fafdab90c5d12d9f52f9a0be9b5f7bc7a5bc29d8))
+* **keyring:** :memo: update readme ([8a11f04](https://github.com/nabla-studio/nablajs/commit/8a11f0403d0119771f72bff16a3fbce0ed82d674))
+* **wif:** :memo: add readme ([60cafd2](https://github.com/nabla-studio/nablajs/commit/60cafd2e294213d8cf6b2a6f49bb7641a89e036a))
+
+# [1.0.0-next.9](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.8...keyring-v1.0.0-next.9) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
+
+### Features
+
+* **bip85:** :memo: add readme ([d0e9c05](https://github.com/nabla-studio/nablajs/commit/d0e9c05082e37b3539171f5df6f9d2c4f39d1a88))
+* **bip85:** :memo: update readme ([15c68f8](https://github.com/nabla-studio/nablajs/commit/15c68f8fd54ee8aabc86a1c1cd1bf7423e58115e))
+* **keyring:** :memo: add keyring readme ([fafdab9](https://github.com/nabla-studio/nablajs/commit/fafdab90c5d12d9f52f9a0be9b5f7bc7a5bc29d8))
 * **wif:** :memo: add readme ([60cafd2](https://github.com/nabla-studio/nablajs/commit/60cafd2e294213d8cf6b2a6f49bb7641a89e036a))
 
 # [1.0.0-next.9](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.8...keyring-v1.0.0-next.9) (2023-05-08)
