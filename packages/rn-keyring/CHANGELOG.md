@@ -1,3 +1,10 @@
+# [1.0.0-next.11](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.10...rn-keyring-v1.0.0-next.11) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
 # [1.0.0-next.10](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.9...rn-keyring-v1.0.0-next.10) (2023-05-07)
 
 
