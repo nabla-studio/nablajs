@@ -1,3 +1,10 @@
+# [1.0.0-next.9](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.8...rn-bip85-v1.0.0-next.9) (2023-05-08)
+
+
+### Features
+
+* **rn-bip85:** :wrench: improve build bundle ([eed4b9c](https://github.com/nabla-studio/nablajs/commit/eed4b9cbb2bc66af397cf8c6e06ad5b35b4bae48))
+
 # [1.0.0-next.8](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.7...rn-bip85-v1.0.0-next.8) (2023-05-08)
 
 
