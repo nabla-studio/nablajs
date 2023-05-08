@@ -1,3 +1,10 @@
+# [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.2...wif-v1.0.0-next.3) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
 # [1.0.0-next.2](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.1...wif-v1.0.0-next.2) (2023-05-06)
 
 
