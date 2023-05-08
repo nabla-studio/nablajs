@@ -5,6 +5,18 @@
 
 * :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
 
+
+### Features
+
+* **wif:** :memo: add readme ([60cafd2](https://github.com/nabla-studio/nablajs/commit/60cafd2e294213d8cf6b2a6f49bb7641a89e036a))
+
+# [1.0.0-next.7](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.6...bip85-v1.0.0-next.7) (2023-05-08)
+
+
+### Bug Fixes
+
+* :wrench: fix package exports ([c6ef98c](https://github.com/nabla-studio/nablajs/commit/c6ef98ca22e3ff87cce4a15a63b4c7f21574afb5))
+
 # [1.0.0-next.6](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.5...bip85-v1.0.0-next.6) (2023-05-07)
 
 
