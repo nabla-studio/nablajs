@@ -1,3 +1,10 @@
+# [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.3...wif-v1.0.0-next.4) (2023-05-08)
+
+
+### Features
+
+* **wif:** :memo: add readme ([60cafd2](https://github.com/nabla-studio/nablajs/commit/60cafd2e294213d8cf6b2a6f49bb7641a89e036a))
+
 # [1.0.0-next.3](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.2...wif-v1.0.0-next.3) (2023-05-08)
 
 
