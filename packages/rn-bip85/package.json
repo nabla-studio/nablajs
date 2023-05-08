@@ -1,6 +1,6 @@
 {
 	"name": "@nabla-studio/rn-bip85",
-	"version": "1.0.0-next.5",
+	"version": "1.0.0-next.6",
 	"author": "nabla <tech@nabla.studio>",
 	"type": "module",
 	"main": "src/index.ts",
