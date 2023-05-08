@@ -15,6 +15,7 @@
 				"entryFile": "packages/rn-bip85/src/index.ts",
 				"external": ["react/jsx-runtime", "react-native"],
 				"rollupConfig": "@nx/react/plugins/bundle-rollup",
+				"format": ["esm", "cjs"],
 				"assets": [
 					{
 						"glob": "packages/rn-bip85/README.md",
