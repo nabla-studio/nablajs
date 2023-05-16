@@ -61,10 +61,30 @@ export class RNKeyring<K = undefined, R = undefined> extends Keyring<
 		return mnemonic;
 	}
 
+	/**
+	 * @public
+	 * Check if the storage is empty
+	 */
+	public get emptySync() {
+		const storage = this.readSync(this.storageKey);
+
+		if (!storage) {
+			return true;
+		}
+
+		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
+	}
+
 	protected async read(
 		key: string,
 	): Promise<Nullable<KeyringStorage<AESMetadata, K, R>>> {
 		const data = await this.storage.getString(key);
+
+		return data ? JSON.parse(data) : null;
+	}
+
+	protected readSync(key: string): Nullable<KeyringStorage<AESMetadata, K, R>> {
+		const data = this.storage.getString(key);
 
 		return data ? JSON.parse(data) : null;
 	}
