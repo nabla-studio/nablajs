@@ -1,3 +1,10 @@
+# [1.0.0-next.19](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.18...rn-keyring-v1.0.0-next.19) (2023-05-16)
+
+
+### Features
+
+* **rn-keyring:** :sparkles: add emptySync get ([1547308](https://github.com/nabla-studio/nablajs/commit/15473088126260efa0eceed448b62f017a2e370a))
+
 # [1.0.0-next.18](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.17...rn-keyring-v1.0.0-next.18) (2023-05-08)
 
 
