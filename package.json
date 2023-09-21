@@ -28,6 +28,7 @@
     "js-crypto-utils": "^1.0.4",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
+    "mobx-utils": "^6.0.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.3",
