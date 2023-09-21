@@ -15,6 +15,18 @@
 		{
 			"files": ["*.js", "*.jsx"],
 			"rules": {}
-		}
+		},
+		{
+      "files": ["*.json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "@nx/dependency-checks": [
+          "error",
+          {
+            "ignoredFiles": ["{projectRoot}/vite.config.{js,ts,mjs,mts}"]
+          }
+        ]
+      }
+    }
 	]
 }

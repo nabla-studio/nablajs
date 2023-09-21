@@ -1,4 +1,4 @@
-import { AccountData, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { HdPath } from '@cosmjs/crypto';
 import { generateMnemonic } from '@scure/bip39';
 import { wordlist } from '@scure/bip39/wordlists/english';
@@ -14,6 +14,7 @@ import {
 	assertKeyringUnlocked,
 	assertOutOfIndex,
 	WalletDataResponse,
+	AccountDataPrefix,
 } from './types';
 import {
 	BIP85,
@@ -28,6 +29,7 @@ import {
 	computed,
 	runInAction,
 } from 'mobx';
+import { computedFn } from 'mobx-utils';
 
 /**
  * Definition of Keyring class structure,
@@ -59,7 +61,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 */
 	public currentWallets: Wallet[] = [];
 
-	public currentAccounts: AccountData[] = [];
+	public currentAccounts: AccountDataPrefix[] = [];
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -160,6 +162,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
+	 * Get wallet by prefix
+	 * @returns Returns an instance of `Wallet`
+	 */
+	wallet = computedFn((prefix: string): DirectSecp256k1HdWallet | undefined => {
+		const wallet = this.currentWallets.find(
+			currentWallet => currentWallet.prefix === prefix,
+		);
+
+		return wallet?.wallet;
+	});
+
+	/**
+	 * @public
 	 * Get all wallets from wallets options
 	 * @returns Returns an array of `Wallet`
 	 */
@@ -194,8 +209,12 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			await this.wallets();
 		}
 
-		const accountsPromises = this.currentWallets.map(({ wallet }) =>
-			wallet.getAccounts(),
+		const accountsPromises = this.currentWallets.map(
+			async ({ wallet, prefix }): Promise<AccountDataPrefix[]> => {
+				const accounts = await wallet.getAccounts();
+
+				return accounts.map(account => ({ ...account, prefix }));
+			},
 		);
 
 		const accounts = await Promise.all(accountsPromises);
