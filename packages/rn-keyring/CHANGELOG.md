@@ -1,3 +1,13 @@
+# [1.0.0-next.21](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.20...rn-keyring-v1.0.0-next.21) (2023-09-21)
+
+
+### Features
+
+* :arrow_down: downgrade vite-plugin-dts ([2aee148](https://github.com/nabla-studio/nablajs/commit/2aee1484a2a7bdd82beeb74601d1f4b30263c3f5))
+* :wrench: move dep ([75757ef](https://github.com/nabla-studio/nablajs/commit/75757ef70c1ec187c4bf1835b56af02520d4c004))
+* **rn-bip85:** :wrench: change vite conf ([10ae669](https://github.com/nabla-studio/nablajs/commit/10ae6691dab07caffb018fe138c9c3c0b83c40e9))
+* **rn-keyring:** :wrench: change vite conf ([3c9fa75](https://github.com/nabla-studio/nablajs/commit/3c9fa7598d372dac3eebf2281a2d776d2b599568))
+
 # [1.0.0-next.20](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.19...rn-keyring-v1.0.0-next.20) (2023-09-21)
 
 
