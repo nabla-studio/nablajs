@@ -1,3 +1,12 @@
+# [1.0.0-next.11](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.10...rn-bip85-v1.0.0-next.11) (2023-09-21)
+
+
+### Features
+
+* :arrow_down: downgrade vite-plugin-dts ([2aee148](https://github.com/nabla-studio/nablajs/commit/2aee1484a2a7bdd82beeb74601d1f4b30263c3f5))
+* :wrench: move dep ([75757ef](https://github.com/nabla-studio/nablajs/commit/75757ef70c1ec187c4bf1835b56af02520d4c004))
+* **rn-bip85:** :wrench: change vite conf ([10ae669](https://github.com/nabla-studio/nablajs/commit/10ae6691dab07caffb018fe138c9c3c0b83c40e9))
+
 # [1.0.0-next.10](https://github.com/nabla-studio/nablajs/compare/rn-bip85-v1.0.0-next.9...rn-bip85-v1.0.0-next.10) (2023-09-21)
 
 
