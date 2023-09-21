@@ -1,3 +1,14 @@
+# [1.0.0-next.5](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.4...wif-v1.0.0-next.5) (2023-09-21)
+
+
+### Features
+
+* :arrow_up: upgrade nx deps ([014f49c](https://github.com/nabla-studio/nablajs/commit/014f49cee610cf1a17b12cdce046db426dc36281))
+* :heavy_plus_sign: add @nx/vite ([e7562e9](https://github.com/nabla-studio/nablajs/commit/e7562e9f31abbdc882fb5f6f0eb8c89581867e0a))
+* :heavy_plus_sign: add mobx-utils ([42c78a8](https://github.com/nabla-studio/nablajs/commit/42c78a8a9fa83bc862087cb77f83af8c94be6ac5))
+* :sparkles: apply nx migrations ([e2ba6f6](https://github.com/nabla-studio/nablajs/commit/e2ba6f6a4c691abdef3fe4e1f8b46787b9a0615d))
+* :sparkles: switch from yarn to pnpm ([2d648fe](https://github.com/nabla-studio/nablajs/commit/2d648fe2cff7e74c0349910dd6cd6e255cc3159a))
+
 # [1.0.0-next.4](https://github.com/nabla-studio/nablajs/compare/wif-v1.0.0-next.3...wif-v1.0.0-next.4) (2023-05-08)
 
 
