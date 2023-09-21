@@ -1,3 +1,20 @@
+# [1.0.0-next.20](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.19...rn-keyring-v1.0.0-next.20) (2023-09-21)
+
+
+### Features
+
+* :arrow_up: upgrade nx deps ([014f49c](https://github.com/nabla-studio/nablajs/commit/014f49cee610cf1a17b12cdce046db426dc36281))
+* :heavy_plus_sign: add @nx/vite ([e7562e9](https://github.com/nabla-studio/nablajs/commit/e7562e9f31abbdc882fb5f6f0eb8c89581867e0a))
+* :heavy_plus_sign: add mobx-utils ([42c78a8](https://github.com/nabla-studio/nablajs/commit/42c78a8a9fa83bc862087cb77f83af8c94be6ac5))
+* :sparkles: apply nx migrations ([e2ba6f6](https://github.com/nabla-studio/nablajs/commit/e2ba6f6a4c691abdef3fe4e1f8b46787b9a0615d))
+* :sparkles: switch from yarn to pnpm ([2d648fe](https://github.com/nabla-studio/nablajs/commit/2d648fe2cff7e74c0349910dd6cd6e255cc3159a))
+* **keyring:** :sparkles: add prefix for accounts ([dfaae9c](https://github.com/nabla-studio/nablajs/commit/dfaae9cf22e25313985731002e1572761b910ad1))
+* **keyring:** :sparkles: add wallet computed ([821af30](https://github.com/nabla-studio/nablajs/commit/821af3098042dd07eca645733f1b876ec1d1bfcb))
+* **rn-bip85:** :sparkles: improve bundle size ([b16c994](https://github.com/nabla-studio/nablajs/commit/b16c99462297f416bd318ede5bcf8ab4516a3844))
+* **rn-bip85:** :sparkles: migrate to vite ([88951aa](https://github.com/nabla-studio/nablajs/commit/88951aae0f5d639a59e70cb7b1d18c4a146c7ac0))
+* **rn-keyring:** :sparkles: improve bundle size ([225f96f](https://github.com/nabla-studio/nablajs/commit/225f96fd66157ca1701c3b6ae0ff3320692d73f6))
+* **rn-keyring:** :sparkles: migrate to vite ([aef97cd](https://github.com/nabla-studio/nablajs/commit/aef97cdc71d2bfb819632dd3e2d98477502d58df))
+
 # [1.0.0-next.19](https://github.com/nabla-studio/nablajs/compare/rn-keyring-v1.0.0-next.18...rn-keyring-v1.0.0-next.19) (2023-05-16)
 
 
