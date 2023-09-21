@@ -29,6 +29,7 @@ import {
 	computed,
 	runInAction,
 } from 'mobx';
+import { computedFn } from 'mobx-utils';
 
 /**
  * Definition of Keyring class structure,
@@ -158,6 +159,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			prefix,
 		};
 	}
+
+	/**
+	 * @public
+	 * Get wallet by prefix
+	 * @returns Returns an instance of `Wallet`
+	 */
+	wallet = computedFn((prefix: string): DirectSecp256k1HdWallet | undefined => {
+		const wallet = this.currentWallets.find(
+			currentWallet => currentWallet.prefix === prefix,
+		);
+
+		return wallet?.wallet;
+	});
 
 	/**
 	 * @public
