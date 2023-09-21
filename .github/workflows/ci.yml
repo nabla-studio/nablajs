@@ -121,7 +121,7 @@ jobs:
    - name: Checks
      run: |
       npx nx affected --target lint --parallel 4 --exclude demo
-      npx nx affected --target test --parallel 4 --ci --code-coverage --exclude demo
+      npx nx affected --target test --parallel 4 --ci --exclude demo
 
    - name: Release
      if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
