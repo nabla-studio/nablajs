@@ -11,7 +11,8 @@
 				"outputPath": "dist/packages/bip85",
 				"main": "packages/bip85/src/index.ts",
 				"tsConfig": "packages/bip85/tsconfig.lib.json",
-				"assets": ["packages/bip85/*.md"]
+				"assets": ["packages/bip85/*.md"],
+				"updateBuildableProjectDepsInPackageJson": true
 			}
 		},
 		"publish": {
@@ -37,17 +38,17 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "bip85-v${VERSION}",
-        "outputPath": "dist/packages/bip85",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "bip85-v${VERSION}",
+				"outputPath": "dist/packages/bip85",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	},
 	"tags": []
 }

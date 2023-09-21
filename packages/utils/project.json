@@ -11,7 +11,8 @@
 				"outputPath": "dist/packages/utils",
 				"main": "packages/utils/src/index.ts",
 				"tsConfig": "packages/utils/tsconfig.lib.json",
-				"assets": ["packages/utils/*.md"]
+				"assets": ["packages/utils/*.md"],
+				"updateBuildableProjectDepsInPackageJson": true
 			}
 		},
 		"publish": {
@@ -37,17 +38,17 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "utils-v${VERSION}",
-        "outputPath": "dist/packages/utils",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "utils-v${VERSION}",
+				"outputPath": "dist/packages/utils",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	},
 	"tags": []
 }

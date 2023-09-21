@@ -11,7 +11,8 @@
 				"outputPath": "dist/packages/wif",
 				"main": "packages/wif/src/index.ts",
 				"tsConfig": "packages/wif/tsconfig.lib.json",
-				"assets": ["packages/wif/*.md"]
+				"assets": ["packages/wif/*.md"],
+				"updateBuildableProjectDepsInPackageJson": true
 			}
 		},
 		"publish": {
@@ -37,17 +38,17 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "wif-v${VERSION}",
-        "outputPath": "dist/packages/wif",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "wif-v${VERSION}",
+				"outputPath": "dist/packages/wif",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	},
 	"tags": []
 }

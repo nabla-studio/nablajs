@@ -11,7 +11,8 @@
 				"outputPath": "dist/packages/keyring",
 				"main": "packages/keyring/src/index.ts",
 				"tsConfig": "packages/keyring/tsconfig.lib.json",
-				"assets": ["packages/keyring/*.md"]
+				"assets": ["packages/keyring/*.md"],
+				"updateBuildableProjectDepsInPackageJson": true
 			}
 		},
 		"publish": {
@@ -37,17 +38,17 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "keyring-v${VERSION}",
-        "outputPath": "dist/packages/keyring",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "keyring-v${VERSION}",
+				"outputPath": "dist/packages/keyring",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	},
 	"tags": []
 }

@@ -13,7 +13,12 @@
 				"tsConfig": "packages/rn-keyring/tsconfig.lib.json",
 				"project": "packages/rn-keyring/package.json",
 				"entryFile": "packages/rn-keyring/src/index.ts",
-				"external": ["react/jsx-runtime", "react-native", "react-native-quick-crypto", "react-native-mmkv"],
+				"external": [
+					"react/jsx-runtime",
+					"react-native",
+					"react-native-quick-crypto",
+					"react-native-mmkv"
+				],
 				"rollupConfig": "@nx/react/plugins/bundle-rollup",
 				"format": ["esm", "cjs"],
 				"assets": [
@@ -41,16 +46,16 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "rn-keyring-v${VERSION}",
-        "outputPath": "dist/packages/rn-keyring",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "rn-keyring-v${VERSION}",
+				"outputPath": "dist/packages/rn-keyring",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	}
 }

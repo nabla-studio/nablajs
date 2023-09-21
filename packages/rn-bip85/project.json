@@ -22,7 +22,9 @@
 						"input": ".",
 						"output": "."
 					}
-				]
+				],
+				"buildableProjectDepsInPackageJsonType": "dependencies",
+				"updateBuildableProjectDepsInPackageJson": true
 			}
 		},
 		"lint": {
@@ -41,16 +43,16 @@
 			}
 		},
 		"semantic-release": {
-      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+			"executor": "@theunderscorer/nx-semantic-release:semantic-release",
 			"dependsOn": ["^build"],
-      "options": {
-        "github": true,
-        "changelog": true,
-        "npm": true,
-        "tagFormat": "rn-bip85-v${VERSION}",
-        "outputPath": "dist/packages/rn-bip85",
+			"options": {
+				"github": true,
+				"changelog": true,
+				"npm": true,
+				"tagFormat": "rn-bip85-v${VERSION}",
+				"outputPath": "dist/packages/rn-bip85",
 				"buildTarget": "${PROJECT_NAME}:build"
-      }
-    }
+			}
+		}
 	}
 }
