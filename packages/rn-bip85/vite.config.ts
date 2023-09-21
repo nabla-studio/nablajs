@@ -36,7 +36,13 @@ export default defineConfig({
 		},
 		rollupOptions: {
 			// External packages that should not be bundled into your library.
-			external: ['react/jsx-runtime', 'react-native'],
+			external: [
+				'react/jsx-runtime',
+				'react-native',
+				'@nabla-studio/bip85',
+				'@nabla-studio/utils',
+				'@scure/bip39',
+			],
 		},
 	},
 
