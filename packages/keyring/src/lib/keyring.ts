@@ -14,6 +14,7 @@ import {
 	assertKeyringUnlocked,
 	assertOutOfIndex,
 	WalletDataResponse,
+	AccountDataPrefix,
 } from './types';
 import {
 	BIP85,
@@ -59,7 +60,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 */
 	public currentWallets: Wallet[] = [];
 
-	public currentAccounts: AccountData[] = [];
+	public currentAccounts: AccountDataPrefix[] = [];
 
 	/**
 	 * @param storageKey - A unique identifier to locate the storage area for Keyring management
@@ -194,8 +195,12 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			await this.wallets();
 		}
 
-		const accountsPromises = this.currentWallets.map(({ wallet }) =>
-			wallet.getAccounts(),
+		const accountsPromises = this.currentWallets.map(
+			async ({ wallet, prefix }): Promise<AccountDataPrefix[]> => {
+				const accounts = await wallet.getAccounts();
+
+				return accounts.map(account => ({ ...account, prefix }));
+			},
 		);
 
 		const accounts = await Promise.all(accountsPromises);
