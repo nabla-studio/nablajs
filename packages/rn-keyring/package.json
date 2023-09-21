@@ -2,8 +2,9 @@
 	"name": "@nabla-studio/rn-keyring",
 	"version": "1.0.0-next.19",
 	"author": "nabla <tech@nabla.studio>",
-	"type": "module",
-	"main": "src/index.ts",
+	"main": "./index.js",
+  "module": "./index.mjs",
+  "typings": "./index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nabla-studio/nablajs.git",
@@ -14,5 +15,16 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	}
+	},
+  "peerDependencies": {
+    "@cosmjs/proto-signing": "*",
+    "@cosmjs/crypto": "*",
+    "react-native-quick-crypto": "*",
+    "@craftzdog/react-native-buffer": "*",
+    "react-native-mmkv": "*",
+    "@nabla-studio/utils": "*",
+    "@nabla-studio/bip85": "*",
+    "@nabla-studio/rn-bip85": "*",
+    "@nabla-studio/keyring": "*"
+  }
 }
