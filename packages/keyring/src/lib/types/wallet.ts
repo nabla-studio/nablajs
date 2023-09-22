@@ -1,15 +1,10 @@
-import { HdPath } from '@cosmjs/crypto';
-import { DirectSecp256k1HdWallet, AccountData } from '@cosmjs/proto-signing';
+import type { HdPath } from '@cosmjs/crypto';
+import type { AccountData } from '@cosmjs/proto-signing';
 
 export type WalletLength = 12 | 24;
 
 export interface WalletOptions {
 	hdpath: HdPath;
-	prefix: string;
-}
-
-export interface Wallet {
-	wallet: DirectSecp256k1HdWallet;
 	prefix: string;
 }
 
@@ -27,4 +22,8 @@ export interface WalletDataResponse {
 
 export interface AccountDataPrefix extends AccountData {
 	prefix: string;
+}
+
+export interface AccountDataWithPrivkey extends AccountDataPrefix {
+	readonly privkey: Uint8Array;
 }

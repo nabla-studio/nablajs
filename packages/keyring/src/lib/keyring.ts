@@ -1,11 +1,19 @@
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { HdPath } from '@cosmjs/crypto';
+import {
+	HdPath,
+	type Secp256k1Keypair,
+	Slip10,
+	Slip10Curve,
+	Secp256k1,
+	sha256,
+	Bip39,
+	EnglishMnemonic,
+} from '@cosmjs/crypto';
 import { generateMnemonic } from '@scure/bip39';
+import { toBech32 } from '@cosmjs/encoding';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import {
 	WalletLength,
 	WalletOptions,
-	Wallet,
 	EncryptResponse,
 	KeyringStorage,
 	KeyringStorageMnemonic,
@@ -15,6 +23,7 @@ import {
 	assertOutOfIndex,
 	WalletDataResponse,
 	AccountDataPrefix,
+	AccountDataWithPrivkey,
 } from './types';
 import {
 	BIP85,
@@ -25,11 +34,15 @@ import {
 	makeObservable,
 	observable,
 	action,
-	flow,
 	computed,
 	runInAction,
 } from 'mobx';
-import { computedFn } from 'mobx-utils';
+import {
+	encodeSecp256k1Signature,
+	rawSecp256k1PubkeyToRawAddress,
+} from '@cosmjs/amino';
+import { DirectSignResponse, makeSignBytes } from '@cosmjs/proto-signing';
+import { SignDoc } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
 /**
  * Definition of Keyring class structure,
@@ -51,15 +64,15 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
-	 * the mnemonics currently selected to operate
+	 * the mnemonic currently selected to operate
 	 */
 	public currentMnemonic?: string = undefined;
 
 	/**
 	 * @public
-	 * current wallets associated with current mnemonic
+	 * the mnemonic seed currently selected to operate
 	 */
-	public currentWallets: Wallet[] = [];
+	public currentSeed?: Uint8Array = undefined;
 
 	public currentAccounts: AccountDataPrefix[] = [];
 
@@ -72,22 +85,31 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		public walletsOptions: WalletOptions[],
 		public cipherMetadata?: K,
 	) {
-		makeObservable<this, 'passphrase' | 'setCurrentMnemonic'>(this, {
+		makeObservable<
+			this,
+			| 'passphrase'
+			| 'setCurrentMnemonic'
+			| 'getAccountsWithPrivkeys'
+			| 'getKeyPair'
+			| 'getAccounts'
+		>(this, {
 			currentMnemonic: observable,
+			currentSeed: observable,
 			passphrase: observable,
-			currentWallets: observable,
 			currentAccounts: observable,
-			init: flow,
-			unlock: flow,
+			init: action,
+			unlock: action,
 			lock: action,
-			wallets: action,
 			accounts: action,
 			setCurrentMnemonic: action,
-			saveMnemonic: flow,
-			editMnemonic: flow,
-			deleteMnemonic: flow,
-			changeCurrentMnemonic: flow,
-			reset: flow,
+			getAccountsWithPrivkeys: action,
+			getAccounts: action,
+			getKeyPair: action,
+			saveMnemonic: action,
+			editMnemonic: action,
+			deleteMnemonic: action,
+			changeCurrentMnemonic: action,
+			reset: action,
 			unlocked: computed,
 		});
 	}
@@ -138,90 +160,17 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
-	 * Restores a wallet from the given BIP39 mnemonic.
-	 * @param mnemonic - Any valid English mnemonic.
-	 * @optional hdpaths - An array of `HdPath`
-	 * @optional prefix - Chain prefix
-	 * @returns Returns a `DirectSecp256k1HdWallet` instance
-	 */
-	public async generateWalletFromMnemonic(
-		mnemonic: string,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<Wallet> {
-		const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
-			hdPaths,
-			prefix,
-		});
-
-		return {
-			wallet,
-			prefix,
-		};
-	}
-
-	/**
-	 * @public
-	 * Get wallet by prefix
-	 * @returns Returns an instance of `Wallet`
-	 */
-	wallet = computedFn((prefix: string): DirectSecp256k1HdWallet | undefined => {
-		const wallet = this.currentWallets.find(
-			currentWallet => currentWallet.prefix === prefix,
-		);
-
-		return wallet?.wallet;
-	});
-
-	/**
-	 * @public
-	 * Get all wallets from wallets options
-	 * @returns Returns an array of `Wallet`
-	 */
-	public async wallets(): Promise<Wallet[]> {
-		let wallets: Wallet[] = [];
-		const currentMnemonic = this.currentMnemonic;
-
-		if (currentMnemonic) {
-			const walletsPromises = this.walletsOptions.map(option =>
-				this.generateWalletFromMnemonic(
-					currentMnemonic,
-					[option.hdpath],
-					option.prefix,
-				),
-			);
-
-			wallets = await Promise.all(walletsPromises);
-		}
-
-		this.currentWallets = wallets;
-
-		return wallets;
-	}
-
-	/**
-	 * @public
 	 * Get all the addresses available inside each `Wallet`
 	 * @returns Returns an array of `AccountData`
 	 */
 	public async accounts() {
-		if (!this.currentMnemonic && this.currentWallets.length === 0) {
-			await this.wallets();
-		}
-
-		const accountsPromises = this.currentWallets.map(
-			async ({ wallet, prefix }): Promise<AccountDataPrefix[]> => {
-				const accounts = await wallet.getAccounts();
-
-				return accounts.map(account => ({ ...account, prefix }));
-			},
-		);
-
-		const accounts = await Promise.all(accountsPromises);
+		const accounts = await this.getAccounts();
 
 		runInAction(() => {
-			this.currentAccounts = accounts.flat();
+			this.currentAccounts = accounts;
 		});
+
+		return accounts;
 	}
 
 	/**
@@ -263,13 +212,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @param name an alias for mnemonics
 	 * @param metadata - Object, for optional metadata
 	 */
-	public async *init(
+	public async init(
 		passphrase: string,
 		mnemonic: string,
 		name: string,
 		metadata?: R,
 	) {
-		const passphraseHash: string = yield await this.hash(passphrase);
+		const passphraseHash: string = await this.hash(passphrase);
 
 		const storage: KeyringStorage<T, K, R> = {
 			passphraseHash: passphraseHash,
@@ -278,11 +227,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			cipherMetadata: this.cipherMetadata,
 		};
 
-		yield await this.write(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 
-		this.passphrase = passphrase;
+		runInAction(() => {
+			this.passphrase = passphrase;
+		});
 
-		yield await this.saveMnemonic(mnemonic, name, metadata);
+		await this.saveMnemonic(mnemonic, name, metadata);
 
 		this.setCurrentMnemonic(mnemonic);
 	}
@@ -291,14 +242,14 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * @public
 	 * Unlock the `Keyring` and set passphareHash
 	 */
-	public async *unlock(passphrase: string) {
-		const storage: Nullable<KeyringStorage<T, K, R>> = yield await this.read(
+	public async unlock(passphrase: string) {
+		const storage: Nullable<KeyringStorage<T, K, R>> = await this.read(
 			this.storageKey,
 		);
 
 		assertIsDefined(storage);
 
-		const compare: boolean = yield await this.compareHash(
+		const compare: boolean = await this.compareHash(
 			passphrase,
 			storage.passphraseHash,
 		);
@@ -315,12 +266,12 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		assertIsDefined(chipherMnemonic);
 
-		const mnemonic: string = yield await this.decrypt(
-			chipherMnemonic,
-			passphrase,
-		);
+		const mnemonic: string = await this.decrypt(chipherMnemonic, passphrase);
 
-		this.passphrase = passphrase;
+		runInAction(() => {
+			this.passphrase = passphrase;
+		});
+
 		this.setCurrentMnemonic(mnemonic);
 	}
 
@@ -331,7 +282,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	public lock() {
 		this.passphrase = undefined;
 		this.setCurrentMnemonic(undefined);
-		this.currentWallets = [];
 	}
 
 	/**
@@ -340,16 +290,16 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 *
 	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
-	public async *saveMnemonic(mnemonic: string, name: string, metadata?: R) {
+	public async saveMnemonic(mnemonic: string, name: string, metadata?: R) {
 		assertKeyringUnlocked(this.passphrase);
 
-		const storage: Nullable<KeyringStorage<T, K, R>> = yield await this.read(
+		const storage: Nullable<KeyringStorage<T, K, R>> = await this.read(
 			this.storageKey,
 		);
 
 		assertIsDefined(storage);
 
-		const encryptResult: EncryptResponse<T> = yield await this.encrypt(
+		const encryptResult: EncryptResponse<T> = await this.encrypt(
 			mnemonic,
 			this.passphrase,
 		);
@@ -365,7 +315,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		storage.mnemonics = mnemonics;
 
-		yield await this.write(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 
 		return {
 			walletsLength: mnemonics.length,
@@ -378,10 +328,10 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 *
 	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
-	public async *editMnemonic(index: number, name: string, metadata?: R) {
+	public async editMnemonic(index: number, name: string, metadata?: R) {
 		assertKeyringUnlocked(this.passphrase);
 
-		const storage: Nullable<KeyringStorage<T, K, R>> = yield await this.read(
+		const storage: Nullable<KeyringStorage<T, K, R>> = await this.read(
 			this.storageKey,
 		);
 
@@ -413,10 +363,10 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 *
 	 * @returns Returns an object containing data relating to I/O operations, such as the number of wallets in memory
 	 */
-	public async *deleteMnemonic(index: number) {
+	public async deleteMnemonic(index: number) {
 		assertKeyringUnlocked(this.passphrase);
 
-		const storage: Nullable<KeyringStorage<T, K, R>> = yield await this.read(
+		const storage: Nullable<KeyringStorage<T, K, R>> = await this.read(
 			this.storageKey,
 		);
 
@@ -438,7 +388,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			this.lock();
 		}
 
-		yield await this.write(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 
 		return {
 			walletsLength: mnemonics.length,
@@ -450,10 +400,10 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 * Reset the `KeyringStorage` and lock the `Keyring`
 	 *
 	 */
-	public async *reset() {
+	public async reset() {
 		assertKeyringUnlocked(this.passphrase);
 
-		yield await this.delete(this.storageKey);
+		await this.delete(this.storageKey);
 
 		this.lock();
 	}
@@ -464,10 +414,10 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	 *
 	 * @param index The index of the mnemonics with which you want to replace the current one
 	 */
-	public async *changeCurrentMnemonic(index: number) {
+	public async changeCurrentMnemonic(index: number) {
 		assertKeyringUnlocked(this.passphrase);
 
-		const storage: Nullable<KeyringStorage<T, K, R>> = yield await this.read(
+		const storage: Nullable<KeyringStorage<T, K, R>> = await this.read(
 			this.storageKey,
 		);
 
@@ -481,14 +431,11 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 		assertIsDefined(chipherMnemonic);
 
-		const mnemonic: string = yield await this.decrypt(
-			chipherMnemonic,
-			this.passphrase,
-		);
+		const mnemonic: string = await this.decrypt(chipherMnemonic, this.passphrase);
 
 		storage.currentMnemonicIndex = index;
 
-		yield await this.write(this.storageKey, storage);
+		await this.write(this.storageKey, storage);
 
 		this.setCurrentMnemonic(mnemonic);
 	}
@@ -521,11 +468,106 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
 	}
 
-	private async setCurrentMnemonic(currentMnemonic?: string) {
-		this.currentMnemonic = currentMnemonic;
+	public async setCurrentMnemonic(currentMnemonic?: string) {
+		let seed: Uint8Array | undefined = undefined;
 
-		await this.wallets();
-		await this.accounts();
+		if (currentMnemonic) {
+			const mnemonicChecked = new EnglishMnemonic(currentMnemonic);
+
+			seed = await Bip39.mnemonicToSeed(mnemonicChecked);
+		}
+
+		runInAction(() => {
+			this.currentMnemonic = currentMnemonic;
+			this.currentSeed = seed;
+		});
+
+		return await this.accounts();
+	}
+
+	private async getKeyPair(
+		hdPath: HdPath,
+	): Promise<Secp256k1Keypair | undefined> {
+		if (!this.currentSeed) {
+			return undefined;
+		}
+
+		const { privkey } = Slip10.derivePath(
+			Slip10Curve.Secp256k1,
+			this.currentSeed,
+			hdPath,
+		);
+
+		const { pubkey } = await Secp256k1.makeKeypair(privkey);
+
+		return {
+			privkey: privkey,
+			pubkey: Secp256k1.compressPubkey(pubkey),
+		};
+	}
+
+	private async getAccountsWithPrivkeys(): Promise<
+		readonly AccountDataWithPrivkey[]
+	> {
+		if (!this.currentSeed) {
+			return [];
+		}
+
+		return Promise.all(
+			this.walletsOptions.map(async ({ hdpath, prefix }) => {
+				const pair = (await this.getKeyPair(hdpath)) as unknown as Secp256k1Keypair;
+
+				const { privkey, pubkey } = pair;
+
+				const address = toBech32(prefix, rawSecp256k1PubkeyToRawAddress(pubkey));
+
+				return {
+					algo: 'secp256k1' as const,
+					privkey: privkey,
+					pubkey: pubkey,
+					address: address,
+					prefix,
+				};
+			}),
+		);
+	}
+
+	public async getAccounts(): Promise<AccountDataPrefix[]> {
+		const accountsWithPrivkeys = await this.getAccountsWithPrivkeys();
+
+		return accountsWithPrivkeys.map(({ algo, pubkey, address, prefix }) => ({
+			algo: algo,
+			pubkey: pubkey,
+			address: address,
+			prefix,
+		}));
+	}
+
+	public async signDirect(
+		signerAddress: string,
+		signDoc: SignDoc,
+	): Promise<DirectSignResponse> {
+		const accounts = await this.getAccountsWithPrivkeys();
+		const account = accounts.find(({ address }) => address === signerAddress);
+
+		if (account === undefined) {
+			throw new Error(`Address ${signerAddress} not found in wallet`);
+		}
+
+		const { privkey, pubkey } = account;
+		const signBytes = makeSignBytes(signDoc);
+		const hashedMessage = sha256(signBytes);
+		const signature = await Secp256k1.createSignature(hashedMessage, privkey);
+		const signatureBytes = new Uint8Array([
+			...signature.r(32),
+			...signature.s(32),
+		]);
+		const stdSignature = encodeSecp256k1Signature(pubkey, signatureBytes);
+
+		return {
+			signed: signDoc,
+			signature: stdSignature,
+		};
 	}
 
 	/**
