@@ -1,3 +1,20 @@
+# [1.0.0-next.13](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.12...keyring-v1.0.0-next.13) (2023-09-22)
+
+
+### Bug Fixes
+
+* **keyring:** :bug: fix accounts queries ([3c4011f](https://github.com/nabla-studio/nablajs/commit/3c4011fd29ce23d42a189bb8527f044ac9a5f3c3))
+
+
+### Features
+
+* :heavy_plus_sign: add @cosmjs/encoding ([dd80080](https://github.com/nabla-studio/nablajs/commit/dd80080610e32528a16aeb4782ac6fb482a17839))
+* :heavy_plus_sign: add cosmjs-types ([97e8fa8](https://github.com/nabla-studio/nablajs/commit/97e8fa8f760db9e81047dcdcbb0deba103973a43))
+* **keyring:** :sparkles: add accounts return ([7995f93](https://github.com/nabla-studio/nablajs/commit/7995f937eb25f4fb622af87ddf5593ae62bf5f47))
+* **keyring:** :sparkles: add new addresses gen ([fd50fc8](https://github.com/nabla-studio/nablajs/commit/fd50fc84813d1ec32c0dbe83cd2777cf80a10704))
+* **keyring:** :sparkles: add sign direct ([4004124](https://github.com/nabla-studio/nablajs/commit/4004124858548fa58a4c0ea5e1247503b74a7788))
+* **keyring:** :sparkles: switch flow with action ([192b90f](https://github.com/nabla-studio/nablajs/commit/192b90f40b4a76e20eb8c5303c92eca63783bef0))
+
 # [1.0.0-next.12](https://github.com/nabla-studio/nablajs/compare/keyring-v1.0.0-next.11...keyring-v1.0.0-next.12) (2023-09-21)
 
 
