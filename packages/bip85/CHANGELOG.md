@@ -1,3 +1,11 @@
+# [1.0.0-next.11](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.10...bip85-v1.0.0-next.11) (2023-09-22)
+
+
+### Features
+
+* :heavy_plus_sign: add @cosmjs/encoding ([dd80080](https://github.com/nabla-studio/nablajs/commit/dd80080610e32528a16aeb4782ac6fb482a17839))
+* :heavy_plus_sign: add cosmjs-types ([97e8fa8](https://github.com/nabla-studio/nablajs/commit/97e8fa8f760db9e81047dcdcbb0deba103973a43))
+
 # [1.0.0-next.10](https://github.com/nabla-studio/nablajs/compare/bip85-v1.0.0-next.9...bip85-v1.0.0-next.10) (2023-09-21)
 
 
