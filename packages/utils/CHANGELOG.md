@@ -1,3 +1,11 @@
+# [1.0.0-next.7](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.6...utils-v1.0.0-next.7) (2023-09-22)
+
+
+### Features
+
+* :heavy_plus_sign: add @cosmjs/encoding ([dd80080](https://github.com/nabla-studio/nablajs/commit/dd80080610e32528a16aeb4782ac6fb482a17839))
+* :heavy_plus_sign: add cosmjs-types ([97e8fa8](https://github.com/nabla-studio/nablajs/commit/97e8fa8f760db9e81047dcdcbb0deba103973a43))
+
 # [1.0.0-next.6](https://github.com/nabla-studio/nablajs/compare/utils-v1.0.0-next.5...utils-v1.0.0-next.6) (2023-09-21)
 
 
