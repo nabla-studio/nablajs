@@ -217,11 +217,13 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			},
 		);
 
-		const accounts = await Promise.all(accountsPromises);
+		const accounts = (await Promise.all(accountsPromises)).flat();
 
 		runInAction(() => {
-			this.currentAccounts = accounts.flat();
+			this.currentAccounts = accounts;
 		});
+
+		return accounts;
 	}
 
 	/**
