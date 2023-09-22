@@ -4,8 +4,11 @@ import {
 	Slip10,
 	Slip10Curve,
 	Secp256k1,
+	sha256,
+	Bip39,
+	EnglishMnemonic,
 } from '@cosmjs/crypto';
-import { generateMnemonic, mnemonicToSeedSync } from '@scure/bip39';
+import { generateMnemonic } from '@scure/bip39';
 import { toBech32 } from '@cosmjs/encoding';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import {
@@ -35,7 +38,12 @@ import {
 	computed,
 	runInAction,
 } from 'mobx';
-import { rawSecp256k1PubkeyToRawAddress } from '@cosmjs/amino';
+import {
+	encodeSecp256k1Signature,
+	rawSecp256k1PubkeyToRawAddress,
+} from '@cosmjs/amino';
+import { DirectSignResponse, makeSignBytes } from '@cosmjs/proto-signing';
+import { SignDoc } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
 /**
  * Definition of Keyring class structure,
@@ -57,15 +65,15 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
-	 * the mnemonics currently selected to operate
+	 * the mnemonic currently selected to operate
 	 */
 	public currentMnemonic?: string = undefined;
 
 	/**
 	 * @public
-	 * the mnemonics currently selected to operate
+	 * the mnemonic seed currently selected to operate
 	 */
-	private currentSeed?: Uint8Array = undefined;
+	public currentSeed?: Uint8Array = undefined;
 
 	public currentAccounts: AccountDataPrefix[] = [];
 
@@ -87,6 +95,7 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			| 'getAccounts'
 		>(this, {
 			currentMnemonic: observable,
+			currentSeed: observable,
 			passphrase: observable,
 			currentAccounts: observable,
 			init: flow,
@@ -461,11 +470,15 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		return storage.mnemonics.length === 0 || storage.currentMnemonicIndex < 0;
 	}
 
-	private async setCurrentMnemonic(currentMnemonic?: string) {
+	public async setCurrentMnemonic(currentMnemonic?: string) {
 		this.currentMnemonic = currentMnemonic;
 
 		if (currentMnemonic) {
-			this.currentSeed = mnemonicToSeedSync(currentMnemonic);
+			const mnemonicChecked = new EnglishMnemonic(currentMnemonic);
+
+			this.currentSeed = await Bip39.mnemonicToSeed(mnemonicChecked);
+		} else {
+			this.currentSeed = undefined;
 		}
 
 		await this.accounts();
@@ -512,6 +525,33 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 			address: address,
 			prefix,
 		}));
+	}
+
+	public async signDirect(
+		signerAddress: string,
+		signDoc: SignDoc,
+	): Promise<DirectSignResponse> {
+		const accounts = await this.getAccountsWithPrivkeys();
+		const account = accounts.find(({ address }) => address === signerAddress);
+
+		if (account === undefined) {
+			throw new Error(`Address ${signerAddress} not found in wallet`);
+		}
+
+		const { privkey, pubkey } = account;
+		const signBytes = makeSignBytes(signDoc);
+		const hashedMessage = sha256(signBytes);
+		const signature = await Secp256k1.createSignature(hashedMessage, privkey);
+		const signatureBytes = new Uint8Array([
+			...signature.r(32),
+			...signature.s(32),
+		]);
+		const stdSignature = encodeSecp256k1Signature(pubkey, signatureBytes);
+
+		return {
+			signed: signDoc,
+			signature: stdSignature,
+		};
 	}
 
 	/**
