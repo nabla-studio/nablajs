@@ -1,6 +1,6 @@
 {
 	"name": "@nabla-studio/rn-keyring",
-	"version": "1.0.0-next.21",
+	"version": "1.0.0-next.22",
 	"author": "nabla <tech@nabla.studio>",
 	"main": "./index.js",
 	"module": "./index.mjs",
