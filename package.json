@@ -80,6 +80,7 @@
     "babel-plugin-module-resolver": "^5.0.0",
     "babel-preset-expo": "~9.3.2",
     "commitizen": "^4.2.5",
+    "cosmjs-types": "^0.8.0",
     "detox": "20.12.1",
     "eas-cli": "~3.10.2",
     "eslint": "8.46.0",
