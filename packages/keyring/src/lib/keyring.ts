@@ -484,12 +484,19 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		await this.accounts();
 	}
 
-	private async getKeyPair(hdPath: HdPath): Promise<Secp256k1Keypair> {
+	private async getKeyPair(
+		hdPath: HdPath,
+	): Promise<Secp256k1Keypair | undefined> {
+		if (!this.currentSeed) {
+			return undefined;
+		}
+
 		const { privkey } = Slip10.derivePath(
 			Slip10Curve.Secp256k1,
-			this.currentSeed!,
+			this.currentSeed,
 			hdPath,
 		);
+
 		const { pubkey } = await Secp256k1.makeKeypair(privkey);
 
 		return {
@@ -501,10 +508,18 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	private async getAccountsWithPrivkeys(): Promise<
 		readonly AccountDataWithPrivkey[]
 	> {
+		if (!this.currentSeed) {
+			return [];
+		}
+
 		return Promise.all(
 			this.walletsOptions.map(async ({ hdpath, prefix }) => {
-				const { privkey, pubkey } = await this.getKeyPair(hdpath);
+				const pair = (await this.getKeyPair(hdpath)) as unknown as Secp256k1Keypair;
+
+				const { privkey, pubkey } = pair;
+
 				const address = toBech32(prefix, rawSecp256k1PubkeyToRawAddress(pubkey));
+
 				return {
 					algo: 'secp256k1' as const,
 					privkey: privkey,
