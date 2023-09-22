@@ -1,5 +1,4 @@
 import { stringToPath } from '@cosmjs/crypto';
-import { asyncFlowResult } from '../lib';
 import { TestKeyring } from './map-storage.testdata';
 import Long from 'long';
 import { utf8 } from '@scure/base';
@@ -92,8 +91,9 @@ describe('Keyring tests using TestKeyring implementation', () => {
 		it('Should save a new mnemonic and set it as current one', async () => {
 			const newMnemonicString = testKeyring.generateMnemonic(24);
 
-			const response = await asyncFlowResult(
-				testKeyring.saveMnemonic(newMnemonicString, 'newmnemonic'),
+			const response = await testKeyring.saveMnemonic(
+				newMnemonicString,
+				'newmnemonic',
 			);
 
 			await new Promise(r => setTimeout(r, 500));
@@ -184,11 +184,13 @@ describe('Keyring tests using TestKeyring implementation', () => {
 				0,
 			);
 
-			const response = await asyncFlowResult(
-				testKeyring.saveMnemonic(childMnemonic, 'newmnemonic', {
+			const response = await testKeyring.saveMnemonic(
+				childMnemonic,
+				'newmnemonic',
+				{
 					bip85: true,
 					index: 0,
-				}),
+				},
 			);
 
 			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
@@ -198,7 +200,7 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			expect(mnemonics.length).toBe(4);
 		});
 		it('Should reset the keyring', async () => {
-			await asyncFlowResult(testKeyring.reset());
+			await testKeyring.reset();
 
 			const empty = await testKeyring.empty();
 
