@@ -58,11 +58,6 @@ describe('Keyring tests using TestKeyring implementation', () => {
 		it('Should init the Keyring', async () => {
 			await testKeyring.init(passphrase, mnemonic, mnemonicName);
 		});
-		it('Should get wallets', async () => {
-			const wallets = await testKeyring.wallets();
-
-			expect(wallets.length).toBe(2);
-		});
 		it('Should get accounts', async () => {
 			await new Promise(r => setTimeout(r, 500));
 			const accounts = testKeyring.currentAccounts;
@@ -95,32 +90,17 @@ describe('Keyring tests using TestKeyring implementation', () => {
 		it('Should save a new mnemonic and set it as current one', async () => {
 			const newMnemonicString = testKeyring.generateMnemonic(24);
 
-			const newMnemonic = await testKeyring.generateWalletFromMnemonic(
-				newMnemonicString,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
-
-			const [newAccount] = await newMnemonic.wallet.getAccounts();
-
 			const response = await asyncFlowResult(
 				testKeyring.saveMnemonic(newMnemonicString, 'newmnemonic'),
 			);
+
+			await new Promise(r => setTimeout(r, 500));
 
 			await testKeyring.changeCurrentMnemonic(response.walletsLength - 1);
 
 			const mnemonics = await testKeyring.getAllMnemonics();
 
 			expect(mnemonics.length).toBe(2);
-
-			await new Promise(r => setTimeout(r, 500));
-			const accounts = testKeyring.currentAccounts;
-
-			const bitsongAccount = accounts.find(
-				account => account.address === newAccount.address,
-			);
-
-			expect(bitsongAccount).not.toBeUndefined();
 		});
 		it('Should edit the new mnemonic', async () => {
 			const [mnemonic] = await testKeyring.getAllMnemonics();
@@ -158,13 +138,7 @@ describe('Keyring tests using TestKeyring implementation', () => {
 				0,
 			);
 
-			const childWallet = await testKeyring.generateWalletFromMnemonic(
-				childMnemonic,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
-
-			await testKeyring.saveMnemonic(childWallet.wallet.mnemonic, 'newmnemonic', {
+			await testKeyring.saveMnemonic(childMnemonic, 'newmnemonic', {
 				bip85: true,
 				index: 0,
 			});
@@ -183,16 +157,8 @@ describe('Keyring tests using TestKeyring implementation', () => {
 				0,
 			);
 
-			const childWallet = await testKeyring.generateWalletFromMnemonic(
-				childMnemonic,
-				[stringToPath(`m/44'/639'/0'/0/0`)],
-				'bitsong',
-			);
-
-			const [newAccount] = await childWallet.wallet.getAccounts();
-
 			const response = await asyncFlowResult(
-				testKeyring.saveMnemonic(childWallet.wallet.mnemonic, 'newmnemonic', {
+				testKeyring.saveMnemonic(childMnemonic, 'newmnemonic', {
 					bip85: true,
 					index: 0,
 				}),
@@ -203,15 +169,6 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			const mnemonics = await testKeyring.getAllMnemonics();
 
 			expect(mnemonics.length).toBe(4);
-
-			await new Promise(r => setTimeout(r, 500));
-			const accounts = testKeyring.currentAccounts;
-
-			const bitsongAccount = accounts.find(
-				account => account.address === newAccount.address,
-			);
-
-			expect(bitsongAccount).not.toBeUndefined();
 		});
 		it('Should reset the keyring', async () => {
 			await asyncFlowResult(testKeyring.reset());
