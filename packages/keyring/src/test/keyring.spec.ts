@@ -1,6 +1,8 @@
 import { stringToPath } from '@cosmjs/crypto';
 import { asyncFlowResult } from '../lib';
 import { TestKeyring } from './map-storage.testdata';
+import Long from 'long';
+import { utf8 } from '@scure/base';
 
 const passphrase = 'test';
 
@@ -101,6 +103,31 @@ describe('Keyring tests using TestKeyring implementation', () => {
 			const mnemonics = await testKeyring.getAllMnemonics();
 
 			expect(mnemonics.length).toBe(2);
+		});
+		it('Should sign a signDoc', async () => {
+			const account = testKeyring.currentAccounts.find(
+				account => account.prefix === 'cosmos',
+			);
+
+			expect(account).not.toBeUndefined();
+
+			if (account) {
+				const message = account.address;
+
+				const messageHash = utf8.decode(message);
+
+				const signDoc = {
+					chainId: '', // Sostituisci con il tuo chainId
+					accountNumber: Long.fromString('0'), // Sostituisci con il tuo accountNumber
+					authInfoBytes: new Uint8Array(), // Questo potrebbe non essere necessario per un messaggio personalizzato
+					sequence: '0', // Sostituisci con il tuo sequence
+					bodyBytes: messageHash,
+				};
+
+				const response = await testKeyring.signDirect(account.address, signDoc);
+
+				expect(response).not.toBeUndefined();
+			}
 		});
 		it('Should edit the new mnemonic', async () => {
 			const [mnemonic] = await testKeyring.getAllMnemonics();
