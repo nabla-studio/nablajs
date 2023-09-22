@@ -1,11 +1,16 @@
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { HdPath } from '@cosmjs/crypto';
-import { generateMnemonic } from '@scure/bip39';
+import {
+	HdPath,
+	type Secp256k1Keypair,
+	Slip10,
+	Slip10Curve,
+	Secp256k1,
+} from '@cosmjs/crypto';
+import { generateMnemonic, mnemonicToSeedSync } from '@scure/bip39';
+import { toBech32 } from '@cosmjs/encoding';
 import { wordlist } from '@scure/bip39/wordlists/english';
 import {
 	WalletLength,
 	WalletOptions,
-	Wallet,
 	EncryptResponse,
 	KeyringStorage,
 	KeyringStorageMnemonic,
@@ -15,6 +20,7 @@ import {
 	assertOutOfIndex,
 	WalletDataResponse,
 	AccountDataPrefix,
+	AccountDataWithPrivkey,
 } from './types';
 import {
 	BIP85,
@@ -29,7 +35,7 @@ import {
 	computed,
 	runInAction,
 } from 'mobx';
-import { computedFn } from 'mobx-utils';
+import { rawSecp256k1PubkeyToRawAddress } from '@cosmjs/amino';
 
 /**
  * Definition of Keyring class structure,
@@ -57,9 +63,9 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
-	 * current wallets associated with current mnemonic
+	 * the mnemonics currently selected to operate
 	 */
-	public currentWallets: Wallet[] = [];
+	private currentSeed?: Uint8Array = undefined;
 
 	public currentAccounts: AccountDataPrefix[] = [];
 
@@ -72,17 +78,25 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 		public walletsOptions: WalletOptions[],
 		public cipherMetadata?: K,
 	) {
-		makeObservable<this, 'passphrase' | 'setCurrentMnemonic'>(this, {
+		makeObservable<
+			this,
+			| 'passphrase'
+			| 'setCurrentMnemonic'
+			| 'getAccountsWithPrivkeys'
+			| 'getKeyPair'
+			| 'getAccounts'
+		>(this, {
 			currentMnemonic: observable,
 			passphrase: observable,
-			currentWallets: observable,
 			currentAccounts: observable,
 			init: flow,
 			unlock: flow,
 			lock: action,
-			wallets: action,
 			accounts: action,
 			setCurrentMnemonic: action,
+			getAccountsWithPrivkeys: action,
+			getAccounts: action,
+			getKeyPair: action,
 			saveMnemonic: flow,
 			editMnemonic: flow,
 			deleteMnemonic: flow,
@@ -138,86 +152,11 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 
 	/**
 	 * @public
-	 * Restores a wallet from the given BIP39 mnemonic.
-	 * @param mnemonic - Any valid English mnemonic.
-	 * @optional hdpaths - An array of `HdPath`
-	 * @optional prefix - Chain prefix
-	 * @returns Returns a `DirectSecp256k1HdWallet` instance
-	 */
-	public async generateWalletFromMnemonic(
-		mnemonic: string,
-		hdPaths: HdPath[],
-		prefix: string,
-	): Promise<Wallet> {
-		const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
-			hdPaths,
-			prefix,
-		});
-
-		return {
-			wallet,
-			prefix,
-		};
-	}
-
-	/**
-	 * @public
-	 * Get wallet by prefix
-	 * @returns Returns an instance of `Wallet`
-	 */
-	wallet = computedFn((prefix: string): DirectSecp256k1HdWallet | undefined => {
-		const wallet = this.currentWallets.find(
-			currentWallet => currentWallet.prefix === prefix,
-		);
-
-		return wallet?.wallet;
-	});
-
-	/**
-	 * @public
-	 * Get all wallets from wallets options
-	 * @returns Returns an array of `Wallet`
-	 */
-	public async wallets(): Promise<Wallet[]> {
-		let wallets: Wallet[] = [];
-		const currentMnemonic = this.currentMnemonic;
-
-		if (currentMnemonic) {
-			const walletsPromises = this.walletsOptions.map(option =>
-				this.generateWalletFromMnemonic(
-					currentMnemonic,
-					[option.hdpath],
-					option.prefix,
-				),
-			);
-
-			wallets = await Promise.all(walletsPromises);
-		}
-
-		this.currentWallets = wallets;
-
-		return wallets;
-	}
-
-	/**
-	 * @public
 	 * Get all the addresses available inside each `Wallet`
 	 * @returns Returns an array of `AccountData`
 	 */
 	public async accounts() {
-		if (!this.currentMnemonic && this.currentWallets.length === 0) {
-			await this.wallets();
-		}
-
-		const accountsPromises = this.currentWallets.map(
-			async ({ wallet, prefix }): Promise<AccountDataPrefix[]> => {
-				const accounts = await wallet.getAccounts();
-
-				return accounts.map(account => ({ ...account, prefix }));
-			},
-		);
-
-		const accounts = (await Promise.all(accountsPromises)).flat();
+		const accounts = await this.getAccounts();
 
 		runInAction(() => {
 			this.currentAccounts = accounts;
@@ -333,7 +272,6 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	public lock() {
 		this.passphrase = undefined;
 		this.setCurrentMnemonic(undefined);
-		this.currentWallets = [];
 	}
 
 	/**
@@ -526,8 +464,54 @@ export abstract class Keyring<T = undefined, K = undefined, R = undefined> {
 	private async setCurrentMnemonic(currentMnemonic?: string) {
 		this.currentMnemonic = currentMnemonic;
 
-		await this.wallets();
+		if (currentMnemonic) {
+			this.currentSeed = mnemonicToSeedSync(currentMnemonic);
+		}
+
 		await this.accounts();
+	}
+
+	private async getKeyPair(hdPath: HdPath): Promise<Secp256k1Keypair> {
+		const { privkey } = Slip10.derivePath(
+			Slip10Curve.Secp256k1,
+			this.currentSeed!,
+			hdPath,
+		);
+		const { pubkey } = await Secp256k1.makeKeypair(privkey);
+
+		return {
+			privkey: privkey,
+			pubkey: Secp256k1.compressPubkey(pubkey),
+		};
+	}
+
+	private async getAccountsWithPrivkeys(): Promise<
+		readonly AccountDataWithPrivkey[]
+	> {
+		return Promise.all(
+			this.walletsOptions.map(async ({ hdpath, prefix }) => {
+				const { privkey, pubkey } = await this.getKeyPair(hdpath);
+				const address = toBech32(prefix, rawSecp256k1PubkeyToRawAddress(pubkey));
+				return {
+					algo: 'secp256k1' as const,
+					privkey: privkey,
+					pubkey: pubkey,
+					address: address,
+					prefix,
+				};
+			}),
+		);
+	}
+
+	public async getAccounts(): Promise<AccountDataPrefix[]> {
+		const accountsWithPrivkeys = await this.getAccountsWithPrivkeys();
+
+		return accountsWithPrivkeys.map(({ algo, pubkey, address, prefix }) => ({
+			algo: algo,
+			pubkey: pubkey,
+			address: address,
+			prefix,
+		}));
 	}
 
 	/**
