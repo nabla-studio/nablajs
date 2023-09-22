@@ -11,6 +11,9 @@ dependencies:
   '@cosmjs/crypto':
     specifier: ^0.30.1
     version: 0.30.1
+  '@cosmjs/encoding':
+    specifier: ^0.31.1
+    version: 0.31.1
   '@cosmjs/proto-signing':
     specifier: ^0.30.1
     version: 0.30.1
@@ -1950,6 +1953,14 @@ packages:
 
   /@cosmjs/encoding@0.30.1:
     resolution: {integrity: sha512-rXmrTbgqwihORwJ3xYhIgQFfMSrwLu1s43RIK9I8EBudPx3KmnmyAKzMOVsRDo9edLFNuZ9GIvysUCwQfq3WlQ==}
+    dependencies:
+      base64-js: 1.5.1
+      bech32: 1.1.4
+      readonly-date: 1.0.0
+    dev: false
+
+  /@cosmjs/encoding@0.31.1:
+    resolution: {integrity: sha512-IuxP6ewwX6vg9sUJ8ocJD92pkerI4lyG8J5ynAM3NaX3q+n+uMoPRSQXNeL9bnlrv01FF1kIm8if/f5F7ZPtkA==}
     dependencies:
       base64-js: 1.5.1
       bech32: 1.1.4

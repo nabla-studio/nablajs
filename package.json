@@ -11,6 +11,7 @@
   "dependencies": {
     "@cosmjs/amino": "^0.30.1",
     "@cosmjs/crypto": "^0.30.1",
+    "@cosmjs/encoding": "^0.31.1",
     "@cosmjs/proto-signing": "^0.30.1",
     "@craftzdog/react-native-buffer": "^6.0.5",
     "@expo/metro-config": "0.7.1",
@@ -113,10 +114,10 @@
     "semantic-release-plus": "20.0.0",
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
+    "tslib": "^2.3.0",
     "typescript": "4.9.5",
     "vite": "~4.3.9",
     "vite-plugin-dts": "~2.3.0",
-    "vitest": "~0.32.0",
-    "tslib": "^2.3.0"
+    "vitest": "~0.32.0"
   }
 }
